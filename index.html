@@ -3,12 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<title>Тренировка</title>
+<title>Упражнения</title>
 
+<!-- Favicon SVG -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='65' y='260' width='170' height='24' rx='12'/%3E%3Crect x='45' y='305' width='190' height='24' rx='12'/%3E%3Crect x='85' y='350' width='150' height='24' rx='12'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='38' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='330' y1='200' x2='255' y2='295'/%3E%3Cline x1='255' y1='295' x2='320' y2='330'/%3E%3Cline x1='320' y1='330' x2='320' y2='405'/%3E%3Cline x1='255' y1='295' x2='195' y2='330'/%3E%3Cline x1='195' y1='330' x2='155' y2='380'/%3E%3Cline x1='325' y1='205' x2='395' y2='240'/%3E%3Cline x1='395' y1='240' x2='420' y2='285'/%3E%3Cline x1='325' y1='205' x2='260' y2='230'/%3E%3C/g%3E%3Ccircle cx='360' cy='150' r='38' fill='%23fff'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='65' y='260' width='170' height='24' rx='12'/%3E%3Crect x='45' y='305' width='190' height='24' rx='12'/%3E%3Crect x='85' y='350' width='150' height='24' rx='12'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='38' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='330' y1='200' x2='255' y2='295'/%3E%3Cline x1='255' y1='295' x2='320' y2='330'/%3E%3Cline x1='320' y1='330' x2='320' y2='405'/%3E%3Cline x1='255' y1='295' x2='195' y2='330'/%3E%3Cline x1='195' y1='330' x2='155' y2='380'/%3E%3Cline x1='325' y1='205' x2='395' y2='240'/%3E%3Cline x1='395' y1='240' x2='420' y2='285'/%3E%3Cline x1='325' y1='205' x2='260' y2='230'/%3E%3C/g%3E%3Ccircle cx='360' cy='150' r='38' fill='%23fff'/%3E%3C/svg%3E">
 
+<!-- Apple Touch Icon — iOS использует его при добавлении на главный экран -->
+<!-- 180×180 для Retina, 152×152, 120×120 для старых, 167×167 для iPad Pro -->
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='22' y='91' width='60' height='9' rx='4.5'/%3E%3Crect x='15' y='107' width='67' height='9' rx='4.5'/%3E%3Crect x='29' y='123' width='53' height='9' rx='4.5'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='13.5' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='116' y1='70' x2='90' y2='104'/%3E%3Cline x1='90' y1='104' x2='113' y2='116'/%3E%3Cline x1='113' y1='116' x2='113' y2='142'/%3E%3Cline x1='90' y1='104' x2='69' y2='116'/%3E%3Cline x1='69' y1='116' x2='55' y2='134'/%3E%3Cline x1='114' y1='72' x2='139' y2='84'/%3E%3Cline x1='139' y1='84' x2='148' y2='100'/%3E%3Cline x1='114' y1='72' x2='91' y2='81'/%3E%3C/g%3E%3Ccircle cx='127' cy='53' r='13' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="167x167" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 167 167'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='167' height='167' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='21' y='85' width='55' height='8' rx='4'/%3E%3Crect x='14' y='100' width='62' height='8' rx='4'/%3E%3Crect x='27' y='115' width='49' height='8' rx='4'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='12.5' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='108' y1='65' x2='83' y2='96'/%3E%3Cline x1='83' y1='96' x2='104' y2='108'/%3E%3Cline x1='104' y1='108' x2='104' y2='132'/%3E%3Cline x1='83' y1='96' x2='64' y2='108'/%3E%3Cline x1='64' y1='108' x2='51' y2='124'/%3E%3Cline x1='106' y1='67' x2='129' y2='78'/%3E%3Cline x1='129' y1='78' x2='137' y2='93'/%3E%3Cline x1='106' y1='67' x2='85' y2='75'/%3E%3C/g%3E%3Ccircle cx='118' cy='49' r='12' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 152 152'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='152' height='152' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='19' y='77' width='50' height='7' rx='3.5'/%3E%3Crect x='13' y='91' width='56' height='7' rx='3.5'/%3E%3Crect x='25' y='105' width='45' height='7' rx='3.5'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='11.4' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='98' y1='59' x2='76' y2='87'/%3E%3Cline x1='76' y1='87' x2='95' y2='98'/%3E%3Cline x1='95' y1='98' x2='95' y2='120'/%3E%3Cline x1='76' y1='87' x2='58' y2='98'/%3E%3Cline x1='58' y1='98' x2='46' y2='113'/%3E%3Cline x1='96' y1='61' x2='117' y2='71'/%3E%3Cline x1='117' y1='71' x2='125' y2='85'/%3E%3Cline x1='96' y1='61' x2='77' y2='68'/%3E%3C/g%3E%3Ccircle cx='107' cy='45' r='11' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="120x120" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='120' height='120' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='15' y='61' width='40' height='5.5' rx='2.75'/%3E%3Crect x='10' y='72' width='44' height='5.5' rx='2.75'/%3E%3Crect x='20' y='83' width='36' height='5.5' rx='2.75'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='77' y1='47' x2='60' y2='69'/%3E%3Cline x1='60' y1='69' x2='75' y2='77'/%3E%3Cline x1='75' y1='77' x2='75' y2='95'/%3E%3Cline x1='60' y1='69' x2='46' y2='77'/%3E%3Cline x1='46' y1='77' x2='36' y2='89'/%3E%3Cline x1='76' y1='49' x2='92' y2='56'/%3E%3Cline x1='92' y1='56' x2='99' y2='67'/%3E%3Cline x1='76' y1='49' x2='61' y2='54'/%3E%3C/g%3E%3Ccircle cx='85' cy='36' r='9' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='22' y='91' width='60' height='9' rx='4.5'/%3E%3Crect x='15' y='107' width='67' height='9' rx='4.5'/%3E%3Crect x='29' y='123' width='53' height='9' rx='4.5'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='13.5' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='116' y1='70' x2='90' y2='104'/%3E%3Cline x1='90' y1='104' x2='113' y2='116'/%3E%3Cline x1='113' y1='116' x2='113' y2='142'/%3E%3Cline x1='90' y1='104' x2='69' y2='116'/%3E%3Cline x1='69' y1='116' x2='55' y2='134'/%3E%3Cline x1='114' y1='72' x2='139' y2='84'/%3E%3Cline x1='139' y1='84' x2='148' y2='100'/%3E%3Cline x1='114' y1='72' x2='91' y2='81'/%3E%3C/g%3E%3Ccircle cx='127' cy='53' r='13' fill='%23fff'/%3E%3C/svg%3E">
+
+<!-- Android / PWA -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D0%A3%D0%BF%D1%80%D0%B0%D0%B6%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F%22%2C%22short_name%22%3A%22%D0%A3%D0%BF%D1%80%D0%B0%D0%B6%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1115%22%2C%22theme_color%22%3A%22%23f7265b%22%2C%22start_url%22%3A%22.%22%7D">
 <meta name="theme-color" content="#f7265b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Упражнения">
 
 <style>
   :root{
@@ -40,19 +53,14 @@
     gap:14px;
   }
 
+  /* ---------- Шапка (только настройка отдыха) ---------- */
   .topbar{
     display:flex;
-    justify-content:space-between;
+    justify-content:flex-end;
     align-items:center;
     gap:12px;
     flex-wrap:wrap;
     padding:0 6px;
-  }
-  .brand{
-    font-weight:700;
-    letter-spacing:.4px;
-    color:var(--text);
-    font-size:22px;
   }
   .setting{
     display:flex;
@@ -82,6 +90,7 @@
   }
   .setting input:focus{border-color:var(--accent);}
 
+  /* ---------- Табы ---------- */
   .tabs{
     display:flex;
     gap:6px;
@@ -183,12 +192,6 @@
   #panel-exercises{
     padding:18px;
     gap:12px;
-  }
-  #panel-exercises h2{
-    margin:0;
-    font-size:18px;
-    font-weight:600;
-    letter-spacing:.3px;
   }
   .exercise-list{
     list-style:none;
@@ -1001,8 +1004,8 @@
       padding: 0 4px;
       gap: 8px;
       flex-wrap: nowrap;
+      justify-content: flex-end;
     }
-    .brand{font-size:18px; white-space:nowrap;}
     .setting{font-size:14px; gap:6px; white-space:nowrap;}
     .setting input{
       width: 78px;
@@ -1050,7 +1053,6 @@
       padding: 12px;
       gap: 8px;
     }
-    #panel-exercises h2{font-size: 16px;}
     .exercise-list{
       max-height: none;
       flex: 1;
@@ -1201,7 +1203,6 @@
   }
 
   @media (max-width: 380px), (max-width: 720px) and (max-height: 660px){
-    .brand{font-size:16px;}
     .setting{font-size:13px;}
     .setting input{width:70px; padding:7px 8px; font-size:15px;}
     .tab{font-size:13px; padding:10px 4px;}
@@ -1223,7 +1224,6 @@
 <div class="app">
 
   <header class="topbar">
-    <div class="brand">Тренировка</div>
     <label class="setting">
       Отдых:
       <input type="number" id="restInput" min="5" max="600" step="5" value="90" inputmode="numeric">
@@ -1232,7 +1232,7 @@
   </header>
 
   <nav class="tabs" id="tabs">
-    <button class="tab active" data-tab="exercises">Что тренируем</button>
+    <button class="tab active" data-tab="exercises">Упражнения</button>
     <button class="tab" data-tab="timer">
       <span class="live-dot" id="liveDot"></span>
       Таймер
@@ -1247,7 +1247,6 @@
 
       <div class="swipe-page">
         <section class="panel" id="panel-exercises">
-          <h2>Что тренируем</h2>
           <ul class="exercise-list" id="exerciseList"></ul>
           <button class="add-exercise-btn" id="addExerciseBtn" type="button">
             <span class="plus">+</span>
@@ -1459,7 +1458,7 @@
   };
 
   /* ==================================================================
-     СВАЙП ВВЕРХ-ВНИЗ ПО ЧИСЛОВОМУ ПОЛЮ (универсальный)
+     СВАЙП ВВЕРХ-ВНИЗ ПО ЧИСЛОВОМУ ПОЛЮ
      ================================================================== */
   function attachVerticalSwipe(input, options){
     options = options || {};
@@ -1467,8 +1466,8 @@
     const max = options.max != null ? options.max : Infinity;
     const step = options.step || 1;
     const onChange = options.onChange || function(){};
-    const PIXELS_PER_STEP = options.pixelsPerStep || 14; // ~14px на 1 шаг
-    const HOLD_DELAY = 400;  // ms удержания для ускорения
+    const PIXELS_PER_STEP = options.pixelsPerStep || 14;
+    const HOLD_DELAY = 400;
 
     let startY = 0;
     let startValue = 0;
@@ -1511,7 +1510,7 @@
 
     function onMove(e){
       if(!dragging || e.pointerId !== pointerId) return;
-      const dy = startY - e.clientY; // вверх = положительное
+      const dy = startY - e.clientY;
       const pxPer = accelerate ? PIXELS_PER_STEP / 3 : PIXELS_PER_STEP;
       const delta = dy / pxPer;
       commit(startValue + delta);
@@ -1531,16 +1530,8 @@
     input.addEventListener('pointermove', onMove);
     input.addEventListener('pointerup', onUp);
     input.addEventListener('pointercancel', onUp);
-    // Клик по полю тоже ничего не должен открывать: числовой input обычно
-    // открывает клавиатуру, но у нас "ручной" ввод не нужен.
-    input.addEventListener('click', (e) => {
-      // Разрешаем обычное поведение, чтобы можно было всё-таки ввести вручную,
-      // если пользователь кликнул без движения.
-      // Не блокируем — оставляем как есть.
-    });
   }
 
-  // Отдых — общий настройщик
   attachVerticalSwipe(els.restInput, {
     min: 5,
     max: 600,
@@ -1552,7 +1543,6 @@
     }
   });
 
-  // Обычный ручной ввод тоже работает
   els.restInput.addEventListener('change', () => {
     let v = parseInt(els.restInput.value, 10);
     if(isNaN(v)) v = 90;
@@ -1608,7 +1598,6 @@
     });
   });
 
-  // --- Свайп по вкладкам ---
   (function initSwipe(){
     let startX = 0;
     let startY = 0;
@@ -1628,7 +1617,6 @@
     function onDown(e){
       if(e.pointerType === 'mouse' && e.button !== 0) return;
       if(document.querySelector('.modal-overlay.show')) return;
-      // Не свайпаем панели, если жест начался на поле с вертикальным свайпом
       if(e.target.closest('.sets-input') || e.target.closest('#restInput')) return;
 
       startX = e.clientX;
@@ -1678,7 +1666,6 @@
       const w = els.swipeViewport.clientWidth;
       const idx = TAB_ORDER.indexOf(S.currentTab);
       const cur = -(idx * w);
-      // Достаём текущее значение transform
       const m = /translate3d\(\s*(-?[\d.]+)px/.exec(els.swipeTrack.style.transform);
       const curX = m ? parseFloat(m[1]) : cur;
       const dx = curX - cur;
@@ -1884,7 +1871,6 @@
       setsInput.title = 'Свайп вверх/вниз для изменения';
       setsInput.inputMode = 'none';
 
-      // Свайп вверх-вниз
       attachVerticalSwipe(setsInput, {
         min: 1,
         max: 30,
@@ -1896,7 +1882,6 @@
         }
       });
 
-      // Ручной ввод, если пользователь всё же введёт вручную
       setsInput.addEventListener('change', () => {
         let v = parseInt(setsInput.value, 10);
         if(isNaN(v) || v < 1) v = 1;
