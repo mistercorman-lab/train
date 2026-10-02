@@ -1282,3 +1282,240 @@ html,body{
           showRepsModal();
           return;
         }
+      }
+      requestFinish();
+    }
+  });
+
+  /* ============ СТАТИСТИКА ============ */
+  function fillStatsFilters(){
+    const monthSel = els.statsMonth;
+    const yearSel = els.statsYear;
+    monthSel.innerHTML = '';
+    MONTHS_RU.forEach((name, i) => {
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = name;
+      monthSel.appendChild(o);
+    });
+
+    const years = new Set();
+    S.allWorkouts.forEach(w => {
+      const d = dateOnly(w.workout_date);
+      if (!d) return;
+      const y = parseInt(d.split('-')[0], 10);
+      if (!isNaN(y)) years.add(y);
+    });
+    years.add(new Date().getFullYear());
+
+    yearSel.innerHTML = '';
+    Array.from(years).sort((a,b) => b - a).forEach(y => {
+      const o = document.createElement('option');
+      o.value = y;
+      o.textContent = y;
+      yearSel.appendChild(o);
+    });
+
+    monthSel.value = S.statsMonth;
+    yearSel.value = S.statsYear;
+  }
+
+  function renderStatsScreen(){
+    fillStatsFilters();
+
+    const m = parseInt(els.statsMonth.value, 10);
+    const y = parseInt(els.statsYear.value, 10);
+
+    const filtered = S.allWorkouts.filter(w => {
+      const d = dateOnly(w.workout_date);
+      if (!d) return false;
+      const [wy, wm] = d.split('-').map(Number);
+      return wy === y && wm === m+1;
+    });
+
+    if (!filtered.length){
+      els.statsContent.innerHTML = '<div class="stats-empty">В этом месяце тренировок нет</div>';
+      return;
+    }
+
+    const byDate = {};
+    filtered.forEach(row => {
+      const d = dateOnly(row.workout_date);
+      if (!byDate[d]) byDate[d] = [];
+      byDate[d].push(row);
+    });
+
+    let html = '';
+    Object.keys(byDate).sort().reverse().forEach(dateStr => {
+      const rows = byDate[dateStr];
+      const firstRow = rows[0];
+      const totalTime = firstRow.total_time ? fmt(parseFloat(firstRow.total_time) * 1000) : '—';
+
+      html += '<div class="stats-item">';
+      html += '<div class="h-date">' + dateStr + '</div>';
+      html += '<div class="h-meta">Всего ' + totalTime + '</div>';
+
+      rows.forEach(r => {
+        const reps = r.reps || 0, sets = r.sets || 0;
+        const avg = sets ? (reps / sets).toFixed(1) : '0';
+        html += '<div class="stats-ex"><span class="name">' + escapeHtml(r.exercise_name) + '</span><span class="reps">' + sets + '×  ·  <b>' + reps + '</b> повт  ·  ср. ' + avg + '</span></div>';
+      });
+
+      html += '</div>';
+    });
+
+    els.statsContent.innerHTML = html;
+  }
+
+  els.statsMonth.addEventListener('change', renderStatsScreen);
+  els.statsYear.addEventListener('change', renderStatsScreen);
+
+  /* ============ СБРОС ============ */
+  function resetAfterFinish(){
+    stopLoop();
+    clearTimeout(S.restTimeout); S.restTimeout = null;
+    S.phase = 'idle';
+    S.workStart = 0; S.workEnd = 0; S.restStart = 0; S.restEnd = 0;
+    S.workoutStart = 0; S.finishedAt = 0;
+    S.activeExercises = []; S.exIdx = 0; S.setIdx = 0;
+    S.pendingFinish = false; S.lastTimeStr = '';
+    S.exercises.forEach(ex => { ex.completed = []; });
+    setSetupDisabled(false);
+    setTimerUI();
+    renderCalendar();
+  }
+
+  /* ============ ЛОГИН ============ */
+  function showSavedProfileView(){
+    els.savedProfile.style.display = 'flex';
+    els.newLogin.classList.add('hidden');
+    els.backToSavedBtn.classList.add('hidden');
+    els.loginTitle.textContent = 'С возвращением!';
+    els.loginSubtitle.textContent = 'Продолжите с сохранённого профиля';
+    els.savedProfileName.textContent = S.savedLogin;
+  }
+
+  function showNewLoginView(){
+    els.savedProfile.style.display = 'none';
+    els.newLogin.classList.remove('hidden');
+    els.backToSavedBtn.classList.toggle('hidden', !S.savedLogin);
+    els.loginTitle.textContent = 'Тренировка';
+    els.loginSubtitle.textContent = S.savedLogin ? 'Введите логин другого пользователя' : 'Введите логин, чтобы продолжить';
+    els.loginError.textContent = '';
+    els.loginInput.value = '';
+    setTimeout(() => { try { els.loginInput.focus(); } catch(e){} }, 100);
+  }
+
+  async function doLogin(login){
+    if (!login || !login.trim()){
+      els.loginError.textContent = 'Введите логин';
+      return;
+    }
+    els.loginError.textContent = '';
+    els.loginBtn.disabled = true;
+    els.loginBtn.textContent = 'Проверяем...';
+
+    try {
+      const data = await apiGetUser(login);
+
+      if (data && data.result === 'success'){
+        S.login = data.login;
+        S.displayName = data.displayName;
+        try { localStorage.setItem(LOGIN_KEY, S.login); } catch(e){}
+
+        els.loginScreen.classList.add('hidden');
+        els.screens.style.display = 'block';
+        els.greetName.textContent = S.displayName;
+
+        try {
+          const saved = parseInt(localStorage.getItem(REST_KEY), 10);
+          if (!isNaN(saved) && saved >= 5 && saved <= 600){
+            els.restInputBig.value = saved;
+            S.restDuration = saved * 1000;
+          }
+        } catch(e){}
+
+        S.exercises = loadExercises();
+        showScreen('menu');
+        loadAllWorkouts();
+      } else {
+        els.loginError.textContent = (data && data.message) || 'Ошибка входа';
+        els.loginInput.classList.add('shake');
+        setTimeout(() => els.loginInput.classList.remove('shake'), 450);
+      }
+    } catch(err){
+      console.error(err);
+      els.loginError.textContent = 'Ошибка: ' + err.message;
+    } finally {
+      els.loginBtn.disabled = false;
+      els.loginBtn.textContent = 'Войти';
+    }
+  }
+
+  els.loginBtn.addEventListener('click', () => doLogin(els.loginInput.value));
+  els.loginInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); doLogin(els.loginInput.value); }
+  });
+  els.savedContinueBtn.addEventListener('click', () => doLogin(S.savedLogin));
+  els.savedSwitchBtn.addEventListener('click', () => showNewLoginView());
+  els.backToSavedBtn.addEventListener('click', () => showSavedProfileView());
+
+  /* ============ СВАЙП НАЗАД ИЗ ПОКАЗАТЕЛЕЙ ============ */
+  (function initStatsSwipe(){
+    let startX = 0, startY = 0, dragging = false, pointerId = null, decided = false;
+    els.statsScreen.addEventListener('pointerdown', (e) => {
+      if (S.screen !== 'stats') return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (e.target.closest('select')) return;
+      startX = e.clientX; startY = e.clientY;
+      dragging = true; decided = false;
+      pointerId = e.pointerId;
+    });
+    els.statsScreen.addEventListener('pointermove', (e) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!decided){
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        if (Math.abs(dy) > Math.abs(dx)){ dragging = false; return; }
+        decided = true;
+        try { els.statsScreen.setPointerCapture(e.pointerId); } catch(err){}
+      }
+      if (dx > 0){
+        els.statsScreen.style.transform = 'translateX(' + dx + 'px)';
+        els.statsScreen.style.transition = 'none';
+      }
+      e.preventDefault();
+    });
+    function onUp(e){
+      if (!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
+      dragging = false; pointerId = null;
+      const dx = e.clientX - startX;
+      els.statsScreen.style.transition = '';
+      els.statsScreen.style.transform = '';
+      if (dx > 100){
+        showScreen('menu');
+      }
+    }
+    els.statsScreen.addEventListener('pointerup', onUp);
+    els.statsScreen.addEventListener('pointercancel', onUp);
+  })();
+
+  /* ============ СТАРТОВАЯ ЛОГИКА ============ */
+  (function initLoginScreen(){
+    let saved = null;
+    try { saved = localStorage.getItem(LOGIN_KEY); } catch(e){}
+
+    if (saved){
+      S.savedLogin = saved;
+      els.savedProfileName.textContent = saved;
+      showSavedProfileView();
+    } else {
+      showNewLoginView();
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
