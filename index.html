@@ -163,6 +163,12 @@ html,body{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:999px;
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.menu-user-box:hover{
+  border-color:var(--accent);
+  background:var(--panel-2);
 }
 .menu-user-icon{
   width:32px;
@@ -410,6 +416,71 @@ html,body{
 }
 .finish-back:active{transform:scale(.97);}
 
+/* ---------- ПРОФИЛЬ ---------- */
+.profile-modal{max-width:420px;}
+.profile-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  margin-bottom:22px;
+}
+.profile-avatar{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background:linear-gradient(160deg,#5b9bff,#2f6ede);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  line-height:1;
+}
+.profile-login{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+  letter-spacing:.3px;
+}
+.profile-field{margin-bottom:14px;}
+.profile-field label{
+  display:block;
+  font-size:11px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:6px;
+}
+.profile-field input{
+  width:100%;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:600;
+  background:var(--panel-2);
+  border:2px solid var(--border);
+  border-radius:12px;
+  color:var(--text);
+  font-family:inherit;
+  outline:none;
+  -moz-appearance:textfield;
+}
+.profile-field input:focus{border-color:var(--accent);}
+.profile-field input::-webkit-outer-spin-button,
+.profile-field input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+.profile-status{
+  font-size:13px;
+  padding:9px 13px;
+  border-radius:10px;
+  margin-bottom:14px;
+  text-align:center;
+  display:none;
+}
+.profile-status.show{display:block;}
+.profile-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
+.profile-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
+.profile-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
+
 /* ---------- МОДАЛКИ ---------- */
 .modal-overlay{position:fixed; inset:0; background:rgba(5,7,12,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; overflow-y:auto;}
 .modal-overlay.show{display:flex;}
@@ -521,7 +592,7 @@ html,body{
 
   <section class="screen slide-up menu-screen" id="screen-menu">
     <div class="menu-top">
-      <div class="menu-user-box">
+      <div class="menu-user-box" id="menuUserBox">
         <div class="menu-user-icon">👤</div>
         <div class="menu-user-name" id="greetName">—</div>
       </div>
@@ -638,6 +709,37 @@ html,body{
   </div>
 </div>
 
+<div class="modal-overlay" id="profileModal">
+  <div class="modal profile-modal">
+    <div class="profile-header">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-login" id="profileLoginLabel">@логин</div>
+    </div>
+
+    <div class="profile-status" id="profileStatus"></div>
+
+    <div class="profile-field">
+      <label for="profileName">Имя пользователя</label>
+      <input type="text" id="profileName" maxlength="30" placeholder="Как вас зовут" autocomplete="off">
+    </div>
+
+    <div class="profile-field">
+      <label for="profileAge">Возраст</label>
+      <input type="number" id="profileAge" min="1" max="120" placeholder="Например, 28" inputmode="numeric">
+    </div>
+
+    <div class="profile-field">
+      <label for="profileWeight">Вес (кг)</label>
+      <input type="number" id="profileWeight" min="20" max="300" step="0.1" placeholder="Например, 72.5" inputmode="decimal">
+    </div>
+
+    <div class="modal-btns" style="margin-top:18px;">
+      <button class="btn-secondary" id="profileCancel">Отмена</button>
+      <button class="btn-primary" id="profileSave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
@@ -666,7 +768,8 @@ html,body{
   const MONTHS_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
   const S = {
-    login: null, displayName: null, screen: 'menu', phase: 'idle',
+    login: null, displayName: null, age: null, weight: null,
+    screen: 'menu', phase: 'idle',
     workStart: 0, workEnd: 0, restStart: 0, restEnd: 0,
     workoutStart: 0, finishedAt: 0, restDuration: 90 * 1000,
     exercises: [], activeExercises: [], exIdx: 0, setIdx: 0,
@@ -696,6 +799,7 @@ html,body{
     menuScreen: $('screen-menu'), setupScreen: $('screen-setup'), timerScreen: $('screen-timer'),
     finishScreen: $('screen-finish'), statsScreen: $('screen-stats'),
     greetName: $('greetName'),
+    menuUserBox: $('menuUserBox'),
     calMonthCount: $('calMonthCount'),
     menuStartBtn: $('menuStartBtn'), menuStatsBtn: $('menuStatsBtn'),
     calTitle: $('calTitle'), calLine: $('calLine'),
@@ -710,7 +814,16 @@ html,body{
     repsModal: $('repsModal'), repsTitle: $('repsTitle'), repsInput: $('repsInput'),
     repsOk: $('repsOk'), repsCancel: $('repsCancel'),
     addExModal: $('addExModal'), newExName: $('newExName'), newExSets: $('newExSets'),
-    addExOk: $('addExOk'), addExCancel: $('addExCancel')
+    addExOk: $('addExOk'), addExCancel: $('addExCancel'),
+
+    profileModal: $('profileModal'),
+    profileLoginLabel: $('profileLoginLabel'),
+    profileName: $('profileName'),
+    profileAge: $('profileAge'),
+    profileWeight: $('profileWeight'),
+    profileStatus: $('profileStatus'),
+    profileSave: $('profileSave'),
+    profileCancel: $('profileCancel')
   };
 
   /* ============ УТИЛИТЫ ============ */
@@ -762,12 +875,23 @@ html,body{
   /* ============ API ============ */
   async function apiGetUser(login){
     try {
-      const { data, error } = await supabase.from('users').select('login, display_name').eq('login', login.trim()).maybeSingle();
+      const { data, error } = await supabase
+        .from('users')
+        .select('login, display_name, age, weight')
+        .eq('login', login.trim())
+        .maybeSingle();
       if (error){ console.error(error); return { result:'error', message: error.message }; }
       if (!data) return { result:'error', message:'Пользователь не найден' };
-      return { result:'success', login: data.login, displayName: data.display_name || data.login };
+      return {
+        result:'success',
+        login: data.login,
+        displayName: data.display_name || data.login,
+        age: data.age,
+        weight: data.weight
+      };
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
   }
+
   async function apiGetHistory(login){
     try {
       const { data, error } = await supabase.from('workouts').select('*').eq('user_login', login).order('workout_date', { ascending: false }).limit(1000);
@@ -775,12 +899,28 @@ html,body{
       return { result:'success', history: data || [] };
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
   }
+
   async function apiSaveWorkout(login, workoutData){
     try {
       const rows = workoutData.exercises.map(ex => ({
         user_login: login, exercise_name: ex.name, sets: ex.sets, reps: ex.reps, total_time: workoutData.totalTime / 1000
       }));
       const { error } = await supabase.from('workouts').insert(rows);
+      if (error){ console.error(error); return { result:'error', message: error.message }; }
+      return { result:'success' };
+    } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
+  }
+
+  async function apiSaveProfile(login, profile){
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          display_name: profile.displayName,
+          age: profile.age,
+          weight: profile.weight
+        })
+        .eq('login', login);
       if (error){ console.error(error); return { result:'error', message: error.message }; }
       return { result:'success' };
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
@@ -1319,6 +1459,84 @@ html,body{
     }
   });
 
+  /* ============ ПРОФИЛЬ ============ */
+  function openProfileModal(){
+    els.profileLoginLabel.textContent = '@' + S.login;
+    els.profileName.value = S.displayName || '';
+    els.profileAge.value = (S.age != null) ? S.age : '';
+    els.profileWeight.value = (S.weight != null) ? S.weight : '';
+    els.profileStatus.className = 'profile-status';
+    els.profileStatus.textContent = '';
+    els.profileModal.classList.add('show');
+    setTimeout(() => { try { els.profileName.focus(); } catch(e){} }, 100);
+  }
+  function closeProfileModal(){
+    els.profileModal.classList.remove('show');
+  }
+  function setProfileStatus(type, text){
+    els.profileStatus.className = 'profile-status show ' + type;
+    els.profileStatus.textContent = text;
+  }
+  async function saveProfile(){
+    const name = els.profileName.value.trim();
+    const ageRaw = els.profileAge.value.trim();
+    const weightRaw = els.profileWeight.value.trim();
+
+    let age = null;
+    if (ageRaw !== ''){
+      age = parseInt(ageRaw, 10);
+      if (isNaN(age) || age < 1 || age > 120){ setProfileStatus('error', 'Возраст от 1 до 120'); return; }
+    }
+
+    let weight = null;
+    if (weightRaw !== ''){
+      weight = parseFloat(weightRaw.replace(',', '.'));
+      if (isNaN(weight) || weight < 20 || weight > 300){ setProfileStatus('error', 'Вес от 20 до 300'); return; }
+    }
+
+    if (!name){ setProfileStatus('error', 'Введите имя'); return; }
+
+    setProfileStatus('sending', '⏳ Сохраняем...');
+    els.profileSave.disabled = true;
+
+    const res = await apiSaveProfile(S.login, {
+      displayName: name,
+      age: age,
+      weight: weight
+    });
+
+    els.profileSave.disabled = false;
+
+    if (res && res.result === 'success'){
+      S.displayName = name;
+      S.age = age;
+      S.weight = weight;
+      els.greetName.textContent = name;
+      els.savedProfileName.textContent = name;
+      setProfileStatus('saved', '✓ Сохранено');
+      setTimeout(() => { closeProfileModal(); }, 700);
+    } else {
+      setProfileStatus('error', 'Ошибка: ' + ((res && res.message) || 'не удалось сохранить'));
+    }
+  }
+  if (els.menuUserBox){
+    els.menuUserBox.addEventListener('click', openProfileModal);
+  }
+  els.profileCancel.addEventListener('click', closeProfileModal);
+  els.profileSave.addEventListener('click', saveProfile);
+  els.profileModal.addEventListener('click', (e) => {
+    if (e.target === els.profileModal) closeProfileModal();
+  });
+  els.profileName.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); els.profileAge.focus(); }
+  });
+  els.profileAge.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); els.profileWeight.focus(); }
+  });
+  els.profileWeight.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); saveProfile(); }
+  });
+
   /* ============ СТАТИСТИКА ============ */
   function fillStatsFilters(){
     const monthSel = els.statsMonth;
@@ -1455,6 +1673,8 @@ html,body{
       if (data && data.result === 'success'){
         S.login = data.login;
         S.displayName = data.displayName;
+        S.age = data.age;
+        S.weight = data.weight;
         try { localStorage.setItem(LOGIN_KEY, S.login); } catch(e){}
 
         els.loginScreen.classList.add('hidden');
