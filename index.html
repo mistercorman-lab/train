@@ -164,7 +164,6 @@ html,body{
 .menu-screen{padding:20px 16px;}
 .menu-top{flex-shrink:0; padding:8px 4px 0;}
 
-/* Карточка пользователя — выравнивание влево */
 .menu-user-card{
   display:flex;
   align-items:center;
@@ -490,13 +489,14 @@ html,body{
   margin-bottom:8px;
   text-align:center;
 }
-/* Поле имени — по центру, как и label */
-.profile-field input{
+/* Имя пользователя — СТРОГО ПО ЦЕНТРУ. !important, чтобы победить
+   правило .modal input[type="text"]{text-align:left} */
+#profileName{
   width:100%;
   padding:14px 16px;
   font-size:16px;
   font-weight:600;
-  text-align:center;
+  text-align:center !important;
   background:var(--panel-2);
   border:2px solid var(--border);
   border-radius:12px;
@@ -505,18 +505,32 @@ html,body{
   outline:none;
   -moz-appearance:textfield;
 }
-.profile-field input:focus{border-color:var(--accent);}
-.profile-field input::-webkit-outer-spin-button,
-.profile-field input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+#profileName:focus{border-color:var(--accent);}
+#profileName::placeholder{text-align:center;}
+
 .profile-field input.weight-swipe{
+  width:100%;
+  padding:14px 16px;
   font-size:22px;
   font-weight:800;
+  text-align:center;
+  background:var(--panel-2);
+  border:2px solid var(--border);
+  border-radius:12px;
+  color:var(--text);
+  font-family:inherit;
+  outline:none;
   cursor:ns-resize;
   user-select:none;
   -webkit-user-select:none;
   touch-action:none;
   font-variant-numeric:tabular-nums;
+  -moz-appearance:textfield;
 }
+.profile-field input.weight-swipe:focus{border-color:var(--accent);}
+.profile-field input.weight-swipe::-webkit-outer-spin-button,
+.profile-field input.weight-swipe::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+
 .profile-status{
   font-size:13px;
   padding:9px 13px;
@@ -530,8 +544,8 @@ html,body{
 .profile-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
 .profile-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
 
-/* ---------- ПИКЕР ДАТЫ (три колеса) ---------- */
-.date-wheels{
+/* ---------- ДАТА РОЖДЕНИЯ (одна строка) ---------- */
+.date-row{
   display:grid;
   grid-template-columns:1fr 1.4fr 1fr;
   gap:6px;
@@ -539,57 +553,66 @@ html,body{
   border:2px solid var(--border);
   border-radius:12px;
   padding:0 6px;
+  height:52px;
   position:relative;
-  height:150px;
   user-select:none;
   touch-action:none;
   overflow:hidden;
 }
-/* Плашка выделения строго по центру */
-.date-wheels::before{
-  content:"";
-  position:absolute;
-  left:6px; right:6px;
-  top:50%;
-  height:44px;
-  transform:translateY(-50%);
-  background:rgba(91,155,255,.10);
-  border-top:1px solid rgba(91,155,255,.35);
-  border-bottom:1px solid rgba(91,155,255,.35);
-  border-radius:8px;
-  pointer-events:none;
-  z-index:3;
-}
-.date-wheel{
+.date-col{
   position:relative;
-  overflow:hidden;
   height:100%;
-  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:ns-resize;
   touch-action:none;
+  overflow:hidden;
 }
-.date-wheel-track{
-  position:absolute;
-  left:0; right:0;
-  top:0;
-  will-change:transform;
-}
-.date-wheel-item{
-  height:44px;
-  line-height:44px;
-  text-align:center;
-  font-size:20px;
-  font-weight:600;
-  color:var(--muted);
-  font-variant-numeric:tabular-nums;
-  transition:color .15s;
-}
-.date-wheel-item.active{
-  color:var(--text);
+.date-col .val{
+  font-size:22px;
   font-weight:800;
+  color:var(--text);
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+  line-height:1;
+  pointer-events:none;
+  white-space:nowrap;
 }
-.date-wheel-item.near{
-  color:#a9b1c3;
+.date-col .val.hint{
+  color:var(--muted);
+  font-weight:500;
+  opacity:.6;
+}
+/* Стрелки сверху/снизу от значения — тонкие подсказки */
+.date-col::before,
+.date-col::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:0;
+  height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  opacity:.35;
+}
+.date-col::before{
+  top:4px;
+  border-bottom:6px solid var(--muted);
+}
+.date-col::after{
+  bottom:4px;
+  border-top:6px solid var(--muted);
+}
+.date-col.active .val{
+  color:var(--accent-2);
+}
+.date-col.active::before,
+.date-col.active::after{
+  opacity:.9;
+  border-bottom-color:var(--accent-2);
+  border-top-color:var(--accent-2);
 }
 
 /* ---------- МОДАЛКИ ---------- */
@@ -599,7 +622,6 @@ html,body{
 .modal h3{margin:0 0 8px; font-size:20px; font-weight:700;}
 .modal .sub{color:var(--muted); font-size:14px; margin:0 0 18px; line-height:1.4;}
 .modal input[type="number"], .modal input[type="text"]{width:100%; padding:15px 16px; font-size:18px; font-weight:600; text-align:center; background:var(--panel-2); border:2px solid var(--border); border-radius:13px; color:var(--text); font-family:inherit; outline:none; margin-bottom:14px; -moz-appearance:textfield;}
-.modal input[type="text"]{text-align:left;}
 .modal input:focus{border-color:var(--accent);}
 .modal input[type="number"]::-webkit-outer-spin-button,
 .modal input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
@@ -651,9 +673,8 @@ html,body{
   .menu-buttons{gap:12px; padding:20px 0;}
   .timer-btn{width:min(180px,50vw); height:min(180px,50vw);}
   .rest-input-big{width:76px; font-size:18px;}
-  .date-wheels{height:130px;}
-  .date-wheel-item{height:38px; line-height:38px; font-size:18px;}
-  .date-wheels::before{height:38px;}
+  .date-row{height:46px;}
+  .date-col .val{font-size:20px;}
 }
 @keyframes shake{
   0%,100%{transform:translateX(0);}
@@ -828,10 +849,10 @@ html,body{
 
     <div class="profile-field">
       <label>Дата рождения</label>
-      <div class="date-wheels" id="dateWheels">
-        <div class="date-wheel" data-wheel="day"><div class="date-wheel-track" id="wheelDay"></div></div>
-        <div class="date-wheel" data-wheel="month"><div class="date-wheel-track" id="wheelMonth"></div></div>
-        <div class="date-wheel" data-wheel="year"><div class="date-wheel-track" id="wheelYear"></div></div>
+      <div class="date-row" id="dateRow">
+        <div class="date-col" data-col="day"><span class="val hint" id="valDay">—</span></div>
+        <div class="date-col" data-col="month"><span class="val hint" id="valMonth">—</span></div>
+        <div class="date-col" data-col="year"><span class="val hint" id="valYear">—</span></div>
       </div>
     </div>
 
@@ -928,10 +949,10 @@ html,body{
     profileModal: $('profileModal'),
     profileLoginLabel: $('profileLoginLabel'),
     profileName: $('profileName'),
-    dateWheels: $('dateWheels'),
-    wheelDay: $('wheelDay'),
-    wheelMonth: $('wheelMonth'),
-    wheelYear: $('wheelYear'),
+    dateRow: $('dateRow'),
+    valDay: $('valDay'),
+    valMonth: $('valMonth'),
+    valYear: $('valYear'),
     profileWeight: $('profileWeight'),
     profileStatus: $('profileStatus'),
     profileSave: $('profileSave'),
@@ -1582,138 +1603,77 @@ html,body{
   }
 
   /* ============================================================
-     КОЛЕСО ДАТЫ — с правильной центровкой активного элемента
+     КОМПАКТНЫЙ ПИКЕР ДАТЫ — одна строка, 3 столбца со свайпом
      ============================================================ */
-  const ITEM_H = 44;
-
-  const dateWheel = {
-    day:   { el: null, track: null, value: 1, min: 1, max: 31 },
-    month: { el: null, track: null, value: 1, min: 1, max: 12 },
-    year:  { el: null, track: null, value: new Date().getFullYear(), min: 1900, max: new Date().getFullYear() }
+  const dateState = {
+    day:   1,
+    month: 1,
+    year:  new Date().getFullYear() - 30
   };
 
-  function buildWheelItems(wheel, kind){
-    wheel.track.innerHTML = '';
+  function pluralMonthShort(m){ return MONTHS_SHORT[m-1]; }
 
-    let items = [];
-    if (kind === 'day'){
-      const maxD = daysInMonth(dateWheel.year.value, dateWheel.month.value);
-      for (let i = 1; i <= maxD; i++) items.push({ v: i, label: String(i) });
-    } else if (kind === 'month'){
-      for (let i = 1; i <= 12; i++) items.push({ v: i, label: MONTHS_SHORT[i-1] });
-    } else if (kind === 'year'){
-      const maxYear = new Date().getFullYear();
-      for (let y = maxYear; y >= 1900; y--) items.push({ v: y, label: String(y) });
+  function renderDateRow(){
+    els.valDay.textContent = String(dateState.day);
+    els.valMonth.textContent = pluralMonthShort(dateState.month);
+    els.valYear.textContent = String(dateState.year);
+    els.valDay.classList.remove('hint');
+    els.valMonth.classList.remove('hint');
+    els.valYear.classList.remove('hint');
+  }
+
+  function clampDate(){
+    const maxD = daysInMonth(dateState.year, dateState.month);
+    if (dateState.day > maxD) dateState.day = maxD;
+    if (dateState.day < 1) dateState.day = 1;
+    dateState.year = Math.max(1900, Math.min(new Date().getFullYear(), dateState.year));
+    dateState.month = Math.max(1, Math.min(12, dateState.month));
+  }
+
+  /* Свайп по одной колонке: изменяет значение по вертикали.
+     Вверх — увеличивает, вниз — уменьшает (как в iOS). */
+  function attachDateColumn(colEl, kind){
+    let startY = 0;
+    let startValue = 0;
+    let dragging = false;
+    let pointerId = null;
+    const STEP_PX = 20; // пикселей на один шаг
+
+    function commit(delta){
+      if (kind === 'day'){
+        dateState.day = startValue + delta;
+      } else if (kind === 'month'){
+        dateState.month = startValue + delta;
+      } else {
+        dateState.year = startValue + delta;
+      }
+      clampDate();
+      renderDateRow();
+      // Подсветка активной колонки
+      Array.from(els.dateRow.querySelectorAll('.date-col')).forEach(c => c.classList.remove('active'));
+      colEl.classList.add('active');
     }
 
-    // Верхний padding: полувысота контейнера минус полувысота строки
-    const padTop = document.createElement('div');
-    padTop.style.height = 'calc(50% - ' + (ITEM_H/2) + 'px)';
-    wheel.track.appendChild(padTop);
-
-    items.forEach(it => {
-      const div = document.createElement('div');
-      div.className = 'date-wheel-item';
-      div.textContent = it.label;
-      div.dataset.value = String(it.v);
-      wheel.track.appendChild(div);
-    });
-
-    // Нижний padding
-    const padBot = document.createElement('div');
-    padBot.style.height = 'calc(50% - ' + (ITEM_H/2) + 'px)';
-    wheel.track.appendChild(padBot);
-  }
-
-  /* Позиционирование: активный элемент должен быть ровно в центре
-     контейнера. Используем чистую формулу y = -idx * ITEM_H.
-     Верхний padding calc(50% - ITEM_H/2) уже даёт смещение,
-     поэтому активный элемент встаёт в центр автоматически. */
-  function setWheelValue(wheel, value, animate){
-    wheel.value = value;
-    const items = wheel.track.querySelectorAll('.date-wheel-item');
-    let idx = -1;
-    items.forEach((it, i) => { if (parseInt(it.dataset.value, 10) === value) idx = i; });
-    if (idx < 0) idx = 0;
-
-    const y = -(idx * ITEM_H);
-
-    wheel.track.style.transition = animate === false ? 'none' : 'transform .25s cubic-bezier(.22,.61,.36,1)';
-    wheel.track.style.transform = 'translateY(' + y + 'px)';
-
-    items.forEach((it, i) => {
-      it.classList.remove('active', 'near');
-      if (i === idx) it.classList.add('active');
-      else if (Math.abs(i - idx) === 1) it.classList.add('near');
-    });
-  }
-
-  function refreshDaysByMonth(){
-    const maxDay = daysInMonth(dateWheel.year.value, dateWheel.month.value);
-    const dayWheel = dateWheel.day;
-    const currentItems = dayWheel.track.querySelectorAll('.date-wheel-item');
-    if (currentItems.length !== maxDay){
-      const prev = Math.min(dayWheel.value, maxDay);
-      buildWheelItems(dayWheel, 'day');
-      setWheelValue(dayWheel, prev, false);
-    }
-  }
-
-  function initDateWheels(){
-    const dayWheel = dateWheel.day;
-    const monthWheel = dateWheel.month;
-    const yearWheel = dateWheel.year;
-
-    dayWheel.el = els.dateWheels.querySelector('[data-wheel="day"]');
-    monthWheel.el = els.dateWheels.querySelector('[data-wheel="month"]');
-    yearWheel.el = els.dateWheels.querySelector('[data-wheel="year"]');
-
-    dayWheel.track = els.wheelDay;
-    monthWheel.track = els.wheelMonth;
-    yearWheel.track = els.wheelYear;
-
-    buildWheelItems(dayWheel, 'day');
-    buildWheelItems(monthWheel, 'month');
-    buildWheelItems(yearWheel, 'year');
-
-    [['day', dayWheel], ['month', monthWheel], ['year', yearWheel]].forEach(([kind, wheel]) => {
-      attachWheelSwipe(wheel, kind);
-    });
-  }
-
-  function attachWheelSwipe(wheel, kind){
-    let startY = 0, startValue = 0, dragging = false, pointerId = null, lastCommitted = null;
-
-    function commit(newValue){
-      if (newValue === lastCommitted) return;
-      lastCommitted = newValue;
-      setWheelValue(wheel, newValue, true);
-      if (kind === 'month' || kind === 'year') refreshDaysByMonth();
-    }
-
-    wheel.el.addEventListener('pointerdown', (e) => {
+    colEl.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       dragging = true;
       pointerId = e.pointerId;
       startY = e.clientY;
-      startValue = wheel.value;
-      lastCommitted = wheel.value;
-      wheel.track.style.transition = 'none';
-      try { wheel.el.setPointerCapture(e.pointerId); } catch(err){}
+      if (kind === 'day') startValue = dateState.day;
+      else if (kind === 'month') startValue = dateState.month;
+      else startValue = dateState.year;
+      // Сброс предыдущих активных
+      Array.from(els.dateRow.querySelectorAll('.date-col')).forEach(c => c.classList.remove('active'));
+      colEl.classList.add('active');
+      try { colEl.setPointerCapture(e.pointerId); } catch(err){}
       e.preventDefault();
     });
 
-    wheel.el.addEventListener('pointermove', (e) => {
+    colEl.addEventListener('pointermove', (e) => {
       if (!dragging || e.pointerId !== pointerId) return;
       const dy = startY - e.clientY;
-      const delta = Math.round(dy / ITEM_H);
-      let newValue = startValue + delta;
-      newValue = Math.max(wheel.min, Math.min(wheel.max, newValue));
-      if (kind === 'day'){
-        const maxDay = daysInMonth(dateWheel.year.value, dateWheel.month.value);
-        newValue = Math.max(1, Math.min(maxDay, newValue));
-      }
-      commit(newValue);
+      const delta = Math.round(dy / STEP_PX);
+      commit(delta);
       e.preventDefault();
     });
 
@@ -1721,45 +1681,51 @@ html,body{
       if (!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
       dragging = false;
       pointerId = null;
-      setWheelValue(wheel, wheel.value, true);
     }
-    wheel.el.addEventListener('pointerup', onUp);
-    wheel.el.addEventListener('pointercancel', onUp);
+    colEl.addEventListener('pointerup', onUp);
+    colEl.addEventListener('pointercancel', onUp);
+    // Клик по колонке — подсветить активную
+    colEl.addEventListener('click', () => {
+      Array.from(els.dateRow.querySelectorAll('.date-col')).forEach(c => c.classList.remove('active'));
+      colEl.classList.add('active');
+    });
   }
 
-  function setDateWheelsFromISO(iso){
-    let y, m, d;
+  function initDateRow(){
+    const cols = els.dateRow.querySelectorAll('.date-col');
+    cols.forEach(col => {
+      const kind = col.dataset.col;
+      attachDateColumn(col, kind);
+    });
+  }
+
+  function setDateRowFromISO(iso){
     if (iso){
       const parts = iso.split('-').map(Number);
-      y = parts[0]; m = parts[1]; d = parts[2];
-      if (!y || !m || !d){
+      if (parts[0] && parts[1] && parts[2]){
+        dateState.year = parts[0];
+        dateState.month = parts[1];
+        dateState.day = parts[2];
+      } else {
         const today = new Date();
-        y = today.getFullYear() - 30; m = today.getMonth() + 1; d = today.getDate();
+        dateState.year = today.getFullYear() - 30;
+        dateState.month = today.getMonth() + 1;
+        dateState.day = today.getDate();
       }
     } else {
       const today = new Date();
-      y = today.getFullYear() - 30; m = today.getMonth() + 1; d = today.getDate();
+      dateState.year = today.getFullYear() - 30;
+      dateState.month = today.getMonth() + 1;
+      dateState.day = today.getDate();
     }
-    const maxDay = daysInMonth(y, m);
-    d = Math.min(d, maxDay);
-    // Установить значения
-    dateWheel.day.value = d;
-    dateWheel.month.value = m;
-    dateWheel.year.value = y;
-    // Пересобрать трек дня под правильное количество дней
-    buildWheelItems(dateWheel.day, 'day');
-    // Применить позиции (без анимации)
-    setWheelValue(dateWheel.day, d, false);
-    setWheelValue(dateWheel.month, m, false);
-    setWheelValue(dateWheel.year, y, false);
+    clampDate();
+    renderDateRow();
   }
 
-  function getDateWheelsISO(){
-    const d = dateWheel.day.value;
-    const m = dateWheel.month.value;
-    const y = dateWheel.year.value;
-    if (!d || !m || !y) return null;
-    return String(y).padStart(4,'0') + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  function getDateRowISO(){
+    return String(dateState.year).padStart(4,'0') + '-' +
+           String(dateState.month).padStart(2,'0') + '-' +
+           String(dateState.day).padStart(2,'0');
   }
 
   function openProfileModal(){
@@ -1768,13 +1734,10 @@ html,body{
     els.profileWeight.value = (S.weight != null && !isNaN(S.weight)) ? S.weight : 70;
     els.profileStatus.className = 'profile-status';
     els.profileStatus.textContent = '';
+    setDateRowFromISO(S.birthDate);
     els.profileModal.classList.add('show');
     setTimeout(() => {
-      // Пересобираем треки после появления модалки, чтобы размеры были корректные
-      buildWheelItems(dateWheel.day, 'day');
-      buildWheelItems(dateWheel.month, 'month');
-      buildWheelItems(dateWheel.year, 'year');
-      setDateWheelsFromISO(S.birthDate);
+      setDateRowFromISO(S.birthDate);
       try { els.profileName.focus(); } catch(e){}
     }, 100);
   }
@@ -1800,7 +1763,7 @@ html,body{
 
   async function saveProfile(){
     const name = els.profileName.value.trim();
-    const birthDate = getDateWheelsISO();
+    const birthDate = getDateRowISO();
 
     let weight = parseFloat(els.profileWeight.value);
     if (isNaN(weight)) weight = 70;
@@ -2070,7 +2033,7 @@ html,body{
     els.statsScreen.addEventListener('pointercancel', onUp);
   })();
 
-  initDateWheels();
+  initDateRow();
 
   (function initLoginScreen(){
     let saved = null;
