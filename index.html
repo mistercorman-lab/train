@@ -38,6 +38,7 @@ html,body{
 .screen.slide-right{transform:translateX(100%); opacity:0; z-index:5;}
 .screen.slide-right.active{transform:translateX(0); opacity:1;}
 
+/* ---------- ЛОГИН ---------- */
 .login-screen{
   position:fixed; inset:0; z-index:999;
   display:flex; align-items:center; justify-content:center; padding:20px;
@@ -46,11 +47,80 @@ html,body{
 .login-screen.hidden{display:none;}
 .login-card{
   background:var(--panel); border:1px solid var(--border);
-  border-radius:22px; padding:32px 28px; width:100%; max-width:360px;
+  border-radius:22px; padding:28px 24px; width:100%; max-width:380px;
   box-shadow:0 30px 80px rgba(0,0,0,.6);
 }
-.login-card h2{margin:0 0 8px; font-size:22px; font-weight:700; text-align:center;}
-.login-card p{margin:0 0 20px; font-size:14px; color:var(--muted); text-align:center;}
+.login-card h2{margin:0 0 6px; font-size:20px; font-weight:700; text-align:center;}
+.login-card .login-sub{margin:0 0 20px; font-size:13px; color:var(--muted); text-align:center;}
+
+/* Блок сохранённого профиля */
+.saved-profile{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:16px;
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:18px;
+  margin-bottom:16px;
+}
+.saved-profile .avatar{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:linear-gradient(160deg,#5b9bff,#2f6ede);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  line-height:1;
+}
+.saved-profile .name{
+  font-size:18px;
+  font-weight:700;
+  text-align:center;
+  word-break:break-word;
+}
+.saved-profile .continue-btn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(160deg,#5b9bff,#2f6ede);
+  cursor:pointer;
+}
+.saved-profile .continue-btn:disabled{opacity:.5;}
+.saved-profile .switch-btn{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-family:inherit;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+.saved-profile .switch-btn:hover{color:var(--text);}
+
+/* Форма нового входа */
+.new-login{margin-top:8px;}
+.new-login.hidden{display:none;}
+.login-card label{
+  display:block;
+  font-size:12px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:8px;
+}
 .login-card input{
   width:100%; padding:14px 16px; font-size:16px;
   background:var(--panel-2); border:2px solid var(--border);
@@ -58,33 +128,74 @@ html,body{
   outline:none; margin-bottom:12px;
 }
 .login-card input:focus{border-color:var(--accent);}
-.login-card button{
+.login-card .btn-primary{
   width:100%; padding:14px; border-radius:12px; border:none;
-  font-family:inherit; font-size:16px; font-weight:600; color:#fff;
+  font-family:inherit; font-size:16px; font-weight:700; color:#fff;
   background:linear-gradient(160deg,#5b9bff,#2f6ede); cursor:pointer;
 }
-.login-card button:disabled{opacity:.5; cursor:wait;}
-.login-error{color:var(--red); font-size:13px; text-align:center; min-height:18px; margin-bottom:12px;}
-
-.menu-screen{padding:20px 16px;}
-.menu-top{display:flex; justify-content:space-between; align-items:center; padding:8px 4px 0; flex-shrink:0;}
-.menu-greeting{font-size:18px; font-weight:600; line-height:1.2;}
-.menu-greeting .greet-sub{display:block; font-size:12px; color:var(--muted); font-weight:500; margin-bottom:2px;}
-.menu-month-stat{
-  font-size:13px; color:var(--muted); background:var(--panel);
-  border:1px solid var(--border); border-radius:999px;
-  padding:8px 14px; font-weight:600; white-space:nowrap;
+.login-card .btn-primary:disabled{opacity:.5; cursor:wait;}
+.login-card .btn-secondary{
+  width:100%; padding:12px; border-radius:12px;
+  border:1px solid var(--border); background:transparent;
+  color:var(--muted); font-family:inherit; font-size:14px;
+  font-weight:600; cursor:pointer; margin-top:8px;
 }
-.menu-month-stat b{color:var(--green); font-size:16px; font-weight:700; margin-right:4px;}
-.menu-buttons{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:20px; padding:40px 0;}
+.login-card .btn-secondary.hidden{display:none;}
+.login-error{color:var(--red); font-size:13px; text-align:center; min-height:18px; margin-bottom:10px;}
+
+/* ---------- МЕНЮ ---------- */
+.menu-screen{padding:20px 16px;}
+.menu-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 4px 0;
+  flex-shrink:0;
+}
+.menu-user-icon{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:linear-gradient(160deg,#5b9bff,#2f6ede);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+}
+.menu-user-info{
+  flex:1;
+  min-width:0;
+}
+.menu-user-info .greet-sub{
+  display:block;
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  font-weight:600;
+  margin-bottom:2px;
+}
+.menu-user-info .greet-name{
+  font-size:18px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.menu-buttons{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:16px; padding:30px 0;}
 .menu-btn{
-  width:100%; max-width:420px; padding:36px 24px; border-radius:24px;
-  border:none; font-family:inherit; font-size:26px; font-weight:800;
-  letter-spacing:.3px; color:#fff; cursor:pointer;
+  width:100%; max-width:420px; padding:32px 24px; border-radius:24px;
+  border:none; font-family:inherit; font-weight:800;
+  color:#fff; cursor:pointer;
   transition:transform .15s, box-shadow .25s;
-  display:flex; align-items:center; justify-content:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px;
   user-select:none;
 }
+.menu-btn .btn-main{font-size:26px; letter-spacing:.3px; line-height:1.1;}
+.menu-btn .btn-sub{font-size:12.5px; font-weight:600; opacity:.75; letter-spacing:.3px;}
 .menu-btn.start{background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 18px 44px rgba(47,110,222,.4), inset 0 1px 0 rgba(255,255,255,.25);}
 .menu-btn.stats{background:linear-gradient(160deg,#39404f,#242935); box-shadow:0 18px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); color:#e8eaf0;}
 .menu-btn:hover{transform:translateY(-3px);}
@@ -103,6 +214,7 @@ html,body{
 .cal-day.today .num{color:var(--accent-2);}
 .cal-day.trained .num{color:var(--text);}
 
+/* ---------- SETUP ---------- */
 .setup-screen{padding:20px 16px;}
 .setup-header{text-align:center; padding:12px 0 20px; flex-shrink:0;}
 .setup-header h1{margin:0; font-size:24px; font-weight:800; letter-spacing:.3px;}
@@ -127,6 +239,7 @@ html,body{
 .setup-footer .big-start:active{transform:scale(.97);}
 .setup-footer .back-btn{margin-top:10px; width:100%; padding:12px; border-radius:14px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;}
 
+/* ---------- ТАЙМЕР ---------- */
 .timer-screen{padding:16px;}
 .timer-rest-config{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:16px 20px; margin-bottom:14px; text-align:center;}
 .timer-rest-config .label{
@@ -177,6 +290,7 @@ html,body{
 }
 .timer-footer .finish-btn:active{transform:scale(.97);}
 
+/* ---------- ФИНАЛ ---------- */
 .finish-screen{padding:20px 16px; overflow-y:auto;}
 .finish-header{text-align:center; padding:20px 0 16px; flex-shrink:0;}
 .finish-emoji{font-size:64px; line-height:1; margin-bottom:8px;}
@@ -187,7 +301,6 @@ html,body{
 .finish-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
 .finish-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
 .finish-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
-
 .summary-list{
   display:flex;
   flex-direction:column;
@@ -252,7 +365,6 @@ html,body{
 }
 .summary-totals .row{display:flex; justify-content:space-between; font-size:14px; color:var(--muted); padding:5px 0;}
 .summary-totals .row b{color:var(--text); font-weight:600; font-variant-numeric:tabular-nums;}
-
 .finish-back{
   width:100%; max-width:500px; margin:16px auto 0; padding:18px;
   border-radius:16px; border:none; font-family:inherit;
@@ -263,6 +375,7 @@ html,body{
 }
 .finish-back:active{transform:scale(.97);}
 
+/* ---------- МОДАЛКИ ---------- */
 .modal-overlay{position:fixed; inset:0; background:rgba(5,7,12,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; overflow-y:auto;}
 .modal-overlay.show{display:flex;}
 .modal{background:var(--panel); border:1px solid var(--border); border-radius:22px; padding:26px; width:100%; max-width:400px; box-shadow:0 30px 80px rgba(0,0,0,.6); margin:auto;}
@@ -278,6 +391,7 @@ html,body{
 .btn-secondary{background:var(--panel-2); color:var(--text); border:1px solid var(--border) !important;}
 .btn-primary{background:linear-gradient(160deg,#5b9bff,#2f6ede); color:#fff;}
 
+/* ---------- СТАТИСТИКА ---------- */
 .stats-screen{padding:20px 16px; gap:14px;}
 .stats-head{display:flex; justify-content:space-between; align-items:center; padding:4px 4px 0; flex-shrink:0;}
 .stats-head h2{margin:0; font-size:22px; font-weight:800;}
@@ -313,7 +427,8 @@ html,body{
 .stats-ex .reps b{color:var(--green); font-weight:700;}
 
 @media (max-width:720px){
-  .menu-btn{padding:30px 20px; font-size:22px; border-radius:20px;}
+  .menu-btn{padding:28px 20px; border-radius:20px;}
+  .menu-btn .btn-main{font-size:22px;}
   .ex-head, .ex-row{grid-template-columns:38px 1fr 70px 36px; gap:5px;}
   .ex-head{padding:10px; font-size:10px;}
   .ex-row{padding:10px 8px;}
@@ -325,8 +440,9 @@ html,body{
   .timer-rest-config .label{font-size:17px;}
 }
 @media (max-width:380px), (max-height:640px){
-  .menu-btn{padding:24px 16px; font-size:20px;}
-  .menu-buttons{gap:14px; padding:24px 0;}
+  .menu-btn{padding:22px 16px;}
+  .menu-btn .btn-main{font-size:20px;}
+  .menu-buttons{gap:12px; padding:20px 0;}
   .timer-btn{width:min(180px,50vw); height:min(180px,50vw);}
   .rest-input-big{width:100px; font-size:24px;}
 }
@@ -344,11 +460,23 @@ html,body{
 
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <h2>Тренировка</h2>
-    <p>Введите ваш логин, чтобы продолжить</p>
-    <input type="text" id="loginInput" placeholder="Логин" autocomplete="off" autocapitalize="off" spellcheck="false">
-    <div class="login-error" id="loginError"></div>
-    <button id="loginBtn">Войти</button>
+    <h2 id="loginTitle">Тренировка</h2>
+    <p class="login-sub" id="loginSubtitle">Введите логин, чтобы продолжить</p>
+
+    <div class="saved-profile" id="savedProfile" style="display:none;">
+      <div class="avatar">👤</div>
+      <div class="name" id="savedProfileName">—</div>
+      <button class="continue-btn" id="savedContinueBtn">Вход выполнен</button>
+      <button class="switch-btn" id="savedSwitchBtn">Войти в другой профиль</button>
+    </div>
+
+    <div class="new-login hidden" id="newLogin">
+      <label for="loginInput">Логин</label>
+      <input type="text" id="loginInput" placeholder="Введите логин" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="login-error" id="loginError"></div>
+      <button class="btn-primary" id="loginBtn">Войти</button>
+      <button class="btn-secondary hidden" id="backToSavedBtn">← Назад к профилю</button>
+    </div>
   </div>
 </div>
 
@@ -356,17 +484,20 @@ html,body{
 
   <section class="screen slide-up menu-screen" id="screen-menu">
     <div class="menu-top">
-      <div class="menu-greeting">
-        <span class="greet-sub">Привет,</span>
-        <span id="greetName">—</span>
-      </div>
-      <div class="menu-month-stat">
-        <b id="monthCount">0</b> в этом месяце
+      <div class="menu-user-icon">👤</div>
+      <div class="menu-user-info">
+        <span class="greet-sub">Вы вошли как</span>
+        <span class="greet-name" id="greetName">—</span>
       </div>
     </div>
     <div class="menu-buttons">
-      <button class="menu-btn start" id="menuStartBtn">Начать</button>
-      <button class="menu-btn stats" id="menuStatsBtn">Показатели</button>
+      <button class="menu-btn start" id="menuStartBtn">
+        <span class="btn-main">Начать</span>
+      </button>
+      <button class="menu-btn stats" id="menuStatsBtn">
+        <span class="btn-main">Показатели</span>
+        <span class="btn-sub" id="menuStatsSub">0 тренировок в этом месяце</span>
+      </button>
     </div>
     <div class="menu-calendar">
       <div class="cal-title" id="calTitle">Календарь</div>
@@ -506,16 +637,30 @@ html,body{
     pendingFinish: false, rafId: null, restTimeout: null,
     lastTimeStr: '', allWorkouts: [],
     statsMonth: new Date().getMonth(),
-    statsYear: new Date().getFullYear()
+    statsYear: new Date().getFullYear(),
+    savedLogin: null
   };
 
   const $ = (id) => document.getElementById(id);
   const els = {
-    loginScreen: $('loginScreen'), loginInput: $('loginInput'), loginBtn: $('loginBtn'), loginError: $('loginError'),
+    loginScreen: $('loginScreen'),
+    loginTitle: $('loginTitle'),
+    loginSubtitle: $('loginSubtitle'),
+    savedProfile: $('savedProfile'),
+    savedProfileName: $('savedProfileName'),
+    savedContinueBtn: $('savedContinueBtn'),
+    savedSwitchBtn: $('savedSwitchBtn'),
+    newLogin: $('newLogin'),
+    loginInput: $('loginInput'),
+    loginBtn: $('loginBtn'),
+    loginError: $('loginError'),
+    backToSavedBtn: $('backToSavedBtn'),
+
     screens: $('screens'),
     menuScreen: $('screen-menu'), setupScreen: $('screen-setup'), timerScreen: $('screen-timer'),
     finishScreen: $('screen-finish'), statsScreen: $('screen-stats'),
-    greetName: $('greetName'), monthCount: $('monthCount'),
+    greetName: $('greetName'),
+    menuStatsSub: $('menuStatsSub'),
     menuStartBtn: $('menuStartBtn'), menuStatsBtn: $('menuStatsBtn'),
     calTitle: $('calTitle'), calLine: $('calLine'),
     exList: $('exList'), exAddBtn: $('exAddBtn'),
@@ -532,6 +677,7 @@ html,body{
     addExOk: $('addExOk'), addExCancel: $('addExCancel')
   };
 
+  /* ============ УТИЛИТЫ ============ */
   function fmt(ms){
     ms = Math.max(0, ms);
     const t = Math.floor(ms / 1000);
@@ -543,6 +689,7 @@ html,body{
   function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 450); }
   function dateOnly(s){ return String(s || '').split('T')[0].split(' ')[0]; }
 
+  /* ============ АУДИО ============ */
   let audioCtx = null;
   function getAudioCtx(){
     if (!audioCtx){
@@ -571,6 +718,7 @@ html,body{
   }
   function vibrate(){ if (navigator.vibrate){ try { navigator.vibrate([180,90,180,90,260]); } catch(e){} } }
 
+  /* ============ API ============ */
   async function apiGetUser(login){
     try {
       const { data, error } = await supabase.from('users').select('login, display_name').eq('login', login.trim()).maybeSingle();
@@ -597,6 +745,7 @@ html,body{
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
   }
 
+  /* ============ ЭКРАНЫ ============ */
   function showScreen(name){
     const screens = { menu: els.menuScreen, setup: els.setupScreen, timer: els.timerScreen, finish: els.finishScreen, stats: els.statsScreen };
     const cur = screens[S.screen];
@@ -607,6 +756,7 @@ html,body{
     S.screen = name;
   }
 
+  /* ============ КАЛЕНДАРЬ ============ */
   function renderCalendar(){
     const now = new Date();
     const y = now.getFullYear(), m = now.getMonth(), today = now.getDate();
@@ -640,9 +790,10 @@ html,body{
       S.allWorkouts = data.history;
       updateMenuStats();
       renderCalendar();
-      renderStatsScreen();
+      if (S.screen === 'stats') renderStatsScreen();
     }
   }
+
   function updateMenuStats(){
     const now = new Date();
     const y = now.getFullYear(), m = now.getMonth();
@@ -653,9 +804,14 @@ html,body{
       const [wy, wm] = d.split('-').map(Number);
       if (wy === y && wm === m+1) dates.add(d);
     });
-    els.monthCount.textContent = dates.size;
+    const count = dates.size;
+    let word = 'тренировок';
+    if (count % 10 === 1 && count % 100 !== 11) word = 'тренировка';
+    else if ([2,3,4].includes(count % 10) && ![12,13,14].includes(count % 100)) word = 'тренировки';
+    els.menuStatsSub.textContent = count + ' ' + word + ' в этом месяце';
   }
 
+  /* ============ УПРАЖНЕНИЯ ============ */
   function loadExercises(){
     try {
       const raw = localStorage.getItem(EXERCISES_KEY);
@@ -839,6 +995,7 @@ html,body{
     try { localStorage.setItem(REST_KEY, String(v)); } catch(e){}
   });
 
+  /* ============ ТАЙМЕР ============ */
   function startWorkout(){
     const active = S.exercises.filter(e => e.sets > 0);
     if (!active.length){ shake(els.exList); return; }
@@ -959,6 +1116,7 @@ html,body{
   }
   function stopLoop(){ if (S.rafId){ cancelAnimationFrame(S.rafId); S.rafId = null; } }
 
+  /* ============ ФИНАЛ ============ */
   function buildWorkoutData(){
     const stats = computeStats();
     const exercises = [];
@@ -1035,6 +1193,7 @@ html,body{
   }
   function setFinishStatus(type, text){ els.finishStatus.className = 'finish-status show ' + type; els.finishStatus.textContent = text; }
 
+  /* ============ МОДАЛКИ ============ */
   function showRepsModal(){
     const ex = S.activeExercises[S.exIdx];
     const setNum = S.setIdx + 1;
@@ -1100,6 +1259,7 @@ html,body{
     else if (e.key === 'Escape'){ e.preventDefault(); closeAddEx(); }
   });
 
+  /* ============ КНОПКИ ============ */
   els.mainBtn.addEventListener('click', () => { getAudioCtx(); if (S.phase === 'work'){ finishApproach(); } });
   els.skipBtn.addEventListener('click', () => { if (S.phase === 'rest') endRest(true); });
   els.setupStartBtn.addEventListener('click', () => { startWorkout(); });
@@ -1122,199 +1282,3 @@ html,body{
           showRepsModal();
           return;
         }
-      }
-      requestFinish();
-    }
-  });
-
-  function fillStatsFilters(){
-    const monthSel = els.statsMonth;
-    const yearSel = els.statsYear;
-    monthSel.innerHTML = '';
-    MONTHS_RU.forEach((name, i) => {
-      const o = document.createElement('option');
-      o.value = i;
-      o.textContent = name;
-      monthSel.appendChild(o);
-    });
-
-    const years = new Set();
-    S.allWorkouts.forEach(w => {
-      const d = dateOnly(w.workout_date);
-      if (!d) return;
-      const y = parseInt(d.split('-')[0], 10);
-      if (!isNaN(y)) years.add(y);
-    });
-    years.add(new Date().getFullYear());
-
-    yearSel.innerHTML = '';
-    Array.from(years).sort((a,b) => b - a).forEach(y => {
-      const o = document.createElement('option');
-      o.value = y;
-      o.textContent = y;
-      yearSel.appendChild(o);
-    });
-
-    monthSel.value = S.statsMonth;
-    yearSel.value = S.statsYear;
-  }
-
-  function renderStatsScreen(){
-    fillStatsFilters();
-
-    const m = parseInt(els.statsMonth.value, 10);
-    const y = parseInt(els.statsYear.value, 10);
-
-    const filtered = S.allWorkouts.filter(w => {
-      const d = dateOnly(w.workout_date);
-      if (!d) return false;
-      const [wy, wm] = d.split('-').map(Number);
-      return wy === y && wm === m+1;
-    });
-
-    if (!filtered.length){
-      els.statsContent.innerHTML = '<div class="stats-empty">В этом месяце тренировок нет</div>';
-      return;
-    }
-
-    const byDate = {};
-    filtered.forEach(row => {
-      const d = dateOnly(row.workout_date);
-      if (!byDate[d]) byDate[d] = [];
-      byDate[d].push(row);
-    });
-
-    let html = '';
-    Object.keys(byDate).sort().reverse().forEach(dateStr => {
-      const rows = byDate[dateStr];
-      const firstRow = rows[0];
-      const totalTime = firstRow.total_time ? fmt(parseFloat(firstRow.total_time) * 1000) : '—';
-
-      html += '<div class="stats-item">';
-      html += '<div class="h-date">' + dateStr + '</div>';
-      html += '<div class="h-meta">Всего ' + totalTime + '</div>';
-
-      rows.forEach(r => {
-        const reps = r.reps || 0, sets = r.sets || 0;
-        const avg = sets ? (reps / sets).toFixed(1) : '0';
-        html += '<div class="stats-ex"><span class="name">' + escapeHtml(r.exercise_name) + '</span><span class="reps">' + sets + '×  ·  <b>' + reps + '</b> повт  ·  ср. ' + avg + '</span></div>';
-      });
-
-      html += '</div>';
-    });
-
-    els.statsContent.innerHTML = html;
-  }
-
-  els.statsMonth.addEventListener('change', renderStatsScreen);
-  els.statsYear.addEventListener('change', renderStatsScreen);
-
-  function resetAfterFinish(){
-    stopLoop();
-    clearTimeout(S.restTimeout); S.restTimeout = null;
-    S.phase = 'idle';
-    S.workStart = 0; S.workEnd = 0; S.restStart = 0; S.restEnd = 0;
-    S.workoutStart = 0; S.finishedAt = 0;
-    S.activeExercises = []; S.exIdx = 0; S.setIdx = 0;
-    S.pendingFinish = false; S.lastTimeStr = '';
-    S.exercises.forEach(ex => { ex.completed = []; });
-    setSetupDisabled(false);
-    setTimerUI();
-    renderCalendar();
-  }
-
-  async function doLogin(login){
-    if (!login || !login.trim()){
-      els.loginError.textContent = 'Введите логин';
-      return;
-    }
-    els.loginError.textContent = '';
-    els.loginBtn.disabled = true;
-    els.loginBtn.textContent = 'Проверяем...';
-
-    try {
-      const data = await apiGetUser(login);
-
-      if (data && data.result === 'success'){
-        S.login = data.login;
-        S.displayName = data.displayName;
-        try { localStorage.setItem(LOGIN_KEY, S.login); } catch(e){}
-
-        els.loginScreen.classList.add('hidden');
-        els.screens.style.display = 'block';
-        els.greetName.textContent = S.displayName;
-
-        try {
-          const saved = parseInt(localStorage.getItem(REST_KEY), 10);
-          if (!isNaN(saved) && saved >= 5 && saved <= 600){
-            els.restInputBig.value = saved;
-            S.restDuration = saved * 1000;
-          }
-        } catch(e){}
-
-        S.exercises = loadExercises();
-        showScreen('menu');
-        loadAllWorkouts();
-      } else {
-        els.loginError.textContent = (data && data.message) || 'Ошибка входа';
-        els.loginInput.classList.add('shake');
-        setTimeout(() => els.loginInput.classList.remove('shake'), 450);
-      }
-    } catch(err){
-      console.error(err);
-      els.loginError.textContent = 'Ошибка: ' + err.message;
-    } finally {
-      els.loginBtn.disabled = false;
-      els.loginBtn.textContent = 'Войти';
-    }
-  }
-
-  els.loginBtn.addEventListener('click', () => doLogin(els.loginInput.value));
-  els.loginInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter'){ e.preventDefault(); doLogin(els.loginInput.value); }
-  });
-
-  (function initStatsSwipe(){
-    let startX = 0, startY = 0, dragging = false, pointerId = null, decided = false;
-    els.statsScreen.addEventListener('pointerdown', (e) => {
-      if (S.screen !== 'stats') return;
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      if (e.target.closest('select')) return;
-      startX = e.clientX; startY = e.clientY;
-      dragging = true; decided = false;
-      pointerId = e.pointerId;
-    });
-    els.statsScreen.addEventListener('pointermove', (e) => {
-      if (!dragging || e.pointerId !== pointerId) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      if (!decided){
-        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-        if (Math.abs(dy) > Math.abs(dx)){ dragging = false; return; }
-        decided = true;
-        try { els.statsScreen.setPointerCapture(e.pointerId); } catch(err){}
-      }
-      if (dx > 0){
-        els.statsScreen.style.transform = 'translateX(' + dx + 'px)';
-        els.statsScreen.style.transition = 'none';
-      }
-      e.preventDefault();
-    });
-    function onUp(e){
-      if (!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
-      dragging = false; pointerId = null;
-      const dx = e.clientX - startX;
-      els.statsScreen.style.transition = '';
-      els.statsScreen.style.transform = '';
-      if (dx > 100){
-        showScreen('menu');
-      }
-    }
-    els.statsScreen.addEventListener('pointerup', onUp);
-    els.statsScreen.addEventListener('pointercancel', onUp);
-  })();
-
-})();
-</script>
-</body>
-</html>
