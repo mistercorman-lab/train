@@ -5,146 +5,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Упражнения</title>
 
-<!-- Favicon для браузеров (SVG работает в Chrome, Firefox, Edge) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='65' y='260' width='170' height='24' rx='12'/%3E%3Crect x='45' y='305' width='190' height='24' rx='12'/%3E%3Crect x='85' y='350' width='150' height='24' rx='12'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='38' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='330' y1='200' x2='255' y2='295'/%3E%3Cline x1='255' y1='295' x2='320' y2='330'/%3E%3Cline x1='320' y1='330' x2='320' y2='405'/%3E%3Cline x1='255' y1='295' x2='195' y2='330'/%3E%3Cline x1='195' y1='330' x2='155' y2='380'/%3E%3Cline x1='325' y1='205' x2='395' y2='240'/%3E%3Cline x1='395' y1='240' x2='420' y2='285'/%3E%3Cline x1='325' y1='205' x2='260' y2='230'/%3E%3C/g%3E%3Ccircle cx='360' cy='150' r='38' fill='%23fff'/%3E%3C/svg%3E">
-
-<!-- Apple Touch Icon — ЭТО ГЛАВНОЕ ДЛЯ IOS. Файл icon.png должен лежать рядом с index.html -->
-<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icon.png">
-<link rel="apple-touch-icon" sizes="167x167" href="icon.png">
-<link rel="apple-touch-icon" sizes="120x120" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
-
-<!-- Android / PWA -->
 <meta name="theme-color" content="#f7265b">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Упражнения">
 
 <style>
   :root{
-    --bg:#0f1115;
-    --panel:#171a21;
-    --panel-2:#1e222b;
-    --text:#e8eaf0;
-    --muted:#8b93a7;
-    --border:#262b36;
-    --accent:#3b6fd4;
+    --bg:#0f1115; --panel:#171a21; --panel-2:#1e222b;
+    --text:#e8eaf0; --muted:#8b93a7; --border:#262b36; --accent:#3b6fd4;
   }
   *{box-sizing:border-box;}
-  html,body{min-height:100%;}
   body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     background:radial-gradient(1200px 800px at 50% -10%, #1b2130 0%, var(--bg) 60%);
-    color:var(--text);
-    display:flex;
-    justify-content:center;
-    padding:16px;
-    -webkit-tap-highlight-color:transparent;
+    color:var(--text); display:flex; justify-content:center; padding:16px;
+    -webkit-tap-highlight-color:transparent; min-height:100vh;
   }
-  .app{
-    width:100%;
-    max-width:820px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-  }
+  .app{width:100%; max-width:820px; display:flex; flex-direction:column; gap:14px;}
 
-  .topbar{
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    gap:12px;
-    flex-wrap:wrap;
-    padding:0 6px;
+  /* ===== Логин ===== */
+  .login-screen{
+    position:fixed; inset:0;
+    background:radial-gradient(1200px 800px at 50% -10%, #1b2130 0%, var(--bg) 60%);
+    display:flex; align-items:center; justify-content:center;
+    z-index:999; padding:20px;
   }
-  .setting{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:16px;
-    color:var(--muted);
-    font-weight:500;
+  .login-screen.hidden{display:none;}
+  .login-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:22px;
+    padding:32px 28px; width:100%; max-width:360px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);
   }
+  .login-card h2{margin:0 0 8px; font-size:22px; font-weight:700; text-align:center;}
+  .login-card p{margin:0 0 20px; font-size:14px; color:var(--muted); text-align:center; line-height:1.4;}
+  .login-card input{
+    width:100%; padding:14px 16px; font-size:16px; background:var(--panel-2);
+    border:2px solid var(--border); border-radius:12px; color:var(--text);
+    font-family:inherit; outline:none; margin-bottom:12px;
+  }
+  .login-card input:focus{border-color:var(--accent);}
+  .login-card button{
+    width:100%; padding:14px; border-radius:12px; border:none;
+    font-family:inherit; font-size:16px; font-weight:600; color:#fff;
+    background:linear-gradient(160deg,#5b9bff,#2f6ede); cursor:pointer;
+  }
+  .login-card button:disabled{opacity:.5; cursor:wait;}
+  .login-error{color:#ff9b9b; font-size:13px; text-align:center; min-height:18px; margin-bottom:12px;}
+
+  /* ===== Шапка ===== */
+  .topbar{display:flex; justify-content:flex-end; padding:0 6px; gap:10px; align-items:center;}
+  .setting{display:flex; align-items:center; gap:10px; font-size:16px; color:var(--muted); font-weight:500;}
   .setting input{
-    width:100px;
-    background:var(--panel);
-    border:1px solid var(--border);
-    color:var(--text);
-    border-radius:10px;
-    padding:11px 12px;
-    font-size:17px;
-    text-align:center;
-    font-variant-numeric:tabular-nums;
-    outline:none;
-    font-family:inherit;
-    font-weight:700;
-    cursor:ns-resize;
-    user-select:none;
-    -webkit-user-select:none;
-    touch-action:none;
+    width:100px; background:var(--panel); border:1px solid var(--border); color:var(--text);
+    border-radius:10px; padding:11px 12px; font-size:17px; text-align:center;
+    font-family:inherit; font-weight:700; cursor:ns-resize; user-select:none;
+    -webkit-user-select:none; touch-action:none; outline:none;
   }
-  .setting input:focus{border-color:var(--accent);}
+  .user-badge{
+    font-size:14px; color:var(--muted); padding:6px 12px;
+    background:var(--panel); border:1px solid var(--border); border-radius:999px;
+  }
+  .user-badge b{color:var(--text); font-weight:600;}
 
-  .tabs{
-    display:flex;
-    gap:6px;
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:6px;
-  }
+  /* ===== Табы ===== */
+  .tabs{display:flex; gap:6px; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:6px;}
   .tab{
-    flex:1;
-    padding:15px 12px;
-    background:transparent;
-    border:none;
-    color:var(--muted);
-    font-family:inherit;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-    border-radius:12px;
-    transition:background .15s, color .15s;
-    position:relative;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    white-space:nowrap;
+    flex:1; padding:15px 12px; background:transparent; border:none;
+    color:var(--muted); font-family:inherit; font-size:16px; font-weight:600;
+    cursor:pointer; border-radius:12px; display:inline-flex;
+    align-items:center; justify-content:center; gap:8px; white-space:nowrap;
   }
-  .tab:hover{color:var(--text);}
-  .tab.active{
-    background:var(--panel-2);
-    color:var(--text);
-    box-shadow:inset 0 0 0 1px var(--border);
-  }
+  .tab.active{background:var(--panel-2); color:var(--text); box-shadow:inset 0 0 0 1px var(--border);}
   .tab .tab-badge{
-    background:var(--accent);
-    color:#fff;
-    border-radius:999px;
-    padding:2px 8px;
-    font-size:12px;
-    font-variant-numeric:tabular-nums;
-    font-weight:700;
-    min-width:20px;
-    text-align:center;
-    line-height:1.5;
+    background:var(--accent); color:#fff; border-radius:999px; padding:2px 8px;
+    font-size:12px; font-weight:700; min-width:20px; text-align:center;
   }
-  .tab .tab-badge.zero{
-    background:#2a3040;
-    color:var(--muted);
-  }
-  .tab .live-dot{
-    display:none;
-    width:9px;
-    height:9px;
-    border-radius:50%;
-    background:#ff8a5c;
-    box-shadow:0 0 0 0 rgba(255,138,92,.7);
-    animation:livePulse 1.6s infinite;
-  }
+  .tab .tab-badge.zero{background:#2a3040; color:var(--muted);}
+  .tab .live-dot{display:none; width:9px; height:9px; border-radius:50%; background:#ff8a5c; animation:livePulse 1.6s infinite;}
   .tab .live-dot.on{display:inline-block;}
   @keyframes livePulse{
     0%{box-shadow:0 0 0 0 rgba(255,138,92,.7);}
@@ -152,496 +91,134 @@
     100%{box-shadow:0 0 0 0 rgba(255,138,92,0);}
   }
 
-  .swipe-viewport{
-    position:relative;
-    overflow:hidden;
-    border-radius:22px;
-    touch-action: pan-y;
-  }
-  .swipe-track{
-    display:flex;
-    width:300%;
-    transition:transform .28s cubic-bezier(.22,.61,.36,1);
-    will-change:transform;
-  }
-  .swipe-track.dragging{
-    transition:none;
-  }
-  .swipe-page{
-    width:calc(100% / 3);
-    flex-shrink:0;
-    display:flex;
-    flex-direction:column;
-    min-height:460px;
-  }
+  /* ===== Свайп ===== */
+  .swipe-viewport{position:relative; overflow:hidden; border-radius:22px; touch-action:pan-y;}
+  .swipe-track{display:flex; width:300%; transition:transform .28s cubic-bezier(.22,.61,.36,1);}
+  .swipe-track.dragging{transition:none;}
+  .swipe-page{width:calc(100% / 3); flex-shrink:0; display:flex; flex-direction:column; min-height:460px;}
 
   .panel{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:22px;
-    min-height:460px;
-    display:flex;
-    flex-direction:column;
-    flex:1;
+    background:var(--panel); border:1px solid var(--border); border-radius:22px;
+    min-height:460px; display:flex; flex-direction:column; flex:1;
   }
 
-  #panel-exercises{
-    padding:18px;
-    gap:12px;
-  }
+  /* ===== Упражнения ===== */
+  #panel-exercises{padding:18px; gap:12px;}
   .exercise-list{
-    list-style:none;
-    margin:0;
-    padding:0;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    overflow-y:auto;
+    list-style:none; margin:0; padding:0; display:flex;
+    flex-direction:column; gap:8px; overflow-y:auto;
     max-height:min(58vh,540px);
-    scrollbar-width:thin;
-    scrollbar-color:#333a48 transparent;
   }
-  .exercise-list::-webkit-scrollbar{width:6px;}
-  .exercise-list::-webkit-scrollbar-thumb{background:#333a48;border-radius:3px;}
-
   .exercise-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:16px 16px;
-    border-radius:14px;
-    background:var(--panel-2);
-    transition:background .15s, border-color .15s, box-shadow .15s;
-    border:1px solid transparent;
+    display:flex; align-items:center; gap:12px; padding:16px;
+    border-radius:14px; background:var(--panel-2); border:1px solid transparent;
   }
-  .exercise-item:hover{background:#232833;}
-  .exercise-item.active{
-    border-color:var(--accent);
-    background:#1a2740;
-    box-shadow:0 0 0 3px rgba(59,111,212,.12);
-  }
-  .exercise-item .ex-label{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    flex:1;
-    min-width:0;
-    cursor:pointer;
-    user-select:none;
-  }
+  .exercise-item.active{border-color:var(--accent); background:#1a2740;}
+  .exercise-item .ex-label{display:flex; align-items:center; gap:12px; flex:1; min-width:0; cursor:pointer; user-select:none;}
   .exercise-item .check{
-    appearance:none;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    width:26px;
-    height:26px;
-    flex-shrink:0;
-    border:2px solid #3a4150;
-    border-radius:8px;
-    background:#10131a;
-    cursor:pointer;
-    position:relative;
-    transition:border-color .15s, background .15s, box-shadow .15s;
-    margin:0;
-    outline:none;
+    appearance:none; -webkit-appearance:none; width:26px; height:26px;
+    flex-shrink:0; border:2px solid #3a4150; border-radius:8px;
+    background:#10131a; cursor:pointer; position:relative; margin:0; outline:none;
   }
-  .exercise-item .check:hover{border-color:#4f5a70;}
-  .exercise-item .check:checked{
-    background:var(--accent);
-    border-color:var(--accent);
-    box-shadow:0 0 0 3px rgba(59,111,212,.18);
-  }
+  .exercise-item .check:checked{background:var(--accent); border-color:var(--accent);}
   .exercise-item .check:checked::after{
-    content:"";
-    position:absolute;
-    left:7px;
-    top:2px;
-    width:7px;
-    height:13px;
-    border:solid #fff;
-    border-width:0 3px 3px 0;
-    transform:rotate(45deg);
+    content:""; position:absolute; left:7px; top:2px; width:7px; height:13px;
+    border:solid #fff; border-width:0 3px 3px 0; transform:rotate(45deg);
   }
-  .exercise-item .check:focus-visible{
-    box-shadow:0 0 0 3px rgba(59,111,212,.35);
-  }
-  .exercise-item .check:disabled{
-    opacity:.4;
-    cursor:default;
-  }
-  .exercise-item .name{
-    font-size:17px;
-    font-weight:500;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
+  .exercise-item .name{font-size:17px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .exercise-item .sets-input{
-    width:66px;
-    background:#14171e;
-    border:1px solid var(--border);
-    color:var(--text);
-    border-radius:10px;
-    padding:9px 6px;
-    font-size:16px;
-    font-weight:600;
-    text-align:center;
-    font-family:inherit;
-    font-variant-numeric:tabular-nums;
-    outline:none;
-    flex-shrink:0;
-    cursor:ns-resize;
-    user-select:none;
-    -webkit-user-select:none;
-    touch-action:none;
+    width:66px; background:#14171e; border:1px solid var(--border); color:var(--text);
+    border-radius:10px; padding:9px 6px; font-size:16px; font-weight:600;
+    text-align:center; font-family:inherit; outline:none; flex-shrink:0;
+    cursor:ns-resize; user-select:none; -webkit-user-select:none; touch-action:none;
   }
-  .exercise-item .sets-input:focus{border-color:var(--accent);}
-  .exercise-item .sets-input:disabled{opacity:.45;cursor:default;}
-
   .exercise-item .remove-btn{
-    width:34px;
-    height:34px;
-    border-radius:10px;
-    border:none;
-    background:transparent;
-    color:var(--muted);
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    font-family:inherit;
-    line-height:1;
-    flex-shrink:0;
-    transition:background .15s, color .15s, transform .1s;
-    padding:0;
-    margin-left:2px;
+    width:34px; height:34px; border-radius:10px; border:none;
+    background:transparent; color:var(--muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; flex-shrink:0;
   }
-  .exercise-item .remove-btn:hover:not(:disabled){
-    background:rgba(255,107,107,.14);
-    color:#ff9b9b;
-  }
-  .exercise-item .remove-btn:active:not(:disabled){
-    transform:scale(.9);
-  }
-  .exercise-item .remove-btn:disabled{
-    opacity:.3;
-    cursor:not-allowed;
-  }
+  .exercise-item .remove-btn:hover{color:#ff9b9b; background:rgba(255,107,107,.14);}
 
   .add-exercise-btn{
-    padding:14px 18px;
-    border-radius:12px;
-    border:1px dashed var(--border);
-    background:transparent;
-    color:var(--muted);
-    font-family:inherit;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    transition:border-color .15s, color .15s, background .15s, transform .1s;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    width:100%;
-    flex-shrink:0;
+    padding:14px; border-radius:12px; border:1px dashed var(--border);
+    background:transparent; color:var(--muted); font-family:inherit;
+    font-size:15px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
   }
-  .add-exercise-btn .plus{
-    font-size:20px;
-    line-height:1;
-    font-weight:400;
-  }
-  .add-exercise-btn:hover:not(:disabled){
-    border-color:var(--accent);
-    color:#9dc0ff;
-    background:rgba(59,111,212,.06);
-  }
-  .add-exercise-btn:active:not(:disabled){
-    transform:scale(.98);
-  }
-  .add-exercise-btn:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-  }
+  .add-exercise-btn:hover{border-color:var(--accent); color:#9dc0ff;}
+  .hint{font-size:12px; color:var(--muted); line-height:1.4;}
 
-  .hint{
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.4;
-    padding:0 2px;
-  }
-
-  #panel-timer{
-    padding:26px 20px 30px;
-    align-items:center;
-    justify-content:center;
-    gap:22px;
-  }
-  .phase{
-    font-size:15px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--muted);
-    font-weight:700;
-    text-align:center;
-    min-height:20px;
-  }
-  .time{
-    font-size:clamp(54px,14vw,110px);
-    font-weight:700;
-    line-height:1;
-    letter-spacing:1px;
-    font-variant-numeric:tabular-nums;
-  }
+  /* ===== Таймер ===== */
+  #panel-timer{padding:26px 20px 30px; align-items:center; justify-content:center; gap:22px;}
+  .phase{font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700; text-align:center; min-height:20px;}
+  .time{font-size:clamp(54px,14vw,110px); font-weight:700; line-height:1; font-variant-numeric:tabular-nums;}
   .main-btn{
-    width:min(220px,58vw);
-    height:min(220px,58vw);
-    border-radius:50%;
-    border:none;
-    cursor:pointer;
-    font-family:inherit;
-    font-size:clamp(17px,4.4vw,24px);
-    font-weight:700;
-    color:#fff;
-    background:linear-gradient(160deg,#5b9bff,#2f6ede);
-    box-shadow:0 14px 34px rgba(47,110,222,.35), inset 0 1px 0 rgba(255,255,255,.25);
-    transition:transform .12s ease, box-shadow .25s ease, background .25s ease;
+    width:min(220px,58vw); height:min(220px,58vw); border-radius:50%; border:none;
+    cursor:pointer; font-family:inherit; font-size:clamp(17px,4.4vw,24px);
+    font-weight:700; color:#fff; background:linear-gradient(160deg,#5b9bff,#2f6ede);
+    box-shadow:0 14px 34px rgba(47,110,222,.35); transition:transform .12s, background .25s;
     user-select:none;
   }
   .main-btn:hover:not(:disabled){transform:translateY(-2px);}
   .main-btn:active:not(:disabled){transform:scale(.96);}
-  .main-btn:disabled{cursor:default;}
-
-  .main-btn.work{
-    background:linear-gradient(160deg,#ff8a5c,#e8503a);
-    box-shadow:0 14px 34px rgba(232,80,58,.35), inset 0 1px 0 rgba(255,255,255,.22);
-  }
-  .main-btn.wait{
-    background:linear-gradient(160deg,#39404f,#242935);
-    color:var(--muted);
-    box-shadow:none;
-  }
+  .main-btn.work{background:linear-gradient(160deg,#ff8a5c,#e8503a);}
+  .main-btn.wait{background:linear-gradient(160deg,#39404f,#242935); color:var(--muted);}
   .main-btn.wait::after{
-    content:"";
-    display:block;
-    width:34px;height:4px;
-    margin:12px auto 0;
-    border-radius:2px;
-    background:rgba(139,147,167,.35);
+    content:""; display:block; width:34px; height:4px; margin:12px auto 0;
+    border-radius:2px; background:rgba(139,147,167,.35);
     animation:pulse 1.4s ease-in-out infinite;
   }
-  @keyframes pulse{
-    0%,100%{opacity:.25;transform:scaleX(.6);}
-    50%{opacity:1;transform:scaleX(1);}
-  }
+  @keyframes pulse{0%,100%{opacity:.25; transform:scaleX(.6);} 50%{opacity:1; transform:scaleX(1);}}
+  .skip-btn{background:none; border:none; color:var(--muted); font-family:inherit; font-size:14px; cursor:pointer; text-decoration:underline; padding:6px 10px;}
 
-  .skip-btn{
-    background:none;
-    border:none;
-    color:var(--muted);
-    font-family:inherit;
-    font-size:14px;
-    cursor:pointer;
-    text-decoration:underline;
-    text-underline-offset:3px;
-    padding:6px 10px;
-  }
-  .skip-btn:hover{color:var(--text);}
-
-  #panel-log{
-    padding:18px;
-    gap:12px;
-  }
-  .log-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-  .log-head h2{
-    margin:0;
-    font-size:18px;
-    font-weight:600;
-    letter-spacing:.3px;
-  }
+  /* ===== Подходы ===== */
+  #panel-log{padding:18px; gap:12px;}
+  .log-head h2{margin:0; font-size:18px; font-weight:600;}
   .log-list{
-    list-style:none;
-    margin:0;
-    padding:0;
-    flex:1;
-    min-height:120px;
-    max-height:min(46vh,340px);
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    scrollbar-width:thin;
-    scrollbar-color:#333a48 transparent;
+    list-style:none; margin:0; padding:0; flex:1;
+    min-height:120px; max-height:min(46vh,340px); overflow-y:auto;
+    display:flex; flex-direction:column; gap:6px;
   }
-  .log-list::-webkit-scrollbar{width:6px;}
-  .log-list::-webkit-scrollbar-thumb{background:#333a48;border-radius:3px;}
+  .log-list li{background:var(--panel-2); border-radius:12px; padding:9px 12px;}
+  .log-list li.empty{background:none; color:var(--muted); text-align:center; font-size:14px; padding:20px 0;}
+  .log-list .log-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:2px;}
+  .log-list .log-ex{font-size:13.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .log-list .log-set{font-size:12px; color:var(--muted); flex-shrink:0;}
+  .log-list .log-bot{display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums;}
+  .log-list .log-reps b{color:#7fc98d;}
+  .log-list .log-dur b{color:var(--text); font-weight:600;}
+  .stats{border-top:1px solid var(--border); padding-top:12px; display:flex; flex-direction:column; gap:7px; font-size:14px;}
+  .stat{display:flex; justify-content:space-between; color:var(--muted);}
+  .stat b{color:var(--text); font-variant-numeric:tabular-nums; font-weight:600;}
 
-  .log-list li{
-    background:var(--panel-2);
-    border-radius:12px;
-    padding:9px 12px;
-    animation:slideIn .22s ease both;
-  }
-  @keyframes slideIn{
-    from{opacity:0;transform:translateY(-6px);}
-    to{opacity:1;transform:translateY(0);}
-  }
-  .log-list li.empty{
-    background:none;
-    color:var(--muted);
-    text-align:center;
-    font-size:14px;
-    animation:none;
-    padding:20px 0;
-  }
-  .log-list li .log-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    gap:8px;
-    margin-bottom:2px;
-  }
-  .log-list li .log-ex{
-    font-size:13.5px;
-    font-weight:600;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .log-list li .log-set{
-    font-size:12px;
-    color:var(--muted);
-    flex-shrink:0;
-  }
-  .log-list li .log-bot{
-    display:flex;
-    justify-content:space-between;
-    font-size:12.5px;
-    color:var(--muted);
-    font-variant-numeric:tabular-nums;
-  }
-  .log-list li .log-reps b{color:#7fc98d;}
-  .log-list li .log-dur b{color:var(--text);font-weight:600;}
+  /* ===== Точки ===== */
+  .dots{display:flex; justify-content:center; gap:8px;}
+  .dot{width:7px; height:7px; border-radius:50%; background:#333a48; transition:background .2s; cursor:pointer;}
+  .dot.active{background:var(--accent); transform:scale(1.25);}
 
-  .stats{
-    border-top:1px solid var(--border);
-    padding-top:12px;
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-    font-size:14px;
-  }
-  .stat{
-    display:flex;
-    justify-content:space-between;
-    color:var(--muted);
-  }
-  .stat b{
-    color:var(--text);
-    font-variant-numeric:tabular-nums;
-    font-weight:600;
-  }
-
-  .dots{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    padding:2px 0 0;
-  }
-  .dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:#333a48;
-    transition:background .2s, transform .2s;
-    cursor:pointer;
-  }
-  .dot.active{
-    background:var(--accent);
-    transform:scale(1.25);
-  }
-
-  footer{
-    display:flex;
-    justify-content:center;
-  }
-  .footer-row{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:center;
-    width:100%;
-  }
+  /* ===== Футер ===== */
+  .footer-row{display:flex; gap:10px; width:100%;}
   .stop-btn, .history-btn{
-    padding:14px 26px;
-    border-radius:14px;
-    border:1px solid var(--border);
-    background:var(--panel);
-    color:var(--text);
-    font-family:inherit;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-    transition:background .15s ease, border-color .15s ease, color .15s ease;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    flex:1;
-    min-width:0;
+    padding:14px 26px; border-radius:14px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text); font-family:inherit;
+    font-size:16px; font-weight:600; cursor:pointer; flex:1;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    transition:background .15s, border-color .15s, color .15s;
   }
-  .stop-btn:hover:not(:disabled){
-    background:#2a1a1a;
-    border-color:#7a3b3b;
-    color:#ff9b9b;
-  }
-  .stop-btn:disabled{opacity:.35;cursor:not-allowed;}
-  .history-btn:hover{
-    background:#1a2740;
-    border-color:var(--accent);
-    color:#9dc0ff;
-  }
+  .stop-btn:hover:not(:disabled){background:#2a1a1a; border-color:#7a3b3b; color:#ff9b9b;}
+  .stop-btn:disabled{opacity:.35; cursor:not-allowed;}
+  .history-btn:hover{background:#1a2740; border-color:var(--accent); color:#9dc0ff;}
   .history-btn .badge{
-    background:var(--accent);
-    color:#fff;
-    border-radius:999px;
-    padding:2px 9px;
-    font-size:12px;
-    font-weight:700;
-    font-variant-numeric:tabular-nums;
-    min-width:22px;
-    text-align:center;
+    background:var(--accent); color:#fff; border-radius:999px;
+    padding:2px 9px; font-size:12px; font-weight:700; min-width:22px; text-align:center;
   }
-  .history-btn .badge.zero{
-    background:#2a3040;
-    color:var(--muted);
-  }
+  .history-btn .badge.zero{background:#2a3040; color:var(--muted);}
 
-  .bottom-note{
-    padding-bottom: 300px;
-    display:flex;
-    justify-content:center;
-    padding-left: 0;
-    margin-top: 4px;
-  }
-  .bottom-note span{
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: .2px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .bottom-note .heart{
-    color: #ff6b81;
-    font-size: 15px;
-    animation: heartbeat 1.8s ease-in-out infinite;
-  }
+  /* ===== Нижняя подпись ===== */
+  .bottom-note{padding-bottom:300px; display:flex; justify-content:center; margin-top:4px;}
+  .bottom-note span{font-size:13px; color:var(--muted); display:inline-flex; align-items:center; gap:6px;}
+  .bottom-note .heart{color:#ff6b81; font-size:15px; animation:heartbeat 1.8s ease-in-out infinite;}
   @keyframes heartbeat{
     0%,100%{transform:scale(1);}
     20%{transform:scale(1.18);}
@@ -650,324 +227,102 @@
     80%{transform:scale(1);}
   }
 
+  /* ===== Модалки ===== */
   .modal-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(5,7,12,.78);
-    backdrop-filter:blur(5px);
-    -webkit-backdrop-filter:blur(5px);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:100;
-    padding:20px;
-    overflow-y:auto;
+    position:fixed; inset:0; background:rgba(5,7,12,.78);
+    backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+    display:none; align-items:center; justify-content:center;
+    z-index:100; padding:20px; overflow-y:auto;
   }
   .modal-overlay.show{display:flex;}
-
   .modal{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:24px;
-    width:100%;
-    max-width:380px;
-    box-shadow:0 30px 80px rgba(0,0,0,.6);
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:20px; padding:24px; width:100%; max-width:380px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6); margin:auto;
     animation:modalIn .18s ease;
-    margin:auto;
   }
   @keyframes modalIn{
-    from{opacity:0;transform:scale(.95) translateY(8px);}
-    to{opacity:1;transform:scale(1) translateY(0);}
+    from{opacity:0; transform:scale(.95) translateY(8px);}
+    to{opacity:1; transform:scale(1) translateY(0);}
   }
-  .modal h3{
-    margin:0 0 6px;
-    font-size:18px;
-    font-weight:600;
+  .modal h3{margin:0 0 6px; font-size:18px; font-weight:600;}
+  .modal .sub{color:var(--muted); font-size:14px; margin:0 0 16px; line-height:1.4;}
+  .modal input[type="number"], .modal input[type="text"]{
+    width:100%; padding:14px 16px; font-size:18px; font-weight:600;
+    text-align:center; background:var(--panel-2); border:2px solid var(--border);
+    border-radius:12px; color:var(--text); font-family:inherit; outline:none; margin-bottom:16px;
   }
-  .modal .sub{
-    color:var(--muted);
-    font-size:14px;
-    margin:0 0 16px;
-    line-height:1.4;
-  }
-  .modal input[type="number"]{
-    width:100%;
-    padding:14px 16px;
-    font-size:24px;
-    font-weight:700;
-    text-align:center;
-    background:var(--panel-2);
-    border:2px solid var(--border);
-    border-radius:12px;
-    color:var(--text);
-    font-family:inherit;
-    font-variant-numeric:tabular-nums;
-    outline:none;
-    margin-bottom:16px;
-    -moz-appearance:textfield;
-  }
+  .modal input:focus{border-color:var(--accent);}
+  .modal input[type="number"]{-moz-appearance:textfield;}
   .modal input[type="number"]::-webkit-outer-spin-button,
-  .modal input[type="number"]::-webkit-inner-spin-button{
-    -webkit-appearance:none;margin:0;
-  }
-  .modal input[type="number"]:focus{border-color:var(--accent);}
-
-  .modal input[type="text"]{
-    width:100%;
-    padding:14px 16px;
-    font-size:16px;
-    font-weight:500;
-    background:var(--panel-2);
-    border:2px solid var(--border);
-    border-radius:12px;
-    color:var(--text);
-    font-family:inherit;
-    outline:none;
-    margin-bottom:12px;
-    transition:border-color .15s;
-  }
-  .modal input[type="text"]:focus{border-color:var(--accent);}
-  .modal input[type="text"]::placeholder{color:var(--muted);opacity:.7;}
-
-  .add-row{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:16px;
-  }
-  .add-row label{
-    color:var(--muted);
-    font-size:14px;
-    flex-shrink:0;
-  }
-  .add-row input[type="number"]{
-    flex:1;
-    margin-bottom:0 !important;
-    padding:12px 14px !important;
-    font-size:18px !important;
-    text-align:center;
-  }
-
-  .modal-btns{
-    display:flex;
-    gap:10px;
-  }
+  .modal input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+  .modal-btns{display:flex; gap:10px;}
   .modal-btns button{
-    flex:1;
-    padding:13px;
-    border-radius:12px;
-    border:none;
-    font-family:inherit;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
+    flex:1; padding:13px; border-radius:12px; border:none;
+    font-family:inherit; font-size:15px; font-weight:600; cursor:pointer;
     transition:opacity .15s, transform .1s;
   }
   .modal-btns button:hover{opacity:.88;}
   .modal-btns button:active{transform:scale(.97);}
+  .btn-secondary{background:var(--panel-2); color:var(--text); border:1px solid var(--border) !important;}
+  .btn-primary{background:linear-gradient(160deg,#5b9bff,#2f6ede); color:#fff;}
+  .btn-danger{background:#2a1a1a; color:#ff9b9b; border:1px solid #7a3b3b !important;}
 
-  .btn-secondary{
-    background:var(--panel-2);
-    color:var(--text);
-    border:1px solid var(--border) !important;
-  }
-  .btn-primary{
-    background:linear-gradient(160deg,#5b9bff,#2f6ede);
-    color:#fff;
-  }
-  .btn-danger{
-    background:#2a1a1a;
-    color:#ff9b9b;
-    border:1px solid #7a3b3b !important;
-  }
-
-  .modal.summary{
-    max-width:520px;
-    max-height:88vh;
-    overflow-y:auto;
-  }
+  /* ===== Саммэри ===== */
+  .modal.summary{max-width:520px; max-height:88vh; overflow-y:auto;}
   .summary-status{
-    font-size:13px;
-    padding:9px 13px;
-    border-radius:10px;
-    margin-bottom:14px;
-    text-align:center;
-    display:none;
+    font-size:13px; padding:9px 13px; border-radius:10px; margin-bottom:14px;
+    text-align:center; display:none;
   }
   .summary-status.show{display:block;}
-  .summary-status.saved{
-    background:rgba(75,168,94,.12);
-    border:1px solid rgba(75,168,94,.4);
-    color:#7fc98d;
-  }
-  .summary-status.not-saved{
-    background:rgba(139,147,167,.1);
-    border:1px solid rgba(139,147,167,.3);
-    color:var(--muted);
-  }
-
-  .summary-item{
-    background:var(--panel-2);
-    border-radius:14px;
-    padding:18px 16px;
-    margin-bottom:12px;
-  }
-  .summary-item .ex-name-big{
-    margin:0 0 12px;
-    font-size:22px;
-    font-weight:800;
-    letter-spacing:.2px;
-    color:#9dc0ff;
-    line-height:1.15;
-  }
-  .summary-item .row{
-    display:flex;
-    justify-content:space-between;
-    font-size:14px;
-    color:var(--muted);
-    padding:4px 0;
-    gap:10px;
-  }
-  .summary-item .row b{
-    color:var(--text);
-    font-variant-numeric:tabular-nums;
-    font-weight:600;
-    text-align:right;
-  }
-
+  .summary-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
+  .summary-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:#7fc98d;}
+  .summary-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:#ff9b9b;}
+  .summary-item{background:var(--panel-2); border-radius:14px; padding:18px 16px; margin-bottom:12px;}
+  .summary-item .ex-name-big{margin:0 0 12px; font-size:22px; font-weight:800; color:#9dc0ff; line-height:1.15;}
+  .summary-item .row{display:flex; justify-content:space-between; font-size:14px; color:var(--muted); padding:4px 0; gap:10px;}
+  .summary-item .row b{color:var(--text); font-weight:600; text-align:right;}
   .small-reps{
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.5;
-    padding:7px 0 9px;
-    font-variant-numeric:tabular-nums;
-    border-bottom:1px dashed rgba(139,147,167,.18);
-    margin-bottom:9px;
+    font-size:12px; color:var(--muted); line-height:1.5;
+    padding:7px 0 9px; border-bottom:1px dashed rgba(139,147,167,.18); margin-bottom:9px;
   }
-  .small-reps b{
-    color:#c8d0e0;
-    font-weight:600;
-  }
-
+  .small-reps b{color:#c8d0e0; font-weight:600;}
   .total-reps-row{
-    margin-top:12px;
-    padding-top:12px;
+    margin-top:12px; padding-top:12px;
     border-top:1px solid rgba(139,147,167,.18);
-    font-size:15px;
-    color:var(--muted);
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    gap:12px;
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    font-size:15px; color:var(--muted);
   }
-  .total-reps-row .big-reps{
-    font-size:26px;
-    font-weight:800;
-    color:#7fc98d;
-    font-variant-numeric:tabular-nums;
-    letter-spacing:.3px;
-    line-height:1;
-  }
+  .total-reps-row .big-reps{font-size:26px; font-weight:800; color:#7fc98d; line-height:1;}
+  .summary-total{border-top:1px solid var(--border); margin-top:16px; padding-top:16px;}
+  .summary-total .row{display:flex; justify-content:space-between; font-size:14px; color:var(--muted); padding:4px 0;}
+  .summary-total .row b{color:var(--text); font-variant-numeric:tabular-nums;}
 
-  .summary-total{
-    border-top:1px solid var(--border);
-    margin-top:16px;
-    padding-top:16px;
-  }
-  .summary-total .row{
-    display:flex;
-    justify-content:space-between;
-    font-size:14px;
-    color:var(--muted);
-    padding:4px 0;
-  }
-  .summary-total .row b{
-    color:var(--text);
-    font-variant-numeric:tabular-nums;
-  }
-
-  .modal.history-modal{
-    max-width:620px;
-    max-height:90vh;
-    overflow-y:auto;
-  }
-  .history-actions{
-    display:flex;
-    gap:8px;
-    margin:14px 0;
-    flex-wrap:wrap;
-  }
+  /* ===== История ===== */
+  .modal.history-modal{max-width:620px; max-height:90vh; overflow-y:auto;}
+  .history-actions{display:flex; gap:8px; margin:14px 0; flex-wrap:wrap;}
   .history-actions button{
-    padding:9px 14px;
-    border-radius:10px;
-    border:none;
-    font-family:inherit;
-    font-size:13.5px;
-    font-weight:600;
-    cursor:pointer;
-    transition:opacity .15s, transform .1s;
+    padding:9px 14px; border-radius:10px; border:none;
+    font-family:inherit; font-size:13.5px; font-weight:600; cursor:pointer;
   }
   .history-actions button:hover{opacity:.88;}
-  .history-actions button:active{transform:scale(.97);}
-  .history-actions button:disabled{opacity:.35;cursor:not-allowed;}
-
   .history-content{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    max-height:56vh;
-    overflow-y:auto;
-    padding-right:4px;
-    scrollbar-width:thin;
-    scrollbar-color:#333a48 transparent;
+    display:flex; flex-direction:column; gap:10px;
+    max-height:56vh; overflow-y:auto; padding-right:4px;
   }
-  .history-content::-webkit-scrollbar{width:6px;}
-  .history-content::-webkit-scrollbar-thumb{background:#333a48;border-radius:3px;}
-
-  .history-empty{
-    text-align:center;
-    color:var(--muted);
-    padding:36px 0;
-    font-size:14px;
-  }
-
+  .history-empty{text-align:center; color:var(--muted); padding:36px 0; font-size:14px;}
+  .history-loading{text-align:center; color:var(--muted); padding:36px 0; font-size:14px;}
   .history-month{
-    font-size:12px;
-    letter-spacing:1.6px;
-    text-transform:uppercase;
-    color:var(--muted);
-    font-weight:700;
-    padding:8px 4px 2px;
+    font-size:12px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--muted); font-weight:700; padding:8px 4px 2px;
   }
-
-  .history-item{
-    background:var(--panel-2);
-    border-radius:12px;
-    padding:13px 15px;
-  }
-  .history-item .h-date{
-    font-size:14px;
-    font-weight:600;
-    margin-bottom:3px;
-  }
-  .history-item .h-meta{
-    font-size:12px;
-    color:var(--muted);
-    margin-bottom:9px;
-    font-variant-numeric:tabular-nums;
-  }
-  .history-ex{
-    display:flex;
-    justify-content:space-between;
-    gap:8px;
-    font-size:13px;
-    padding:3px 0;
-    color:var(--muted);
-  }
+  .history-item{background:var(--panel-2); border-radius:12px; padding:13px 15px;}
+  .history-item .h-date{font-size:14px; font-weight:600; margin-bottom:3px;}
+  .history-item .h-meta{font-size:12px; color:var(--muted); margin-bottom:9px; font-variant-numeric:tabular-nums;}
+  .history-ex{display:flex; justify-content:space-between; font-size:13px; padding:3px 0; color:var(--muted); gap:8px;}
   .history-ex .h-ex-name{color:var(--text);}
   .history-ex .h-ex-stats{font-variant-numeric:tabular-nums;}
-  .history-ex .h-ex-stats b{color:#7fc98d;font-weight:600;}
+  .history-ex .h-ex-stats b{color:#7fc98d; font-weight:600;}
 
   @keyframes shake{
     0%,100%{transform:translateX(0);}
@@ -978,248 +333,91 @@
   }
   .shake{animation:shake .4s ease;}
 
-  @media (max-width: 720px){
-    html, body{
-      height: 100dvh;
-      min-height: 100dvh;
-      max-height: 100dvh;
-      overflow: hidden;
-    }
-    body{
-      padding: 8px;
-      align-items: stretch;
-    }
-    .app{
-      height: 100%;
-      max-height: 100%;
-      gap: 8px;
-      max-width: 100%;
-    }
+  /* ===== Мобильная адаптация ===== */
+  @media (max-width:720px){
+    html, body{height:100dvh; min-height:100dvh; max-height:100dvh; overflow:hidden;}
+    body{padding:8px; align-items:stretch;}
+    .app{height:100%; max-height:100%; gap:8px; max-width:100%;}
 
-    .topbar{
-      padding: 0 4px;
-      gap: 8px;
-      flex-wrap: nowrap;
-      justify-content: flex-end;
-    }
-    .setting{font-size:14px; gap:6px; white-space:nowrap;}
-    .setting input{
-      width: 78px;
-      padding: 8px 9px;
-      font-size: 16px;
-      border-radius: 9px;
-    }
+    .topbar{padding:0 4px; gap:8px; flex-wrap:nowrap; justify-content:space-between;}
+    .setting{font-size:14px; gap:6px;}
+    .setting input{width:74px; padding:8px 9px; font-size:15px; border-radius:9px;}
+    .user-badge{font-size:12px; padding:5px 10px;}
 
-    .tabs{
-      padding: 5px;
-      gap: 5px;
-      border-radius: 15px;
-      flex-shrink: 0;
-    }
-    .tab{
-      padding: 12px 6px;
-      font-size: 14px;
-      border-radius: 11px;
-      gap: 5px;
-    }
+    .tabs{padding:5px; gap:5px; border-radius:15px; flex-shrink:0;}
+    .tab{padding:12px 6px; font-size:14px; border-radius:11px; gap:5px;}
     .tab .tab-badge{font-size:11px; padding:1px 7px; min-width:18px;}
     .tab .live-dot{width:8px; height:8px;}
 
-    .swipe-viewport{
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      border-radius: 18px;
-    }
-    .swipe-track{
-      flex: 1;
-      min-height: 0;
-    }
-    .swipe-page{
-      min-height: 0;
-    }
-    .panel{
-      min-height: 0;
-      border-radius: 18px;
-      flex: 1;
-    }
+    .swipe-viewport{flex:1; min-height:0; display:flex; flex-direction:column; border-radius:18px;}
+    .swipe-track{flex:1; min-height:0;}
+    .swipe-page{min-height:0;}
+    .panel{min-height:0; border-radius:18px; flex:1;}
 
-    #panel-exercises{
-      padding: 12px;
-      gap: 8px;
-    }
-    .exercise-list{
-      max-height: none;
-      flex: 1;
-      min-height: 0;
-      gap: 6px;
-    }
-    .exercise-item{
-      padding: 12px 12px;
-      border-radius: 12px;
-      gap: 10px;
-    }
-    .exercise-item .ex-label{gap:10px;}
-    .exercise-item .check{width:24px;height:24px;border-radius:7px;}
-    .exercise-item .check:checked::after{left:6px;top:2px;width:7px;height:12px;border-width:0 3px 3px 0;}
+    #panel-exercises{padding:12px; gap:8px;}
+    .exercise-list{max-height:none; flex:1; min-height:0; gap:6px;}
+    .exercise-item{padding:12px; border-radius:12px; gap:10px;}
+    .exercise-item .check{width:24px; height:24px; border-radius:7px;}
+    .exercise-item .check:checked::after{left:6px; top:2px; width:7px; height:12px; border-width:0 3px 3px 0;}
     .exercise-item .name{font-size:15px;}
-    .exercise-item .sets-input{
-      width: 56px;
-      padding: 8px 5px;
-      font-size: 15px;
-      border-radius: 9px;
-    }
-    .exercise-item .remove-btn{
-      width: 30px;
-      height: 30px;
-      font-size: 20px;
-    }
-    .add-exercise-btn{
-      padding: 12px 14px;
-      font-size: 13.5px;
-      border-radius: 11px;
-      gap: 6px;
-    }
-    .add-exercise-btn .plus{font-size:18px;}
-    .hint{
-      font-size: 11px;
-      padding: 0;
-      line-height: 1.3;
-      flex-shrink: 0;
-    }
+    .exercise-item .sets-input{width:56px; padding:8px 5px; font-size:15px; border-radius:9px;}
+    .exercise-item .remove-btn{width:30px; height:30px; font-size:20px;}
+    .add-exercise-btn{padding:12px 14px; font-size:13.5px; border-radius:11px;}
+    .hint{font-size:11px;}
 
-    #panel-timer{
-      padding: 14px 12px 18px;
-      gap: 14px;
-      justify-content: center;
-    }
-    .phase{
-      font-size: 12.5px;
-      letter-spacing: 1.4px;
-      min-height: 16px;
-    }
-    .time{
-      font-size: clamp(52px, 22vw, 96px);
-      letter-spacing: 0;
-    }
-    .main-btn{
-      width: min(190px, 52vw);
-      height: min(190px, 52vw);
-      font-size: clamp(15px, 4.6vw, 20px);
-      box-shadow: 0 10px 24px rgba(47,110,222,.35), inset 0 1px 0 rgba(255,255,255,.25);
-    }
-    .skip-btn{
-      font-size: 12.5px;
-      padding: 4px 8px;
-    }
+    #panel-timer{padding:14px 12px 18px; gap:14px;}
+    .phase{font-size:12.5px; letter-spacing:1.4px; min-height:16px;}
+    .time{font-size:clamp(52px,22vw,96px);}
+    .main-btn{width:min(190px,52vw); height:min(190px,52vw); font-size:clamp(15px,4.6vw,20px);}
 
-    #panel-log{
-      padding: 12px;
-      gap: 8px;
-    }
-    .log-head h2{font-size: 16px;}
-    .log-list{
-      max-height: none;
-      flex: 1;
-      min-height: 0;
-      gap: 5px;
-    }
-    .log-list li{padding: 7px 10px; border-radius: 10px;}
-    .log-list li .log-ex{font-size: 12.5px;}
-    .log-list li .log-set{font-size: 11px;}
-    .log-list li .log-bot{font-size: 11.5px;}
-    .log-list li.empty{font-size: 12.5px; padding: 14px 0;}
-    .stats{
-      font-size: 12.5px;
-      padding-top: 8px;
-      gap: 4px;
-      flex-shrink: 0;
-    }
+    #panel-log{padding:12px; gap:8px;}
+    .log-head h2{font-size:16px;}
+    .log-list{max-height:none; flex:1; min-height:0; gap:5px;}
+    .stats{font-size:12.5px; padding-top:8px; gap:4px;}
 
     .dots{gap:6px;}
-    .dot{width:6px;height:6px;}
+    .dot{width:6px; height:6px;}
 
-    footer{padding-bottom: 0; flex-shrink: 0;}
-    .footer-row{gap: 8px;}
-    .stop-btn, .history-btn{
-      padding: 11px 12px;
-      font-size: 13px;
-      border-radius: 11px;
-      gap: 5px;
-    }
-    .history-btn .badge{
-      font-size: 10.5px;
-      padding: 1px 7px;
-      min-width: 18px;
-    }
+    .stop-btn, .history-btn{padding:11px 12px; font-size:13px; border-radius:11px;}
+    .history-btn .badge{font-size:10.5px; padding:1px 7px; min-width:18px;}
 
-    .bottom-note{
-      padding-bottom: 0;
-      padding-left: 0;
-      margin-top: 0;
-      flex-shrink: 0;
-      min-height: 22px;
-      align-items: center;
-      justify-content: center;
-    }
-    .bottom-note span{
-      font-size: 11px;
-      gap: 4px;
-    }
-    .bottom-note .heart{font-size: 12px;}
+    .bottom-note{padding-bottom:0; min-height:22px; align-items:center;}
+    .bottom-note span{font-size:11px;}
+    .bottom-note .heart{font-size:12px;}
 
-    .modal-overlay{padding: 12px;}
-    .modal{padding: 18px; border-radius: 18px;}
-    .modal h3{font-size: 16px;}
-    .modal .sub{font-size: 13px; margin-bottom: 12px;}
-    .modal input[type="number"]{
-      padding: 12px 14px;
-      font-size: 22px;
-      margin-bottom: 12px;
-    }
-    .modal input[type="text"]{
-      padding: 12px 14px;
-      font-size: 15px;
-      margin-bottom: 10px;
-    }
-    .add-row label{font-size: 13px;}
-    .add-row input[type="number"]{
-      padding: 10px 12px !important;
-      font-size: 16px !important;
-    }
-    .modal-btns button{padding: 11px; font-size: 14px;}
-    .modal.summary .summary-item{padding: 14px 12px;}
-    .summary-item .ex-name-big{font-size: 19px; margin-bottom: 10px;}
-    .summary-item .row{font-size: 13px;}
-    .small-reps{font-size: 11.5px;}
-    .total-reps-row{font-size: 14px;}
-    .total-reps-row .big-reps{font-size: 22px;}
-    .history-actions button{padding: 8px 11px; font-size: 12.5px;}
-  }
-
-  @media (max-width: 380px), (max-width: 720px) and (max-height: 660px){
-    .setting{font-size:13px;}
-    .setting input{width:70px; padding:7px 8px; font-size:15px;}
-    .tab{font-size:13px; padding:10px 4px;}
-    .main-btn{
-      width: min(160px, 46vw);
-      height: min(160px, 46vw);
-    }
-    .time{font-size: clamp(44px, 19vw, 80px);}
-    .exercise-item{padding: 10px 10px;}
-    .exercise-item .name{font-size: 14px;}
-    .exercise-item .sets-input{width:52px; padding:7px 5px; font-size:14px;}
-    #panel-timer{padding: 10px 10px 14px; gap: 10px;}
-    .bottom-note span{font-size: 10.5px;}
+    .modal{padding:18px; border-radius:18px;}
+    .modal h3{font-size:16px;}
+    .modal .sub{font-size:13px; margin-bottom:12px;}
+    .modal input[type="number"], .modal input[type="text"]{padding:12px 14px; font-size:16px;}
+    .modal-btns button{padding:11px; font-size:14px;}
+    .summary-item{padding:14px 12px;}
+    .summary-item .ex-name-big{font-size:19px; margin-bottom:10px;}
+    .summary-item .row{font-size:13px;}
+    .small-reps{font-size:11.5px;}
+    .total-reps-row{font-size:14px;}
+    .total-reps-row .big-reps{font-size:22px;}
+    .history-actions button{padding:8px 11px; font-size:12.5px;}
   }
 </style>
 </head>
 <body>
 
-<div class="app">
+<!-- ЭКРАН ЛОГИНА -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h2>Тренировка</h2>
+    <p>Введите ваш логин, чтобы продолжить</p>
+    <input type="text" id="loginInput" placeholder="Логин" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="login-error" id="loginError"></div>
+    <button id="loginBtn">Войти</button>
+  </div>
+</div>
+
+<!-- ПРИЛОЖЕНИЕ -->
+<div class="app" id="mainApp" style="display:none;">
 
   <header class="topbar">
+    <div class="user-badge" id="userBadge" style="display:none;">👤 <b id="userBadgeName"></b></div>
     <label class="setting">
       Отдых:
       <input type="number" id="restInput" min="5" max="600" step="5" value="90" inputmode="numeric">
@@ -1229,29 +427,21 @@
 
   <nav class="tabs" id="tabs">
     <button class="tab active" data-tab="exercises">Упражнения</button>
-    <button class="tab" data-tab="timer">
-      <span class="live-dot" id="liveDot"></span>
-      Таймер
-    </button>
-    <button class="tab" data-tab="log">
-      Подходы <span class="tab-badge zero" id="logBadge">0</span>
-    </button>
+    <button class="tab" data-tab="timer"><span class="live-dot" id="liveDot"></span>Таймер</button>
+    <button class="tab" data-tab="log">Подходы <span class="tab-badge zero" id="logBadge">0</span></button>
   </nav>
 
   <div class="swipe-viewport" id="swipeViewport">
     <div class="swipe-track" id="swipeTrack">
-
       <div class="swipe-page">
         <section class="panel" id="panel-exercises">
           <ul class="exercise-list" id="exerciseList"></ul>
           <button class="add-exercise-btn" id="addExerciseBtn" type="button">
-            <span class="plus">+</span>
-            Добавить упражнение
+            <span style="font-size:20px;">+</span> Добавить упражнение
           </button>
-          <div class="hint">Отметьте упражнения и укажите число подходов. Приложение проведёт вас по всем подходам по очереди.</div>
+          <div class="hint">Отметьте упражнения и укажите число подходов.</div>
         </section>
       </div>
-
       <div class="swipe-page">
         <section class="panel" id="panel-timer">
           <div class="phase" id="phaseLabel">Готов к тренировке</div>
@@ -1260,15 +450,10 @@
           <button class="skip-btn" id="skipBtn" hidden>Пропустить отдых →</button>
         </section>
       </div>
-
       <div class="swipe-page">
         <section class="panel" id="panel-log">
-          <div class="log-head">
-            <h2>Подходы</h2>
-          </div>
-          <ul class="log-list" id="logList">
-            <li class="empty">Пока нет подходов</li>
-          </ul>
+          <div class="log-head"><h2>Подходы</h2></div>
+          <ul class="log-list" id="logList"><li class="empty">Пока нет подходов</li></ul>
           <div class="stats">
             <div class="stat"><span>Всего времени</span><b id="totalTime">00:00</b></div>
             <div class="stat"><span>Работа</span><b id="workTime">00:00</b></div>
@@ -1276,7 +461,6 @@
           </div>
         </section>
       </div>
-
     </div>
   </div>
 
@@ -1301,11 +485,12 @@
 
 </div>
 
+<!-- МОДАЛКА: ввод повторений -->
 <div class="modal-overlay" id="repsModal">
   <div class="modal">
     <h3 id="repsTitle">Подход</h3>
     <p class="sub">Сколько повторений сделали?</p>
-    <input type="number" id="repsInput" min="0" max="999" inputmode="numeric" pattern="[0-9]*" placeholder="0" autocomplete="off">
+    <input type="number" id="repsInput" min="0" max="999" inputmode="numeric" placeholder="0" autocomplete="off">
     <div class="modal-btns">
       <button class="btn-secondary" id="repsCancel">Отмена</button>
       <button class="btn-primary" id="repsOk">ОК</button>
@@ -1313,15 +498,13 @@
   </div>
 </div>
 
+<!-- МОДАЛКА: добавить упражнение -->
 <div class="modal-overlay" id="addExerciseModal">
   <div class="modal">
     <h3>Новое упражнение</h3>
     <p class="sub">Введите название и количество подходов.</p>
-    <input type="text" id="newExName" maxlength="30" placeholder="Например, Подтягивания" autocomplete="off" autocapitalize="sentences">
-    <div class="add-row">
-      <label for="newExSets">Подходов:</label>
-      <input type="number" id="newExSets" min="1" max="30" value="3" inputmode="numeric">
-    </div>
+    <input type="text" id="newExName" maxlength="30" placeholder="Например, Подтягивания" autocomplete="off">
+    <input type="number" id="newExSets" min="1" max="30" value="3" inputmode="numeric" placeholder="Подходов">
     <div class="modal-btns">
       <button class="btn-secondary" id="addExCancel">Отмена</button>
       <button class="btn-primary" id="addExOk">Добавить</button>
@@ -1329,17 +512,7 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="saveModal">
-  <div class="modal">
-    <h3>Сохранить тренировку?</h3>
-    <p class="sub">Результаты будут добавлены в историю и попадут в статистику. Если не сохранять — данные не запишутся.</p>
-    <div class="modal-btns">
-      <button class="btn-secondary" id="saveNo">Не сохранять</button>
-      <button class="btn-primary" id="saveYes">Сохранить</button>
-    </div>
-  </div>
-</div>
-
+<!-- МОДАЛКА: итоги -->
 <div class="modal-overlay" id="summaryModal">
   <div class="modal summary">
     <h3 style="margin-bottom:14px;">🏁 Тренировка завершена</h3>
@@ -1351,14 +524,13 @@
   </div>
 </div>
 
+<!-- МОДАЛКА: история -->
 <div class="modal-overlay" id="historyModal">
   <div class="modal history-modal">
     <h3>📊 История тренировок</h3>
-    <p class="sub" id="historySub">Все сохранённые тренировки</p>
+    <p class="sub" id="historySub">Загрузка из Google Sheets...</p>
     <div class="history-actions">
-      <button class="btn-primary" id="exportBtn">⬇ Скачать .txt</button>
-      <button class="btn-secondary" id="exportCsvBtn">⬇ Скачать .csv</button>
-      <button class="btn-danger" id="clearHistoryBtn">🗑 Очистить</button>
+      <button class="btn-primary" id="refreshHistoryBtn">🔄 Обновить</button>
     </div>
     <div class="history-content" id="historyContent"></div>
     <div class="modal-btns" style="margin-top:16px;">
@@ -1371,6 +543,11 @@
 (function(){
   "use strict";
 
+  // ============================================================
+  // !!! ВАШ URL ВЕБ-ПРИЛОЖЕНИЯ APPS SCRIPT !!!
+  // ============================================================
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyRKL_lkoCB9ULytaox2AmuqA531md2a-M6EMXv8HN069taUnEtR5IOP4q6dc6BrGKM/exec';
+
   const DEFAULT_EXERCISES = [
     { id:'pushups', name:'Отжимания',  checked:true,  sets:3 },
     { id:'squats',  name:'Приседания', checked:false, sets:3 },
@@ -1379,34 +556,36 @@
     { id:'abs',     name:'Пресс',      checked:false, sets:3 }
   ];
 
-  const HISTORY_KEY = 'workoutHistory_v1';
   const EXERCISES_KEY = 'workoutExercises_v1';
-  const MONTHS_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь',
-                     'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-
+  const LOGIN_KEY = 'workoutLogin_v1';
   const TAB_ORDER = ['exercises', 'timer', 'log'];
 
   const S = {
+    login: null,
     phase: 'idle',
-    workStart: 0,
-    workEnd: 0,
-    restStart: 0,
-    restEnd: 0,
-    workoutStart: 0,
-    finishedAt: 0,
+    workStart: 0, workEnd: 0,
+    restStart: 0, restEnd: 0,
+    workoutStart: 0, finishedAt: 0,
     restDuration: 90 * 1000,
     exercises: [],
     activeExercises: [],
-    exIdx: 0,
-    setIdx: 0,
+    exIdx: 0, setIdx: 0,
     pendingFinish: false,
-    rafId: null,
-    restTimeout: null,
-    lastTimeStr: '',
-    currentTab: 'exercises'
+    rafId: null, restTimeout: null,
+    lastTimeStr: '', currentTab: 'exercises',
+    historyCount: 0,
+    appInitialized: false
   };
 
   const els = {
+    loginScreen: document.getElementById('loginScreen'),
+    loginInput:  document.getElementById('loginInput'),
+    loginBtn:    document.getElementById('loginBtn'),
+    loginError:  document.getElementById('loginError'),
+    mainApp:     document.getElementById('mainApp'),
+    userBadge:   document.getElementById('userBadge'),
+    userBadgeName: document.getElementById('userBadgeName'),
+
     phaseLabel:      document.getElementById('phaseLabel'),
     timeDisplay:     document.getElementById('timeDisplay'),
     mainBtn:         document.getElementById('mainBtn'),
@@ -1435,9 +614,6 @@
     newExSets:       document.getElementById('newExSets'),
     addExOk:         document.getElementById('addExOk'),
     addExCancel:     document.getElementById('addExCancel'),
-    saveModal:       document.getElementById('saveModal'),
-    saveYes:         document.getElementById('saveYes'),
-    saveNo:          document.getElementById('saveNo'),
     summaryModal:    document.getElementById('summaryModal'),
     summaryContent:  document.getElementById('summaryContent'),
     summaryStatus:   document.getElementById('summaryStatus'),
@@ -1448,369 +624,146 @@
     historyContent:  document.getElementById('historyContent'),
     historySub:      document.getElementById('historySub'),
     historyClose:    document.getElementById('historyClose'),
-    exportBtn:       document.getElementById('exportBtn'),
-    exportCsvBtn:    document.getElementById('exportCsvBtn'),
-    clearHistoryBtn: document.getElementById('clearHistoryBtn')
+    refreshHistoryBtn: document.getElementById('refreshHistoryBtn')
   };
 
-  function attachVerticalSwipe(input, options){
-    options = options || {};
-    const min = options.min != null ? options.min : -Infinity;
-    const max = options.max != null ? options.max : Infinity;
-    const step = options.step || 1;
-    const onChange = options.onChange || function(){};
-    const PIXELS_PER_STEP = options.pixelsPerStep || 14;
-    const HOLD_DELAY = 400;
-
-    let startY = 0;
-    let startValue = 0;
-    let dragging = false;
-    let pointerId = null;
-    let lastCommitted = 0;
-    let holdTimer = null;
-    let accelerate = false;
-
-    function clamp(v){
-      if(v < min) v = min;
-      if(v > max) v = max;
-      return v;
-    }
-
-    function commit(v){
-      v = clamp(Math.round(v / step) * step);
-      if(v === lastCommitted) return;
-      lastCommitted = v;
-      input.value = v;
-      onChange(v);
-    }
-
-    function onDown(e){
-      if(input.disabled) return;
-      if(e.pointerType === 'mouse' && e.button !== 0) return;
-      dragging = true;
-      pointerId = e.pointerId;
-      startY = e.clientY;
-      startValue = parseInt(input.value, 10) || 0;
-      lastCommitted = startValue;
-      accelerate = false;
-      try{ input.setPointerCapture(e.pointerId); }catch(err){}
-
-      holdTimer = setTimeout(() => {
-        accelerate = true;
-        input.style.borderColor = 'var(--accent)';
-      }, HOLD_DELAY);
-    }
-
-    function onMove(e){
-      if(!dragging || e.pointerId !== pointerId) return;
-      const dy = startY - e.clientY;
-      const pxPer = accelerate ? PIXELS_PER_STEP / 3 : PIXELS_PER_STEP;
-      const delta = dy / pxPer;
-      commit(startValue + delta);
-      e.preventDefault();
-    }
-
-    function onUp(e){
-      if(!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
-      dragging = false;
-      pointerId = null;
-      if(holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
-      accelerate = false;
-      input.style.borderColor = '';
-    }
-
-    input.addEventListener('pointerdown', onDown);
-    input.addEventListener('pointermove', onMove);
-    input.addEventListener('pointerup', onUp);
-    input.addEventListener('pointercancel', onUp);
+  /* ============================================================
+     API
+     ============================================================ */
+  async function apiGet(params){
+    const query = new URLSearchParams(params).toString();
+    const url = SCRIPT_URL + '?' + query;
+    console.log('[API]', url);
+    const res = await fetch(url, { method: 'GET' });
+    const text = await res.text();
+    console.log('[API ответ]', text);
+    try { return JSON.parse(text); }
+    catch(e){ throw new Error('Некорректный ответ сервера'); }
   }
 
-  attachVerticalSwipe(els.restInput, {
-    min: 5,
-    max: 600,
-    step: 5,
-    pixelsPerStep: 16,
-    onChange: (v) => {
-      S.restDuration = v * 1000;
-      try{ localStorage.setItem('restSeconds', String(v)); }catch(e){}
-    }
-  });
-
-  els.restInput.addEventListener('change', () => {
-    let v = parseInt(els.restInput.value, 10);
-    if(isNaN(v)) v = 90;
-    v = Math.min(600, Math.max(5, v));
-    els.restInput.value = v;
-    S.restDuration = v * 1000;
-    try{ localStorage.setItem('restSeconds', String(v)); }catch(e){}
-  });
-
-  function applyTrackTransform(animate){
-    const w = els.swipeViewport.clientWidth;
-    const idx = TAB_ORDER.indexOf(S.currentTab);
-    const x = -idx * w;
-    if(animate === false){
-      els.swipeTrack.classList.add('dragging');
-    } else {
-      els.swipeTrack.classList.remove('dragging');
-    }
-    els.swipeTrack.style.transform = 'translate3d(' + x + 'px, 0, 0)';
+  async function apiLogin(login){
+    return await apiGet({ action: 'login', login: login });
   }
 
-  function updateDotsAndTabs(){
-    els.tabs.querySelectorAll('.tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.tab === S.currentTab);
-    });
-    els.dots.querySelectorAll('.dot').forEach(d => {
-      d.classList.toggle('active', d.dataset.tab === S.currentTab);
+  async function apiGetHistory(login){
+    return await apiGet({ action: 'getHistory', login: login });
+  }
+
+  async function apiSaveWorkout(login, workoutData){
+    return await apiGet({
+      action: 'saveWorkout',
+      login: login,
+      data: JSON.stringify(workoutData)
     });
   }
 
-  function switchTab(name, animate){
-    if(TAB_ORDER.indexOf(name) === -1) return;
-    S.currentTab = name;
-    updateDotsAndTabs();
-    applyTrackTransform(animate !== false);
-  }
-
-  els.tabs.addEventListener('click', (e) => {
-    const btn = e.target.closest('.tab');
-    if(btn) switchTab(btn.dataset.tab, true);
-  });
-
-  els.dots.addEventListener('click', (e) => {
-    const dot = e.target.closest('.dot');
-    if(dot) switchTab(dot.dataset.tab, true);
-  });
-
-  window.addEventListener('resize', () => {
-    applyTrackTransform(false);
-    requestAnimationFrame(() => {
-      els.swipeTrack.classList.remove('dragging');
-    });
-  });
-
-  (function initSwipe(){
-    let startX = 0;
-    let startY = 0;
-    let startOffset = 0;
-    let dragging = false;
-    let decided = false;
-    let pointerId = null;
-    const THRESHOLD = 8;
-    const SNAP = 0.28;
-
-    function currentX(){
-      const w = els.swipeViewport.clientWidth;
-      const idx = TAB_ORDER.indexOf(S.currentTab);
-      return -idx * w;
+  /* ============================================================
+     ЛОГИН
+     ============================================================ */
+  async function doLogin(login){
+    if (!login || login.trim() === ''){
+      els.loginError.textContent = 'Введите логин';
+      return;
     }
+    els.loginError.textContent = '';
+    els.loginBtn.disabled = true;
+    els.loginBtn.textContent = 'Проверяем...';
 
-    function onDown(e){
-      if(e.pointerType === 'mouse' && e.button !== 0) return;
-      if(document.querySelector('.modal-overlay.show')) return;
-      if(e.target.closest('.sets-input') || e.target.closest('#restInput')) return;
-
-      startX = e.clientX;
-      startY = e.clientY;
-      startOffset = currentX();
-      dragging = true;
-      decided = false;
-      pointerId = e.pointerId;
-      els.swipeTrack.classList.add('dragging');
-    }
-
-    function onMove(e){
-      if(!dragging || e.pointerId !== pointerId) return;
-
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-
-      if(!decided){
-        if(Math.abs(dx) < THRESHOLD && Math.abs(dy) < THRESHOLD) return;
-        if(Math.abs(dy) > Math.abs(dx)){
-          dragging = false;
-          els.swipeTrack.classList.remove('dragging');
-          pointerId = null;
-          return;
-        }
-        decided = true;
-        try{ els.swipeViewport.setPointerCapture(e.pointerId); }catch(err){}
-      }
-
-      const w = els.swipeViewport.clientWidth;
-      let x = startOffset + dx;
-
-      const minX = -(TAB_ORDER.length - 1) * w;
-      if(x > 0) x = x * 0.35;
-      if(x < minX) x = minX + (x - minX) * 0.35;
-
-      els.swipeTrack.style.transform = 'translate3d(' + x + 'px, 0, 0)';
-      e.preventDefault();
-    }
-
-    function onUp(e){
-      if(!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
-      dragging = false;
-      pointerId = null;
-      els.swipeTrack.classList.remove('dragging');
-
-      const w = els.swipeViewport.clientWidth;
-      const idx = TAB_ORDER.indexOf(S.currentTab);
-      const cur = -(idx * w);
-      const m = /translate3d\(\s*(-?[\d.]+)px/.exec(els.swipeTrack.style.transform);
-      const curX = m ? parseFloat(m[1]) : cur;
-      const dx = curX - cur;
-
-      let newIdx = idx;
-      if(Math.abs(dx) > w * SNAP){
-        if(dx < 0) newIdx = Math.min(TAB_ORDER.length - 1, idx + 1);
-        else       newIdx = Math.max(0, idx - 1);
-      }
-
-      if(newIdx !== idx){
-        switchTab(TAB_ORDER[newIdx], true);
+    try {
+      const data = await apiLogin(login.trim());
+      if (data && data.result === 'success'){
+        S.login = data.login || login.trim();
+        try { localStorage.setItem(LOGIN_KEY, S.login); } catch(e){}
+        els.loginScreen.classList.add('hidden');
+        els.mainApp.style.display = 'flex';
+        els.userBadge.style.display = 'inline-flex';
+        els.userBadgeName.textContent = S.login;
+        initApp();
+        // Загружаем количество тренировок для бейджа
+        loadHistoryCount();
       } else {
-        applyTrackTransform(true);
+        els.loginError.textContent = (data && data.message) || 'Ошибка входа';
+        els.loginInput.classList.add('shake');
+        setTimeout(() => els.loginInput.classList.remove('shake'), 450);
       }
-    }
-
-    els.swipeViewport.addEventListener('pointerdown', onDown);
-    els.swipeViewport.addEventListener('pointermove', onMove);
-    els.swipeViewport.addEventListener('pointerup', onUp);
-    els.swipeViewport.addEventListener('pointercancel', onUp);
-  })();
-
-  let audioCtx = null;
-
-  function getAudioCtx(){
-    if(!audioCtx){
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if(!Ctx) return null;
-      audioCtx = new Ctx();
-    }
-    if(audioCtx.state === 'suspended'){
-      audioCtx.resume().catch(()=>{});
-    }
-    return audioCtx;
-  }
-
-  function playBeep(){
-    try{
-      const ctx = getAudioCtx();
-      if(!ctx) return;
-      const t0 = ctx.currentTime + 0.03;
-      const notes = [
-        { t:0.00, f:880 },
-        { t:0.22, f:880 },
-        { t:0.44, f:1174 }
-      ];
-      notes.forEach(n => {
-        const osc  = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const start = t0 + n.t;
-        osc.type = 'sine';
-        osc.frequency.value = n.f;
-        gain.gain.setValueAtTime(0.0001, start);
-        gain.gain.exponentialRampToValueAtTime(0.28, start + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.20);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(start);
-        osc.stop(start + 0.24);
-      });
-    }catch(err){ console.warn(err); }
-  }
-
-  function vibrate(){
-    if(navigator.vibrate){
-      try{ navigator.vibrate([180, 90, 180, 90, 260]); }catch(e){}
+    } catch(err){
+      console.error(err);
+      els.loginError.textContent = 'Нет связи с сервером';
+    } finally {
+      els.loginBtn.disabled = false;
+      els.loginBtn.textContent = 'Войти';
     }
   }
 
-  function fmt(ms){
-    ms = Math.max(0, ms);
-    const total = Math.floor(ms / 1000);
-    const m = Math.floor(total / 60);
-    const s = total % 60;
-    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  els.loginBtn.addEventListener('click', () => doLogin(els.loginInput.value));
+  els.loginInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); doLogin(els.loginInput.value); }
+  });
+
+  /* ============================================================
+     ИНИЦИАЛИЗАЦИЯ
+     ============================================================ */
+  function initApp(){
+    if (S.appInitialized) return;
+    S.appInitialized = true;
+
+    try {
+      const saved = parseInt(localStorage.getItem('restSeconds'), 10);
+      if (!isNaN(saved) && saved >= 5 && saved <= 600){
+        els.restInput.value = saved;
+        S.restDuration = saved * 1000;
+      }
+    } catch(e){}
+
+    S.exercises = loadExercises();
+    buildExerciseList();
+    renderLog();
+    setPhaseUI();
+    updateStats();
+
+    requestAnimationFrame(() => applyTrackTransform(false));
+
+    document.addEventListener('pointerdown', () => getAudioCtx(), { once: true });
+    document.addEventListener('keydown', () => getAudioCtx(), { once: true });
   }
 
-  function fmtLong(ms){
-    ms = Math.max(0, ms);
-    const total = Math.floor(ms / 1000);
-    const h = Math.floor(total / 3600);
-    const m = Math.floor((total % 3600) / 60);
-    const s = total % 60;
-    if(h > 0) return h + 'ч ' + String(m).padStart(2,'0') + 'м';
-    return m + 'м ' + String(s).padStart(2,'0') + 'с';
-  }
-
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
-  }
-
-  function pad2(n){ return String(n).padStart(2,'0'); }
-
-  function formatDate(d){
-    return pad2(d.getDate()) + '.' + pad2(d.getMonth()+1) + '.' + d.getFullYear() +
-           ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
-  }
-
-  function formatDateShort(d){
-    return pad2(d.getDate()) + '.' + pad2(d.getMonth()+1) + '.' + d.getFullYear();
-  }
-
-  function shake(el){
-    el.classList.remove('shake');
-    void el.offsetWidth;
-    el.classList.add('shake');
-    setTimeout(() => el.classList.remove('shake'), 450);
-  }
-
-  function makeId(){
-    return 'ex_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7);
-  }
-
+  /* ============================================================
+     СПИСОК УПРАЖНЕНИЙ
+     ============================================================ */
   function loadExercises(){
-    try{
+    try {
       const raw = localStorage.getItem(EXERCISES_KEY);
-      if(raw){
+      if (raw){
         const arr = JSON.parse(raw);
-        if(Array.isArray(arr) && arr.length > 0){
+        if (Array.isArray(arr) && arr.length){
           return arr.map(e => ({
-            id: String(e.id || makeId()),
-            name: String(e.name || 'Упражнение').slice(0, 30),
+            id: e.id || ('ex_' + Math.random().toString(36).slice(2,9)),
+            name: String(e.name || 'Упражнение').slice(0,30),
             checked: !!e.checked,
             sets: Math.min(30, Math.max(1, parseInt(e.sets,10) || 3)),
             completed: []
           }));
         }
       }
-    }catch(e){}
-
-    return DEFAULT_EXERCISES.map(e => ({
-      id: e.id, name: e.name, checked: e.checked, sets: e.sets, completed: []
-    }));
+    } catch(e){}
+    return DEFAULT_EXERCISES.map(e => ({...e, completed: []}));
   }
 
   function saveExercises(){
-    try{
-      const data = S.exercises.map(e => ({
-        id: e.id, name: e.name, checked: e.checked, sets: e.sets
-      }));
-      localStorage.setItem(EXERCISES_KEY, JSON.stringify(data));
-    }catch(e){ console.warn('Не удалось сохранить список упражнений:', e); }
+    try {
+      localStorage.setItem(EXERCISES_KEY, JSON.stringify(
+        S.exercises.map(e => ({ id:e.id, name:e.name, checked:e.checked, sets:e.sets }))
+      ));
+    } catch(e){}
   }
 
   function addExercise(name, sets){
-    name = String(name || '').trim().slice(0, 30);
-    if(!name) return false;
-    sets = Math.min(30, Math.max(1, parseInt(sets, 10) || 3));
+    name = String(name || '').trim().slice(0,30);
+    if (!name) return false;
+    sets = Math.min(30, Math.max(1, parseInt(sets,10) || 3));
     S.exercises.push({
-      id: makeId(), name: name, checked: true, sets: sets, completed: []
+      id: 'ex_' + Math.random().toString(36).slice(2,9),
+      name: name, checked: true, sets: sets, completed: []
     });
     saveExercises();
     buildExerciseList();
@@ -1818,7 +771,7 @@
   }
 
   function removeExercise(idx){
-    if(idx < 0 || idx >= S.exercises.length) return;
+    if (idx < 0 || idx >= S.exercises.length) return;
     S.exercises.splice(idx, 1);
     saveExercises();
     buildExerciseList();
@@ -1830,7 +783,6 @@
       const li = document.createElement('li');
       li.className = 'exercise-item';
       li.dataset.idx = i;
-      li.dataset.id = ex.id;
 
       const label = document.createElement('label');
       label.className = 'ex-label';
@@ -1839,10 +791,7 @@
       cb.type = 'checkbox';
       cb.className = 'check';
       cb.checked = ex.checked;
-      cb.addEventListener('change', () => {
-        ex.checked = cb.checked;
-        saveExercises();
-      });
+      cb.addEventListener('change', () => { ex.checked = cb.checked; saveExercises(); });
 
       const name = document.createElement('span');
       name.className = 'name';
@@ -1854,27 +803,17 @@
       const setsInput = document.createElement('input');
       setsInput.type = 'number';
       setsInput.className = 'sets-input';
-      setsInput.min = 1;
-      setsInput.max = 30;
+      setsInput.min = 1; setsInput.max = 30;
       setsInput.value = ex.sets;
-      setsInput.title = 'Свайп вверх/вниз для изменения';
       setsInput.inputMode = 'none';
-
       attachVerticalSwipe(setsInput, {
-        min: 1,
-        max: 30,
-        step: 1,
-        pixelsPerStep: 16,
-        onChange: (v) => {
-          ex.sets = v;
-          saveExercises();
-        }
+        min:1, max:30, step:1, pixelsPerStep:16,
+        onChange: (v) => { ex.sets = v; saveExercises(); }
       });
-
       setsInput.addEventListener('change', () => {
         let v = parseInt(setsInput.value, 10);
-        if(isNaN(v) || v < 1) v = 1;
-        if(v > 30) v = 30;
+        if (isNaN(v) || v < 1) v = 1;
+        if (v > 30) v = 30;
         setsInput.value = v;
         ex.sets = v;
         saveExercises();
@@ -1883,13 +822,10 @@
       const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'remove-btn';
-      removeBtn.title = 'Удалить упражнение';
-      removeBtn.setAttribute('aria-label', 'Удалить упражнение');
       removeBtn.textContent = '×';
       removeBtn.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if(S.phase !== 'idle') return;
+        ev.preventDefault(); ev.stopPropagation();
+        if (S.phase !== 'idle') return;
         removeExercise(i);
       });
 
@@ -1901,76 +837,278 @@
   }
 
   function setExerciseInputsDisabled(disabled){
-    els.exerciseList.querySelectorAll('.check, .sets-input, .remove-btn').forEach(inp => {
-      inp.disabled = disabled;
-    });
+    els.exerciseList.querySelectorAll('.check, .sets-input, .remove-btn').forEach(inp => inp.disabled = disabled);
     els.addExerciseBtn.disabled = disabled;
   }
 
   function highlightActiveExercise(){
-    const items = els.exerciseList.querySelectorAll('.exercise-item');
-    items.forEach(it => it.classList.remove('active'));
-    if((S.phase === 'work' || S.phase === 'prompt' || S.phase === 'rest') && S.activeExercises[S.exIdx]){
+    els.exerciseList.querySelectorAll('.exercise-item').forEach(it => it.classList.remove('active'));
+    if ((S.phase === 'work' || S.phase === 'prompt' || S.phase === 'rest') && S.activeExercises[S.exIdx]){
       const ex = S.activeExercises[S.exIdx];
       const idx = S.exercises.indexOf(ex);
       const item = els.exerciseList.querySelector('.exercise-item[data-idx="' + idx + '"]');
-      if(item) item.classList.add('active');
+      if (item) item.classList.add('active');
     }
   }
 
-  function loadHistory(){
-    try{
-      const raw = localStorage.getItem(HISTORY_KEY);
-      if(!raw) return [];
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) ? arr : [];
-    }catch(e){ return []; }
+  /* ============================================================
+     СВАЙП ВЕРТИКАЛЬНЫЙ
+     ============================================================ */
+  function attachVerticalSwipe(input, options){
+    options = options || {};
+    const min = options.min != null ? options.min : -Infinity;
+    const max = options.max != null ? options.max : Infinity;
+    const step = options.step || 1;
+    const onChange = options.onChange || function(){};
+    const PIXELS_PER_STEP = options.pixelsPerStep || 16;
+    const HOLD_DELAY = 400;
+
+    let startY = 0, startValue = 0, dragging = false, pointerId = null;
+    let lastCommitted = 0, holdTimer = null, accelerate = false;
+
+    function commit(v){
+      v = Math.min(max, Math.max(min, Math.round(v/step)*step));
+      if (v === lastCommitted) return;
+      lastCommitted = v;
+      input.value = v;
+      onChange(v);
+    }
+
+    function onDown(e){
+      if (input.disabled) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true;
+      pointerId = e.pointerId;
+      startY = e.clientY;
+      startValue = parseInt(input.value, 10) || 0;
+      lastCommitted = startValue;
+      accelerate = false;
+      try { input.setPointerCapture(e.pointerId); } catch(err){}
+      holdTimer = setTimeout(() => {
+        accelerate = true;
+        input.style.borderColor = 'var(--accent)';
+      }, HOLD_DELAY);
+    }
+
+    function onMove(e){
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dy = startY - e.clientY;
+      const pxPer = accelerate ? PIXELS_PER_STEP / 3 : PIXELS_PER_STEP;
+      commit(startValue + dy / pxPer);
+      e.preventDefault();
+    }
+
+    function onUp(){
+      if (!dragging) return;
+      dragging = false;
+      pointerId = null;
+      if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
+      accelerate = false;
+      input.style.borderColor = '';
+    }
+
+    input.addEventListener('pointerdown', onDown);
+    input.addEventListener('pointermove', onMove);
+    input.addEventListener('pointerup', onUp);
+    input.addEventListener('pointercancel', onUp);
   }
 
-  function saveHistory(arr){
-    try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(arr)); }
-    catch(e){ console.warn('Не удалось сохранить историю:', e); }
+  // Отдых
+  attachVerticalSwipe(els.restInput, {
+    min: 5, max: 600, step: 5, pixelsPerStep: 16,
+    onChange: (v) => {
+      S.restDuration = v * 1000;
+      try { localStorage.setItem('restSeconds', String(v)); } catch(e){}
+    }
+  });
+
+  els.restInput.addEventListener('change', () => {
+    let v = parseInt(els.restInput.value, 10);
+    if (isNaN(v)) v = 90;
+    v = Math.min(600, Math.max(5, v));
+    els.restInput.value = v;
+    S.restDuration = v * 1000;
+    try { localStorage.setItem('restSeconds', String(v)); } catch(e){}
+  });
+
+  /* ============================================================
+     ТАБЫ + СВАЙП ПАНЕЛЕЙ
+     ============================================================ */
+  function applyTrackTransform(animate){
+    const w = els.swipeViewport.clientWidth;
+    const idx = TAB_ORDER.indexOf(S.currentTab);
+    const x = -idx * w;
+    if (animate === false) els.swipeTrack.classList.add('dragging');
+    else els.swipeTrack.classList.remove('dragging');
+    els.swipeTrack.style.transform = 'translate3d(' + x + 'px, 0, 0)';
   }
 
-  function addWorkoutToHistory(workout){
-    const arr = loadHistory();
-    arr.push(workout);
-    saveHistory(arr);
-    updateHistoryBadge();
+  function updateDotsAndTabs(){
+    els.tabs.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === S.currentTab));
+    els.dots.querySelectorAll('.dot').forEach(d => d.classList.toggle('active', d.dataset.tab === S.currentTab));
   }
 
-  function updateHistoryBadge(){
-    const n = loadHistory().length;
-    els.historyCount.textContent = String(n);
-    els.historyCount.classList.toggle('zero', n === 0);
+  function switchTab(name, animate){
+    if (TAB_ORDER.indexOf(name) === -1) return;
+    S.currentTab = name;
+    updateDotsAndTabs();
+    applyTrackTransform(animate !== false);
   }
 
+  els.tabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab');
+    if (btn) switchTab(btn.dataset.tab, true);
+  });
+
+  els.dots.addEventListener('click', (e) => {
+    const dot = e.target.closest('.dot');
+    if (dot) switchTab(dot.dataset.tab, true);
+  });
+
+  window.addEventListener('resize', () => {
+    applyTrackTransform(false);
+    requestAnimationFrame(() => els.swipeTrack.classList.remove('dragging'));
+  });
+
+  (function initSwipe(){
+    let startX = 0, startY = 0, startOffset = 0, dragging = false, decided = false, pointerId = null;
+    const THRESHOLD = 8, SNAP = 0.28;
+
+    function currentX(){
+      const w = els.swipeViewport.clientWidth;
+      return -TAB_ORDER.indexOf(S.currentTab) * w;
+    }
+
+    function onDown(e){
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (document.querySelector('.modal-overlay.show')) return;
+      if (e.target.closest('.sets-input') || e.target.closest('#restInput')) return;
+      startX = e.clientX; startY = e.clientY;
+      startOffset = currentX();
+      dragging = true; decided = false;
+      pointerId = e.pointerId;
+      els.swipeTrack.classList.add('dragging');
+    }
+
+    function onMove(e){
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!decided){
+        if (Math.abs(dx) < THRESHOLD && Math.abs(dy) < THRESHOLD) return;
+        if (Math.abs(dy) > Math.abs(dx)){
+          dragging = false;
+          els.swipeTrack.classList.remove('dragging');
+          pointerId = null;
+          return;
+        }
+        decided = true;
+        try { els.swipeViewport.setPointerCapture(e.pointerId); } catch(err){}
+      }
+      const w = els.swipeViewport.clientWidth;
+      let x = startOffset + dx;
+      const minX = -(TAB_ORDER.length - 1) * w;
+      if (x > 0) x = x * 0.35;
+      if (x < minX) x = minX + (x - minX) * 0.35;
+      els.swipeTrack.style.transform = 'translate3d(' + x + 'px, 0, 0)';
+      e.preventDefault();
+    }
+
+    function onUp(e){
+      if (!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
+      dragging = false; pointerId = null;
+      els.swipeTrack.classList.remove('dragging');
+      const w = els.swipeViewport.clientWidth;
+      const idx = TAB_ORDER.indexOf(S.currentTab);
+      const cur = -idx * w;
+      const m = /translate3d\(\s*(-?[\d.]+)px/.exec(els.swipeTrack.style.transform);
+      const curX = m ? parseFloat(m[1]) : cur;
+      const dx = curX - cur;
+      let newIdx = idx;
+      if (Math.abs(dx) > w * SNAP){
+        if (dx < 0) newIdx = Math.min(TAB_ORDER.length - 1, idx + 1);
+        else newIdx = Math.max(0, idx - 1);
+      }
+      if (newIdx !== idx) switchTab(TAB_ORDER[newIdx], true);
+      else applyTrackTransform(true);
+    }
+
+    els.swipeViewport.addEventListener('pointerdown', onDown);
+    els.swipeViewport.addEventListener('pointermove', onMove);
+    els.swipeViewport.addEventListener('pointerup', onUp);
+    els.swipeViewport.addEventListener('pointercancel', onUp);
+  })();
+
+  /* ============================================================
+     АУДИО + УТИЛИТЫ
+     ============================================================ */
+  let audioCtx = null;
+  function getAudioCtx(){
+    if (!audioCtx){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      audioCtx = new Ctx();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+    return audioCtx;
+  }
+
+  function playBeep(){
+    try {
+      const ctx = getAudioCtx(); if (!ctx) return;
+      const t0 = ctx.currentTime + 0.03;
+      [{t:0,f:880},{t:0.22,f:880},{t:0.44,f:1174}].forEach(n => {
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        const start = t0 + n.t;
+        osc.type = 'sine'; osc.frequency.value = n.f;
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.28, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.20);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(start); osc.stop(start + 0.24);
+      });
+    } catch(err){}
+  }
+
+  function vibrate(){
+    if (navigator.vibrate){
+      try { navigator.vibrate([180, 90, 180, 90, 260]); } catch(e){}
+    }
+  }
+
+  function fmt(ms){
+    ms = Math.max(0, ms);
+    const total = Math.floor(ms / 1000);
+    return String(Math.floor(total / 60)).padStart(2,'0') + ':' + String(total % 60).padStart(2,'0');
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function shake(el){
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+    setTimeout(() => el.classList.remove('shake'), 450);
+  }
+
+  /* ============================================================
+     ОТРИСОВКА
+     ============================================================ */
   function renderTime(ms){
     const str = fmt(ms);
-    if(str !== S.lastTimeStr){
-      S.lastTimeStr = str;
-      els.timeDisplay.textContent = str;
-    }
+    if (str !== S.lastTimeStr){ S.lastTimeStr = str; els.timeDisplay.textContent = str; }
   }
 
   function renderLog(){
     els.logList.innerHTML = '';
     const all = [];
-    S.exercises.forEach(ex => {
-      (ex.completed || []).forEach(c => {
-        all.push({
-          name: ex.name,
-          setNum: c.setNum,
-          totalSets: ex.sets,
-          reps: c.reps,
-          dur: c.dur,
-          t: c.t
-        });
-      });
-    });
+    S.exercises.forEach(ex => (ex.completed || []).forEach(c => all.push({
+      name: ex.name, setNum: c.setNum, totalSets: ex.sets, reps: c.reps, dur: c.dur, t: c.t
+    })));
     all.sort((a,b) => a.t - b.t);
 
-    if(all.length === 0){
+    if (!all.length){
       const li = document.createElement('li');
       li.className = 'empty';
       li.textContent = 'Пока нет подходов';
@@ -1997,29 +1135,25 @@
   function computeStats(){
     const isFinished = S.phase === 'finished';
     let now;
-    if(isFinished && S.finishedAt) now = S.finishedAt;
-    else if(S.phase === 'prompt') now = S.workEnd;
+    if (isFinished && S.finishedAt) now = S.finishedAt;
+    else if (S.phase === 'prompt') now = S.workEnd;
     else now = performance.now();
 
     let work = 0;
-    S.exercises.forEach(ex => {
-      (ex.completed || []).forEach(c => { work += c.dur; });
-    });
-    if(S.phase === 'work')        work += now - S.workStart;
-    else if(S.phase === 'prompt') work += S.workEnd - S.workStart;
+    S.exercises.forEach(ex => (ex.completed || []).forEach(c => { work += c.dur; }));
+    if (S.phase === 'work') work += now - S.workStart;
+    else if (S.phase === 'prompt') work += S.workEnd - S.workStart;
 
     let total = 0;
-    if(S.workoutStart) total = Math.max(0, now - S.workoutStart);
-    const rest = Math.max(0, total - work);
-
-    return { work, rest, total };
+    if (S.workoutStart) total = Math.max(0, now - S.workoutStart);
+    return { work, rest: Math.max(0, total - work), total };
   }
 
   function updateStats(){
     const st = computeStats();
     els.totalTime.textContent = fmt(st.total);
-    els.workTime.textContent  = fmt(st.work);
-    els.restTime.textContent  = fmt(st.rest);
+    els.workTime.textContent = fmt(st.work);
+    els.restTime.textContent = fmt(st.rest);
 
     let count = 0;
     S.exercises.forEach(ex => { count += (ex.completed || []).length; });
@@ -2033,37 +1167,33 @@
     btn.disabled = false;
     els.skipBtn.hidden = true;
 
-    if(S.phase === 'idle'){
+    if (S.phase === 'idle'){
       els.phaseLabel.textContent = 'Готов к тренировке';
       btn.textContent = 'Начать';
       S.lastTimeStr = '';
       els.timeDisplay.textContent = '00:00';
       els.liveDot.classList.remove('on');
-    }
-    else if(S.phase === 'work'){
+    } else if (S.phase === 'work'){
       const ex = S.activeExercises[S.exIdx];
       els.phaseLabel.textContent = ex.name + ' · подход ' + (S.setIdx + 1) + '/' + ex.sets;
       btn.textContent = 'Отдых';
       btn.classList.add('work');
       els.liveDot.classList.add('on');
-    }
-    else if(S.phase === 'prompt'){
+    } else if (S.phase === 'prompt'){
       const ex = S.activeExercises[S.exIdx];
       els.phaseLabel.textContent = ex.name + ' · подход ' + (S.setIdx + 1) + '/' + ex.sets;
       btn.textContent = 'Отдых';
       btn.classList.add('work');
       btn.disabled = true;
       els.liveDot.classList.add('on');
-    }
-    else if(S.phase === 'rest'){
+    } else if (S.phase === 'rest'){
       els.phaseLabel.textContent = 'Отдых';
       btn.textContent = 'Ожидание';
       btn.classList.add('wait');
       btn.disabled = true;
       els.skipBtn.hidden = false;
       els.liveDot.classList.add('on');
-    }
-    else if(S.phase === 'finished'){
+    } else if (S.phase === 'finished'){
       els.phaseLabel.textContent = 'Тренировка завершена';
       btn.textContent = 'Заново';
       els.liveDot.classList.remove('on');
@@ -2073,47 +1203,36 @@
     highlightActiveExercise();
   }
 
+  /* ============================================================
+     ЦИКЛ
+     ============================================================ */
   function update(){
     const now = performance.now();
-
-    if(S.phase === 'work'){
-      renderTime(now - S.workStart);
-    }
-    else if(S.phase === 'prompt'){
-      renderTime(S.workEnd - S.workStart);
-    }
-    else if(S.phase === 'rest'){
+    if (S.phase === 'work') renderTime(now - S.workStart);
+    else if (S.phase === 'prompt') renderTime(S.workEnd - S.workStart);
+    else if (S.phase === 'rest'){
       const remaining = S.restEnd - now;
-      if(remaining <= 0){
-        renderTime(0);
-        endRest(false);
-        return;
-      }
+      if (remaining <= 0){ renderTime(0); endRest(false); return; }
       renderTime(remaining);
     }
-
     updateStats();
   }
 
   function startLoop(){
-    if(S.rafId) return;
-    const loop = () => {
-      S.rafId = requestAnimationFrame(loop);
-      update();
-    };
+    if (S.rafId) return;
+    const loop = () => { S.rafId = requestAnimationFrame(loop); update(); };
     S.rafId = requestAnimationFrame(loop);
   }
-
   function stopLoop(){
-    if(S.rafId){
-      cancelAnimationFrame(S.rafId);
-      S.rafId = null;
-    }
+    if (S.rafId){ cancelAnimationFrame(S.rafId); S.rafId = null; }
   }
 
+  /* ============================================================
+     ФАЗЫ ТРЕНИРОВКИ
+     ============================================================ */
   function startWorkout(){
     const active = S.exercises.filter(e => e.checked);
-    if(active.length === 0){
+    if (!active.length){
       switchTab('exercises', true);
       shake(document.getElementById('panel-exercises'));
       return;
@@ -2158,60 +1277,39 @@
     setPhaseUI();
 
     clearTimeout(S.restTimeout);
-    S.restTimeout = setTimeout(() => {
-      if(S.phase === 'rest') endRest(false);
-    }, S.restDuration);
-
-    if(!S.rafId) startLoop();
+    S.restTimeout = setTimeout(() => { if (S.phase === 'rest') endRest(false); }, S.restDuration);
+    if (!S.rafId) startLoop();
   }
 
   function endRest(skipped){
     clearTimeout(S.restTimeout);
     S.restTimeout = null;
-
-    if(!skipped){
-      playBeep();
-      vibrate();
-    }
-
+    if (!skipped){ playBeep(); vibrate(); }
     S.phase = 'work';
     S.workStart = performance.now();
     S.workEnd = 0;
     setPhaseUI();
     updateStats();
-
-    if(!S.rafId) startLoop();
+    if (!S.rafId) startLoop();
   }
 
   function recordSet(reps){
     const dur = S.workEnd - S.workStart;
     const ex = S.activeExercises[S.exIdx];
-    if(!ex.completed) ex.completed = [];
+    if (!ex.completed) ex.completed = [];
     ex.completed.push({
-      reps: reps,
-      dur: dur,
-      setNum: S.setIdx + 1,
-      t: performance.now()
+      reps: reps, dur: dur, setNum: S.setIdx + 1, t: performance.now()
     });
-
     renderLog();
 
-    if(S.pendingFinish){
-      S.pendingFinish = false;
-      requestFinish();
-      return;
-    }
+    if (S.pendingFinish){ S.pendingFinish = false; requestFinish(); return; }
 
     S.setIdx++;
-    if(S.setIdx >= ex.sets){
+    if (S.setIdx >= ex.sets){
       S.exIdx++;
       S.setIdx = 0;
-      if(S.exIdx >= S.activeExercises.length){
-        requestFinish();
-        return;
-      }
+      if (S.exIdx >= S.activeExercises.length){ requestFinish(); return; }
     }
-
     startRest();
   }
 
@@ -2219,62 +1317,61 @@
     clearTimeout(S.restTimeout);
     S.restTimeout = null;
 
-    if(!S.finishedAt) S.finishedAt = performance.now();
+    if (!S.finishedAt) S.finishedAt = performance.now();
     S.phase = 'finished';
     stopLoop();
     setPhaseUI();
     updateStats();
 
     let hasData = false;
-    S.exercises.forEach(ex => { if((ex.completed || []).length > 0) hasData = true; });
+    S.exercises.forEach(ex => { if ((ex.completed || []).length > 0) hasData = true; });
 
-    if(hasData){
-      els.saveModal.classList.add('show');
-    } else {
-      finishWorkout(false);
-    }
+    if (hasData) finishWorkout();
+    else resetAll();
   }
 
-  function finishWorkout(save){
-    els.saveModal.classList.remove('show');
-
+  async function finishWorkout(){
     const workoutData = buildWorkoutData();
-    let saved = false;
+    if (!workoutData.exercises.length){ resetAll(); return; }
 
-    if(save && workoutData.exercises.length > 0){
-      addWorkoutToHistory(workoutData);
-      saved = true;
+    // Показываем модалку сразу, со статусом "отправляем"
+    showSummary(workoutData, 'sending');
+
+    try {
+      const res = await apiSaveWorkout(S.login, workoutData);
+      if (res && res.result === 'success'){
+        setSummaryStatus('saved', '✓ Сохранено в Google Таблицу');
+        loadHistoryCount();
+      } else {
+        setSummaryStatus('error', 'Ошибка: ' + ((res && res.message) || 'не удалось сохранить'));
+      }
+    } catch(err){
+      console.error(err);
+      setSummaryStatus('error', 'Нет связи с сервером');
     }
-
-    showSummary(workoutData, saved);
   }
 
   function buildWorkoutData(){
     const stats = computeStats();
     const exercises = [];
-
     S.activeExercises.forEach(ex => {
       const comp = ex.completed || [];
-      if(comp.length === 0) return;
+      if (!comp.length) return;
       const sets = comp.length;
       const reps = comp.reduce((s,c) => s + c.reps, 0);
       const time = comp.reduce((s,c) => s + c.dur, 0);
-      const setReps = comp.map(c => c.reps);
       exercises.push({
         name: ex.name,
         sets: sets,
         reps: reps,
-        setReps: setReps,
+        setReps: comp.map(c => c.reps),
         avgReps: reps / sets,
         totalTime: time,
         avgTime: time / sets
       });
     });
-
-    const now = new Date();
     return {
-      date: now.toISOString(),
-      dateStr: formatDate(now),
+      date: new Date().toISOString(),
       totalTime: stats.total,
       workTime: stats.work,
       restTime: stats.rest,
@@ -2283,11 +1380,10 @@
   }
 
   function stopWorkout(){
-    if(S.phase === 'idle' || S.phase === 'finished') return;
-
-    if(S.phase === 'work'){
+    if (S.phase === 'idle' || S.phase === 'finished') return;
+    if (S.phase === 'work'){
       const dur = performance.now() - S.workStart;
-      if(dur > 2000){
+      if (dur > 2000){
         S.workEnd = performance.now();
         S.phase = 'prompt';
         S.pendingFinish = true;
@@ -2305,15 +1401,11 @@
     stopLoop();
 
     S.phase = 'idle';
-    S.workStart = 0;
-    S.workEnd = 0;
-    S.restStart = 0;
-    S.restEnd = 0;
-    S.workoutStart = 0;
-    S.finishedAt = 0;
+    S.workStart = 0; S.workEnd = 0;
+    S.restStart = 0; S.restEnd = 0;
+    S.workoutStart = 0; S.finishedAt = 0;
     S.activeExercises = [];
-    S.exIdx = 0;
-    S.setIdx = 0;
+    S.exIdx = 0; S.setIdx = 0;
     S.pendingFinish = false;
     S.lastTimeStr = '';
 
@@ -2321,7 +1413,6 @@
 
     els.repsModal.classList.remove('show');
     els.addExerciseModal.classList.remove('show');
-    els.saveModal.classList.remove('show');
     els.summaryModal.classList.remove('show');
 
     setExerciseInputsDisabled(false);
@@ -2331,59 +1422,61 @@
     switchTab('exercises', true);
   }
 
+  /* ============================================================
+     МОДАЛКА ПОВТОРЕНИЙ
+     ============================================================ */
   function showRepsModal(){
     const ex = S.activeExercises[S.exIdx];
     const setNum = S.setIdx + 1;
     els.repsTitle.textContent = ex.name + ' — подход ' + setNum + '/' + ex.sets;
     els.repsInput.value = '';
 
-    if(document.activeElement && document.activeElement.blur){
-      try{ document.activeElement.blur(); }catch(e){}
+    if (document.activeElement && document.activeElement.blur){
+      try { document.activeElement.blur(); } catch(e){}
     }
-
     els.repsModal.classList.add('show');
 
-    try{
-      els.repsInput.focus({ preventScroll: false });
-      els.repsInput.select();
-    }catch(e){}
-
+    try { els.repsInput.focus(); els.repsInput.select(); } catch(e){}
     requestAnimationFrame(() => {
-      if(els.repsModal.classList.contains('show') &&
-         document.activeElement !== els.repsInput){
-        try{
-          els.repsInput.focus({ preventScroll: false });
-          els.repsInput.select();
-        }catch(e){}
+      if (els.repsModal.classList.contains('show') && document.activeElement !== els.repsInput){
+        try { els.repsInput.focus(); els.repsInput.select(); } catch(e){}
       }
     });
   }
 
   function submitReps(){
     let reps = parseInt(els.repsInput.value, 10);
-    if(isNaN(reps) || reps < 0) reps = 0;
-    if(reps > 999) reps = 999;
+    if (isNaN(reps) || reps < 0) reps = 0;
+    if (reps > 999) reps = 999;
     els.repsModal.classList.remove('show');
     recordSet(reps);
   }
 
   function cancelReps(){
     els.repsModal.classList.remove('show');
-    if(S.pendingFinish){ S.pendingFinish = false; }
+    if (S.pendingFinish) S.pendingFinish = false;
     S.phase = 'work';
     S.workEnd = 0;
     setPhaseUI();
-    if(!S.rafId) startLoop();
+    if (!S.rafId) startLoop();
   }
 
+  els.repsOk.addEventListener('click', submitReps);
+  els.repsCancel.addEventListener('click', cancelReps);
+  els.repsInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); submitReps(); }
+    else if (e.key === 'Escape'){ e.preventDefault(); cancelReps(); }
+  });
+
+  /* ============================================================
+     МОДАЛКА ДОБАВЛЕНИЯ УПРАЖНЕНИЯ
+     ============================================================ */
   function openAddExerciseModal(){
-    if(S.phase !== 'idle') return;
+    if (S.phase !== 'idle') return;
     els.newExName.value = '';
     els.newExSets.value = 3;
     els.addExerciseModal.classList.add('show');
-    requestAnimationFrame(() => {
-      try{ els.newExName.focus({ preventScroll: false }); }catch(e){}
-    });
+    requestAnimationFrame(() => { try { els.newExName.focus(); } catch(e){} });
   }
 
   function closeAddExerciseModal(){
@@ -2392,32 +1485,29 @@
 
   function submitAddExercise(){
     const name = els.newExName.value.trim();
-    if(!name){
-      shake(els.newExName);
-      return;
-    }
+    if (!name){ shake(els.newExName); return; }
     const sets = parseInt(els.newExSets.value, 10) || 3;
-    const ok = addExercise(name, sets);
-    if(ok) closeAddExerciseModal();
+    if (addExercise(name, sets)) closeAddExerciseModal();
   }
 
   els.addExerciseBtn.addEventListener('click', openAddExerciseModal);
   els.addExOk.addEventListener('click', submitAddExercise);
   els.addExCancel.addEventListener('click', closeAddExerciseModal);
-
   els.newExName.addEventListener('keydown', (e) => {
-    if(e.key === 'Enter'){ e.preventDefault(); submitAddExercise(); }
-    else if(e.key === 'Escape'){ e.preventDefault(); closeAddExerciseModal(); }
+    if (e.key === 'Enter'){ e.preventDefault(); submitAddExercise(); }
+    else if (e.key === 'Escape'){ e.preventDefault(); closeAddExerciseModal(); }
   });
   els.newExSets.addEventListener('keydown', (e) => {
-    if(e.key === 'Enter'){ e.preventDefault(); submitAddExercise(); }
-    else if(e.key === 'Escape'){ e.preventDefault(); closeAddExerciseModal(); }
+    if (e.key === 'Enter'){ e.preventDefault(); submitAddExercise(); }
+    else if (e.key === 'Escape'){ e.preventDefault(); closeAddExerciseModal(); }
   });
 
-  function showSummary(workout, saved){
+  /* ============================================================
+     САММЭРИ
+     ============================================================ */
+  function showSummary(workout, status){
     let html = '';
-
-    if(workout.exercises.length === 0){
+    if (!workout.exercises.length){
       html = '<div class="summary-item" style="text-align:center;color:var(--muted);">Нет выполненных подходов</div>';
     } else {
       workout.exercises.forEach(ex => {
@@ -2448,252 +1538,176 @@
 
     els.summaryContent.innerHTML = html;
 
-    if(workout.exercises.length === 0){
-      els.summaryStatus.className = 'summary-status';
-    } else if(saved){
-      els.summaryStatus.textContent = '✓ Сохранено в историю';
-      els.summaryStatus.className = 'summary-status show saved';
-    } else {
-      els.summaryStatus.textContent = 'Тренировка не сохранена';
-      els.summaryStatus.className = 'summary-status show not-saved';
-    }
-
+    if (status === 'sending') setSummaryStatus('sending', '⏳ Сохраняем в Google Таблицу...');
     els.summaryModal.classList.add('show');
   }
 
-  function renderHistory(){
-    const history = loadHistory();
-    updateHistoryBadge();
+  function setSummaryStatus(type, text){
+    els.summaryStatus.className = 'summary-status show ' + type;
+    els.summaryStatus.textContent = text;
+  }
 
-    if(history.length === 0){
-      els.historyContent.innerHTML = '<div class="history-empty">История пуста.<br>Завершите тренировку, чтобы она появилась здесь.</div>';
-      els.historySub.textContent = 'Все сохранённые тренировки';
-      return;
+  els.summaryClose.addEventListener('click', () => {
+    els.summaryModal.classList.remove('show');
+    if (S.phase === 'finished') resetAll();
+  });
+
+  /* ============================================================
+     ИСТОРИЯ ИЗ GOOGLE SHEETS
+     ============================================================ */
+  async function loadHistoryCount(){
+    try {
+      const data = await apiGetHistory(S.login);
+      if (data && data.result === 'success' && Array.isArray(data.history)){
+        // Уникальных дат = количество тренировок
+        const dates = new Set(data.history.map(r => String(r.date)));
+        S.historyCount = dates.size;
+        els.historyCount.textContent = String(S.historyCount);
+        els.historyCount.classList.toggle('zero', S.historyCount === 0);
+      }
+    } catch(err){
+      console.warn('Не удалось загрузить историю:', err);
     }
+  }
 
-    const groups = {};
-    history.forEach(w => {
-      const d = new Date(w.date);
-      const key = d.getFullYear() + '-' + pad2(d.getMonth()+1);
-      if(!groups[key]) groups[key] = { year: d.getFullYear(), month: d.getMonth(), items: [] };
-      groups[key].items.push(w);
-    });
+  async function renderHistory(){
+    els.historyContent.innerHTML = '<div class="history-loading">Загрузка...</div>';
+    els.historySub.textContent = 'Загрузка из Google Sheets...';
 
-    const keys = Object.keys(groups).sort().reverse();
+    try {
+      const data = await apiGetHistory(S.login);
+      if (!data || data.result !== 'success' || !Array.isArray(data.history)){
+        els.historyContent.innerHTML = '<div class="history-empty">Не удалось загрузить историю</div>';
+        return;
+      }
+      if (!data.history.length){
+        els.historyContent.innerHTML = '<div class="history-empty">История пуста.<br>Завершите тренировку, чтобы она появилась здесь.</div>';
+        els.historySub.textContent = 'Все сохранённые тренировки';
+        return;
+      }
 
-    let html = '';
-    keys.forEach(k => {
-      const g = groups[k];
-      html += '<div class="history-month">' + MONTHS_RU[g.month] + ' ' + g.year + ' · ' + g.items.length + ' трен.</div>';
+      // Группируем по дате (уникальные даты тренировок)
+      const byDate = {};
+      data.history.forEach(row => {
+        const d = String(row.date);
+        if (!byDate[d]) byDate[d] = [];
+        byDate[d].push(row);
+      });
 
-      [...g.items].reverse().forEach(w => {
-        html += '<div class="history-item">';
-        html += '<div class="h-date">' + escapeHtml(w.dateStr) + '</div>';
-        html += '<div class="h-meta">Всего ' + fmt(w.totalTime) + ' · работа ' + fmt(w.workTime) + ' · отдых ' + fmt(w.restTime) + '</div>';
+      // Группируем по месяцам
+      const groups = {};
+      Object.keys(byDate).forEach(dateStr => {
+        const [datePart] = dateStr.split(' ');
+        const [y, m, d] = datePart.split('-');
+        const key = y + '-' + m;
+        if (!groups[key]) groups[key] = { year: parseInt(y), month: parseInt(m) - 1, items: [] };
+        groups[key].items.push({ dateStr, rows: byDate[dateStr] });
+      });
 
-        w.exercises.forEach(ex => {
-          html += '<div class="history-ex">' +
-                    '<span class="h-ex-name">' + escapeHtml(ex.name) + '</span>' +
-                    '<span class="h-ex-stats">' + ex.sets + '×  ·  <b>' + ex.reps + '</b> повт  ·  ср. ' + ex.avgReps.toFixed(1) + '</span>' +
-                  '</div>';
+      const MONTHS_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+      const keys = Object.keys(groups).sort().reverse();
+
+      let html = '';
+      keys.forEach(k => {
+        const g = groups[k];
+        html += '<div class="history-month">' + MONTHS_RU[g.month] + ' ' + g.year + ' · ' + g.items.length + ' трен.</div>';
+
+        [...g.items].reverse().forEach(item => {
+          const dateOnly = item.dateStr.split(' ')[0];
+          const timeOnly = item.dateStr.split(' ')[1] || '';
+
+          // Извлекаем общие параметры из первой строки
+          const firstRow = item.rows[0];
+          const totalTime = firstRow.totalTime ? fmt(parseFloat(firstRow.totalTime) * 1000) : '—';
+          const workTime = firstRow.workTime ? fmt(parseFloat(firstRow.workTime) * 1000) : '—';
+          const restTime = firstRow.restTime ? fmt(parseFloat(firstRow.restTime) * 1000) : '—';
+
+          html += '<div class="history-item">';
+          html += '<div class="h-date">' + dateOnly + (timeOnly ? ' в ' + timeOnly : '') + '</div>';
+          html += '<div class="h-meta">Всего ' + totalTime + ' · работа ' + workTime + ' · отдых ' + restTime + '</div>';
+
+          item.rows.forEach(r => {
+            const reps = r.totalReps || 0;
+            const sets = r.sets || 0;
+            const avg = sets ? (reps / sets).toFixed(1) : '0';
+            html += '<div class="history-ex">' +
+                      '<span class="h-ex-name">' + escapeHtml(r.exercise) + '</span>' +
+                      '<span class="h-ex-stats">' + sets + '×  ·  <b>' + reps + '</b> повт  ·  ср. ' + avg + '</span>' +
+                    '</div>';
+          });
+
+          html += '</div>';
         });
-
-        html += '</div>';
       });
-    });
 
-    els.historyContent.innerHTML = html;
-    const totalWorkouts = history.length;
-    const first = new Date(history[0].date);
-    const last  = new Date(history[history.length-1].date);
-    els.historySub.textContent =
-      'Всего: ' + totalWorkouts + ' трен. · ' +
-      formatDateShort(first) + ' — ' + formatDateShort(last);
+      els.historyContent.innerHTML = html;
+      els.historySub.textContent = 'Всего: ' + S.historyCount + ' трен.';
+    } catch(err){
+      console.error(err);
+      els.historyContent.innerHTML = '<div class="history-empty">Нет связи с сервером</div>';
+    }
   }
 
-  function downloadFile(filename, content, mime){
-    const blob = new Blob([content], { type: mime + ';charset=utf-8' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 500);
-  }
+  els.historyBtn.addEventListener('click', () => {
+    els.historyModal.classList.add('show');
+    renderHistory();
+  });
 
-  function exportTxt(){
-    const history = loadHistory();
-    if(history.length === 0) return;
+  els.historyClose.addEventListener('click', () => {
+    els.historyModal.classList.remove('show');
+  });
 
-    const now = new Date();
-    const lines = [];
+  els.refreshHistoryBtn.addEventListener('click', () => {
+    renderHistory();
+    loadHistoryCount();
+  });
 
-    lines.push('ИСТОРИЯ ТРЕНИРОВОК');
-    lines.push('Экспортировано: ' + formatDate(now));
-    lines.push('Всего тренировок: ' + history.length);
-    lines.push('='.repeat(60));
-    lines.push('');
-
-    const groups = {};
-    history.forEach(w => {
-      const d = new Date(w.date);
-      const key = d.getFullYear() + '-' + pad2(d.getMonth()+1);
-      if(!groups[key]) groups[key] = { year: d.getFullYear(), month: d.getMonth(), items: [] };
-      groups[key].items.push(w);
-    });
-
-    Object.keys(groups).sort().forEach(k => {
-      const g = groups[k];
-      lines.push('');
-      lines.push('#'.repeat(60));
-      lines.push('# ' + (MONTHS_RU[g.month] + ' ' + g.year).toUpperCase());
-      lines.push('#'.repeat(60));
-      lines.push('');
-
-      g.items.forEach(w => {
-        lines.push('--- ' + w.dateStr + ' ---');
-        lines.push('Общее время:      ' + fmtLong(w.totalTime));
-        lines.push('Работа:           ' + fmtLong(w.workTime));
-        lines.push('Отдых:            ' + fmtLong(w.restTime));
-        lines.push('');
-
-        w.exercises.forEach(ex => {
-          lines.push('  ' + ex.name + ':');
-          lines.push('    Подходов:              ' + ex.sets);
-          lines.push('    Всего повторений:      ' + ex.reps);
-          if(ex.setReps) lines.push('    По подходам:           ' + ex.setReps.join(' · '));
-          lines.push('    Среднее за подход:     ' + ex.avgReps.toFixed(1));
-          lines.push('    Общее время работы:    ' + fmtLong(ex.totalTime));
-          lines.push('    Среднее время/подход:  ' + fmtLong(ex.avgTime));
-          lines.push('');
-        });
-        lines.push('');
-      });
-    });
-
-    downloadFile('workout-history-' + formatDateShort(now).replace(/\./g,'-') + '.txt',
-                 lines.join('\n'), 'text/plain');
-  }
-
-  function exportCsv(){
-    const history = loadHistory();
-    if(history.length === 0) return;
-
-    const rows = [];
-    rows.push(['Дата','Упражнение','Подходов','Всего повторений','Повторения по подходам','Среднее за подход',
-               'Время работы (сек)','Среднее время/подход (сек)',
-               'Общее время тренировки (сек)','Работа (сек)','Отдых (сек)'].join(';'));
-
-    history.forEach(w => {
-      w.exercises.forEach(ex => {
-        rows.push([
-          w.dateStr,
-          '"' + ex.name.replace(/"/g,'""') + '"',
-          ex.sets,
-          ex.reps,
-          '"' + (ex.setReps ? ex.setReps.join(' · ') : '') + '"',
-          ex.avgReps.toFixed(2),
-          Math.round(ex.totalTime / 1000),
-          Math.round(ex.avgTime / 1000),
-          Math.round(w.totalTime / 1000),
-          Math.round(w.workTime / 1000),
-          Math.round(w.restTime / 1000)
-        ].join(';'));
-      });
-    });
-
-    const csv = '\uFEFF' + rows.join('\n');
-    const now = new Date();
-    downloadFile('workout-history-' + formatDateShort(now).replace(/\./g,'-') + '.csv',
-                 csv, 'text/csv');
-  }
-
+  /* ============================================================
+     ГЛАВНЫЕ КНОПКИ
+     ============================================================ */
   els.mainBtn.addEventListener('click', () => {
     getAudioCtx();
-
-    if(S.phase === 'idle'){
-      if(!S.exercises.some(e => e.checked)){
+    if (S.phase === 'idle'){
+      if (!S.exercises.some(e => e.checked)){
         switchTab('exercises', true);
         shake(document.getElementById('panel-exercises'));
         return;
       }
       startWorkout();
+    } else if (S.phase === 'work'){
+      finishApproach();
+    } else if (S.phase === 'finished'){
+      resetAll();
     }
-    else if(S.phase === 'work'){ finishApproach(); }
-    else if(S.phase === 'finished'){ resetAll(); }
   });
 
   els.skipBtn.addEventListener('click', () => {
-    if(S.phase === 'rest') endRest(true);
+    if (S.phase === 'rest') endRest(true);
   });
 
   els.stopBtn.addEventListener('click', stopWorkout);
 
-  els.repsOk.addEventListener('click', submitReps);
-  els.repsCancel.addEventListener('click', cancelReps);
-
-  els.repsInput.addEventListener('keydown', (e) => {
-    if(e.key === 'Enter'){ e.preventDefault(); submitReps(); }
-    else if(e.key === 'Escape'){ e.preventDefault(); cancelReps(); }
-  });
-
-  els.saveYes.addEventListener('click', () => finishWorkout(true));
-  els.saveNo.addEventListener('click', () => finishWorkout(false));
-
-  els.summaryClose.addEventListener('click', () => {
-    els.summaryModal.classList.remove('show');
-  });
-
-  els.historyBtn.addEventListener('click', () => {
-    renderHistory();
-    els.historyModal.classList.add('show');
-  });
-  els.historyClose.addEventListener('click', () => {
-    els.historyModal.classList.remove('show');
-  });
-  els.exportBtn.addEventListener('click', exportTxt);
-  els.exportCsvBtn.addEventListener('click', exportCsv);
-  els.clearHistoryBtn.addEventListener('click', () => {
-    if(confirm('Удалить всю историю тренировок? Это действие необратимо.')){
-      saveHistory([]);
-      updateHistoryBadge();
-      renderHistory();
-    }
-  });
-
+  // ESC закрывает модалки
   document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape'){
-      if(els.summaryModal.classList.contains('show')) els.summaryModal.classList.remove('show');
-      else if(els.historyModal.classList.contains('show')) els.historyModal.classList.remove('show');
+    if (e.key === 'Escape'){
+      if (els.historyModal.classList.contains('show')) els.historyModal.classList.remove('show');
+      else if (els.summaryModal.classList.contains('show')){
+        els.summaryModal.classList.remove('show');
+        if (S.phase === 'finished') resetAll();
+      }
     }
   });
 
-  (function init(){
-    try{
-      const saved = parseInt(localStorage.getItem('restSeconds'), 10);
-      if(!isNaN(saved) && saved >= 5 && saved <= 600){
-        els.restInput.value = saved;
-        S.restDuration = saved * 1000;
-      }
-    }catch(e){}
-
-    S.exercises = loadExercises();
-
-    buildExerciseList();
-    renderLog();
-    setPhaseUI();
-    updateStats();
-    updateHistoryBadge();
-
-    requestAnimationFrame(() => {
-      applyTrackTransform(false);
-    });
-
-    const unlock = () => { getAudioCtx(); };
-    document.addEventListener('pointerdown', unlock, { once:true });
-    document.addEventListener('keydown', unlock, { once:true });
+  /* ============================================================
+     АВТО-ВХОД (если логин сохранён)
+     ============================================================ */
+  (function autoLogin(){
+    let savedLogin = null;
+    try { savedLogin = localStorage.getItem(LOGIN_KEY); } catch(e){}
+    if (savedLogin){
+      els.loginInput.value = savedLogin;
+      doLogin(savedLogin);
+    }
   })();
 
 })();
