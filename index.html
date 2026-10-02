@@ -164,12 +164,13 @@ html,body{
 .menu-screen{padding:20px 16px;}
 .menu-top{flex-shrink:0; padding:8px 4px 0;}
 
+/* Карточка пользователя — выравнивание влево */
 .menu-user-card{
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   gap:12px;
-  padding:12px 16px;
+  padding:12px 16px 12px 12px;
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:18px;
@@ -193,13 +194,13 @@ html,body{
   line-height:1;
 }
 .menu-user-info{
-  flex:0 1 auto;
+  flex:1;
   min-width:0;
   display:flex;
   flex-direction:column;
   gap:2px;
-  align-items:center;
-  text-align:center;
+  align-items:flex-start;
+  text-align:left;
 }
 .menu-user-name{
   font-size:17px;
@@ -207,7 +208,6 @@ html,body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  text-align:center;
 }
 .menu-user-meta{
   font-size:12.5px;
@@ -216,7 +216,6 @@ html,body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  text-align:center;
 }
 
 .menu-buttons{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:16px; padding:30px 0;}
@@ -491,6 +490,7 @@ html,body{
   margin-bottom:8px;
   text-align:center;
 }
+/* Поле имени — по центру, как и label */
 .profile-field input{
   width:100%;
   padding:14px 16px;
@@ -1582,7 +1582,7 @@ html,body{
   }
 
   /* ============================================================
-     КОЛЕСО ДАТЫ (исправлено)
+     КОЛЕСО ДАТЫ — с правильной центровкой активного элемента
      ============================================================ */
   const ITEM_H = 44;
 
@@ -1592,13 +1592,7 @@ html,body{
     year:  { el: null, track: null, value: new Date().getFullYear(), min: 1900, max: new Date().getFullYear() }
   };
 
-  /* Строит трек с верхним и нижним padding.
-     Внутри контейнера высотой H, чтобы ITEM-й элемент оказался по центру,
-     верхний padding = H/2 - ITEM_H/2, аналогично снизу. */
   function buildWheelItems(wheel, kind){
-    const containerH = wheel.el.clientHeight || 150;
-    const pad = Math.max(0, containerH / 2 - ITEM_H / 2);
-
     wheel.track.innerHTML = '';
 
     let items = [];
@@ -1612,12 +1606,11 @@ html,body{
       for (let y = maxYear; y >= 1900; y--) items.push({ v: y, label: String(y) });
     }
 
-    // Верхний padding
+    // Верхний padding: полувысота контейнера минус полувысота строки
     const padTop = document.createElement('div');
-    padTop.style.height = pad + 'px';
+    padTop.style.height = 'calc(50% - ' + (ITEM_H/2) + 'px)';
     wheel.track.appendChild(padTop);
 
-    // Элементы
     items.forEach(it => {
       const div = document.createElement('div');
       div.className = 'date-wheel-item';
@@ -1628,12 +1621,14 @@ html,body{
 
     // Нижний padding
     const padBot = document.createElement('div');
-    padBot.style.height = pad + 'px';
+    padBot.style.height = 'calc(50% - ' + (ITEM_H/2) + 'px)';
     wheel.track.appendChild(padBot);
   }
 
-  /* Устанавливает активное значение. Смещает track так, чтобы нужный
-     ITEM оказался по вертикальному центру контейнера. */
+  /* Позиционирование: активный элемент должен быть ровно в центре
+     контейнера. Используем чистую формулу y = -idx * ITEM_H.
+     Верхний padding calc(50% - ITEM_H/2) уже даёт смещение,
+     поэтому активный элемент встаёт в центр автоматически. */
   function setWheelValue(wheel, value, animate){
     wheel.value = value;
     const items = wheel.track.querySelectorAll('.date-wheel-item');
@@ -1641,9 +1636,7 @@ html,body{
     items.forEach((it, i) => { if (parseInt(it.dataset.value, 10) === value) idx = i; });
     if (idx < 0) idx = 0;
 
-    // Смещение = позиция нужного элемента в треке минус половина разницы высот
-    const containerH = wheel.el.clientHeight || 150;
-    const y = -(idx * ITEM_H) + (containerH / 2 - ITEM_H / 2);
+    const y = -(idx * ITEM_H);
 
     wheel.track.style.transition = animate === false ? 'none' : 'transform .25s cubic-bezier(.22,.61,.36,1)';
     wheel.track.style.transform = 'translateY(' + y + 'px)';
@@ -1655,7 +1648,6 @@ html,body{
     });
   }
 
-  /* Пересобирает трек дня, если изменилось количество дней в месяце */
   function refreshDaysByMonth(){
     const maxDay = daysInMonth(dateWheel.year.value, dateWheel.month.value);
     const dayWheel = dateWheel.day;
@@ -1750,11 +1742,13 @@ html,body{
     }
     const maxDay = daysInMonth(y, m);
     d = Math.min(d, maxDay);
-    // Пересобираем трек дня под правильное количество дней
+    // Установить значения
     dateWheel.day.value = d;
     dateWheel.month.value = m;
     dateWheel.year.value = y;
+    // Пересобрать трек дня под правильное количество дней
     buildWheelItems(dateWheel.day, 'day');
+    // Применить позиции (без анимации)
     setWheelValue(dateWheel.day, d, false);
     setWheelValue(dateWheel.month, m, false);
     setWheelValue(dateWheel.year, y, false);
@@ -1776,7 +1770,7 @@ html,body{
     els.profileStatus.textContent = '';
     els.profileModal.classList.add('show');
     setTimeout(() => {
-      // Пересобираем треки после того, как модалка стала видимой (clientHeight > 0)
+      // Пересобираем треки после появления модалки, чтобы размеры были корректные
       buildWheelItems(dateWheel.day, 'day');
       buildWheelItems(dateWheel.month, 'month');
       buildWheelItems(dateWheel.year, 'year');
