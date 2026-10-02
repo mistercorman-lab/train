@@ -710,8 +710,25 @@ html,body{
 }
 
 /* ---------- МОДАЛКИ ---------- */
-.modal-overlay{position:fixed; inset:0; background:rgba(5,7,12,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; overflow-y:auto;}
+.modal-overlay{
+  position:fixed; inset:0;
+  background:rgba(5,7,12,.78);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+  overflow-y:auto;
+}
 .modal-overlay.show{display:flex;}
+
+/* Эмодзи-модалка поверх профиля */
+#emojiModal{
+  z-index:200;
+}
+
 .modal{background:var(--panel); border:1px solid var(--border); border-radius:22px; padding:26px; width:100%; max-width:400px; box-shadow:0 30px 80px rgba(0,0,0,.6); margin:auto;}
 .modal h3{margin:0 0 8px; font-size:20px; font-weight:700;}
 .modal .sub{color:var(--muted); font-size:14px; margin:0 0 18px; line-height:1.4;}
@@ -998,7 +1015,6 @@ html,body{
     { id:'abs',     name:'Пресс',      sets:3 }
   ];
 
-  /* Список доступных аватарок */
   const AVATARS = ['👤','🦁','🐻','🦊','🐼','🐯','🦅','🐺','🦈','🐉','🦄','👽','🤖','🧑‍🚀','🏋️','🥊','🚴','🧗','🏊','⚽','🏀','🎯'];
   const DEFAULT_AVATAR = '👤';
 
@@ -1228,9 +1244,6 @@ html,body{
     S.screen = name;
   }
 
-  /* ============================================================
-     ОТРИСОВКА АВАТАРКИ
-     ============================================================ */
   function renderAvatar(el, avatar){
     if (!el) return;
     el.textContent = avatar || DEFAULT_AVATAR;
@@ -1268,7 +1281,6 @@ html,body{
 
   async function selectAvatar(emoji){
     if (!S.login) return;
-    // Оптимистично обновляем UI
     const prev = S.avatar;
     S.avatar = emoji;
     renderAllAvatars();
@@ -1276,7 +1288,6 @@ html,body{
 
     const res = await apiSaveAvatar(S.login, emoji);
     if (!res || res.result !== 'success'){
-      // Откат в случае ошибки
       S.avatar = prev;
       renderAllAvatars();
       setProfileStatus('error', 'Не удалось сохранить аватар');
@@ -2179,12 +2190,10 @@ html,body{
     els.loginTitle.style.display = 'none';
     els.loginSubtitle.style.display = 'none';
     els.savedProfileName.textContent = S.savedLogin;
-    // Попробуем подгрузить аватар для сохранённого профиля
     loadSavedAvatarPreview(S.savedLogin);
   }
 
   async function loadSavedAvatarPreview(login){
-    // Быстрая попытка получить аватар сохранённого пользователя
     const res = await apiGetUser(login);
     if (res && res.result === 'success' && res.avatar){
       renderAvatar(els.savedProfileAvatar, res.avatar);
