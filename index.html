@@ -269,12 +269,38 @@ html,body{
 .ex-head{display:grid; grid-template-columns:44px 1fr 88px 40px; gap:6px; padding:12px; border-bottom:1px solid var(--border); font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); font-weight:700; flex-shrink:0;}
 .ex-head > div:nth-child(1), .ex-head > div:nth-child(3), .ex-head > div:nth-child(4){text-align:center;}
 .ex-list{list-style:none; margin:0; padding:6px; flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:4px;}
-.ex-row{display:grid; grid-template-columns:44px 1fr 88px 40px; gap:6px; align-items:center; background:var(--panel-2); border-radius:12px; padding:10px 8px; transition:transform .15s, box-shadow .15s; border:1px solid transparent; user-select:none; touch-action:manipulation;}
+.ex-row{
+  display:grid;
+  grid-template-columns:44px 1fr 88px 40px;
+  gap:6px;
+  align-items:center;
+  background:var(--panel-2);
+  border-radius:12px;
+  padding:10px 8px;
+  transition:transform .15s, box-shadow .15s;
+  border:1px solid transparent;
+  user-select:none;
+  touch-action:manipulation;
+  position:relative;
+}
 .ex-row.dragging{opacity:.85; transform:scale(1.02); box-shadow:0 12px 30px rgba(0,0,0,.5); background:var(--panel-3); z-index:10;}
 .ex-row.drop-target{border-color:var(--accent-2); background:#1a2740;}
-.ex-num{text-align:center; font-size:16px; font-weight:700; color:var(--muted); cursor:grab; display:flex; align-items:center; justify-content:center; gap:4px;}
+
+/* Зона захвата для перетаскивания: номер + название */
+.ex-drag-zone{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  cursor:grab;
+  touch-action:none;
+}
+.ex-drag-zone:active{cursor:grabbing;}
+
+.ex-num{text-align:center; font-size:16px; font-weight:700; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:4px; flex-shrink:0; width:32px;}
 .ex-num::before{content:"⋮⋮"; font-size:12px; letter-spacing:-2px; color:#3a4150; margin-right:2px;}
-.ex-name{font-size:16px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:2px 0;}
+.ex-name{font-size:16px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:2px 0; flex:1; min-width:0;}
+
 .ex-sets{width:100%; background:#14171e; border:1px solid var(--border); color:var(--text); border-radius:9px; padding:9px 6px; font-size:16px; font-weight:600; text-align:center; font-family:inherit; outline:none; cursor:ns-resize; user-select:none; -webkit-user-select:none; touch-action:none;}
 .ex-remove{width:34px; height:34px; border-radius:9px; border:none; background:transparent; color:var(--muted); cursor:pointer; font-size:22px; display:flex; align-items:center; justify-content:center;}
 .ex-remove:hover{background:rgba(255,107,107,.14); color:var(--red);}
@@ -289,7 +315,6 @@ html,body{
 .timer-screen{padding:16px;}
 .timer-rest-config{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:14px 20px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:14px;}
 .timer-rest-config .label{font-size:14px; color:var(--muted); font-weight:600; line-height:1.3;}
-.timer-rest-config .label b{display:block; font-size:11px; font-weight:500; opacity:.7; margin-top:2px;}
 .timer-rest-config .rest-value{display:flex; align-items:baseline; gap:8px;}
 .rest-input-big{
   width:96px;
@@ -489,8 +514,6 @@ html,body{
   margin-bottom:8px;
   text-align:center;
 }
-/* Имя пользователя — СТРОГО ПО ЦЕНТРУ. !important, чтобы победить
-   правило .modal input[type="text"]{text-align:left} */
 #profileName{
   width:100%;
   padding:14px 16px;
@@ -584,7 +607,6 @@ html,body{
   font-weight:500;
   opacity:.6;
 }
-/* Стрелки сверху/снизу от значения — тонкие подсказки */
 .date-col::before,
 .date-col::after{
   content:"";
@@ -660,7 +682,7 @@ html,body{
   .ex-head, .ex-row{grid-template-columns:38px 1fr 70px 36px; gap:5px;}
   .ex-head{padding:10px; font-size:10px;}
   .ex-row{padding:10px 8px;}
-  .ex-num{font-size:14px;}
+  .ex-num{font-size:14px; width:28px;}
   .ex-name{font-size:15px;}
   .ex-sets{font-size:15px; padding:8px 5px;}
   .ex-remove{width:30px; height:30px; font-size:20px;}
@@ -744,7 +766,7 @@ html,body{
   <section class="screen slide-up setup-screen" id="screen-setup">
     <div class="setup-header">
       <h1>Что тренируем сегодня?</h1>
-      <p>Перетащите упражнения для изменения порядка</p>
+      <p>Перетащите упражнения за название, чтобы изменить порядок</p>
     </div>
     <div class="ex-table">
       <div class="ex-head">
@@ -1144,6 +1166,11 @@ html,body{
       li.className = 'ex-row';
       li.dataset.idx = i;
 
+      // Зона захвата: номер + название. Тащим за неё.
+      const dragZone = document.createElement('div');
+      dragZone.className = 'ex-drag-zone';
+      dragZone.style.gridColumn = '1 / 3'; // занимает первые две колонки
+
       const num = document.createElement('div');
       num.className = 'ex-num';
       num.textContent = String(i + 1);
@@ -1152,6 +1179,10 @@ html,body{
       name.className = 'ex-name';
       name.textContent = ex.name;
 
+      dragZone.appendChild(num);
+      dragZone.appendChild(name);
+
+      // Отдельная ячейка для подходов (3-я колонка грида)
       const setsInput = document.createElement('input');
       setsInput.type = 'number';
       setsInput.className = 'ex-sets';
@@ -1175,16 +1206,21 @@ html,body{
         S.exercises.splice(i, 1); saveExercises(); renderExerciseList();
       });
 
-      li.appendChild(num); li.appendChild(name); li.appendChild(setsInput); li.appendChild(removeBtn);
+      li.appendChild(dragZone);
+      li.appendChild(setsInput);
+      li.appendChild(removeBtn);
       els.exList.appendChild(li);
-      attachDragSort(li, i);
+
+      // Перетаскивание за dragZone
+      attachDragSort(li, i, dragZone);
     });
   }
 
-  function attachDragSort(li, idx){
+  /* Перетаскивание: захват только за dragZone (номер + название).
+     Поле подходов и кнопка удаления — вне зоны. */
+  function attachDragSort(li, idx, dragZone){
     let startY = 0, startX = 0, dragging = false, pointerId = null, otherRows = [];
-    li.addEventListener('pointerdown', (e) => {
-      if (!e.target.classList.contains('ex-num')) return;
+    dragZone.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       startY = e.clientY; startX = e.clientX; pointerId = e.pointerId;
 
@@ -1197,7 +1233,7 @@ html,body{
           dragging = true;
           li.classList.add('dragging');
           otherRows = Array.from(els.exList.querySelectorAll('.ex-row')).filter(r => r !== li);
-          try { li.setPointerCapture(ev.pointerId); } catch(err){}
+          try { dragZone.setPointerCapture(ev.pointerId); } catch(err){}
         }
         li.style.transform = 'translateY(' + dy + 'px)';
         const curY = ev.clientY;
@@ -1611,11 +1647,9 @@ html,body{
     year:  new Date().getFullYear() - 30
   };
 
-  function pluralMonthShort(m){ return MONTHS_SHORT[m-1]; }
-
   function renderDateRow(){
     els.valDay.textContent = String(dateState.day);
-    els.valMonth.textContent = pluralMonthShort(dateState.month);
+    els.valMonth.textContent = MONTHS_SHORT[dateState.month-1];
     els.valYear.textContent = String(dateState.year);
     els.valDay.classList.remove('hint');
     els.valMonth.classList.remove('hint');
@@ -1630,26 +1664,19 @@ html,body{
     dateState.month = Math.max(1, Math.min(12, dateState.month));
   }
 
-  /* Свайп по одной колонке: изменяет значение по вертикали.
-     Вверх — увеличивает, вниз — уменьшает (как в iOS). */
   function attachDateColumn(colEl, kind){
     let startY = 0;
     let startValue = 0;
     let dragging = false;
     let pointerId = null;
-    const STEP_PX = 20; // пикселей на один шаг
+    const STEP_PX = 20;
 
     function commit(delta){
-      if (kind === 'day'){
-        dateState.day = startValue + delta;
-      } else if (kind === 'month'){
-        dateState.month = startValue + delta;
-      } else {
-        dateState.year = startValue + delta;
-      }
+      if (kind === 'day') dateState.day = startValue + delta;
+      else if (kind === 'month') dateState.month = startValue + delta;
+      else dateState.year = startValue + delta;
       clampDate();
       renderDateRow();
-      // Подсветка активной колонки
       Array.from(els.dateRow.querySelectorAll('.date-col')).forEach(c => c.classList.remove('active'));
       colEl.classList.add('active');
     }
@@ -1662,7 +1689,6 @@ html,body{
       if (kind === 'day') startValue = dateState.day;
       else if (kind === 'month') startValue = dateState.month;
       else startValue = dateState.year;
-      // Сброс предыдущих активных
       Array.from(els.dateRow.querySelectorAll('.date-col')).forEach(c => c.classList.remove('active'));
       colEl.classList.add('active');
       try { colEl.setPointerCapture(e.pointerId); } catch(err){}
@@ -1684,7 +1710,6 @@ html,body{
     }
     colEl.addEventListener('pointerup', onUp);
     colEl.addEventListener('pointercancel', onUp);
-    // Клик по колонке — подсветить активную
     colEl.addEventListener('click', () => {
       Array.from(els.dateRow.querySelectorAll('.date-col')).forEach(c => c.classList.remove('active'));
       colEl.classList.add('active');
@@ -1694,8 +1719,7 @@ html,body{
   function initDateRow(){
     const cols = els.dateRow.querySelectorAll('.date-col');
     cols.forEach(col => {
-      const kind = col.dataset.col;
-      attachDateColumn(col, kind);
+      attachDateColumn(col, col.dataset.col);
     });
   }
 
@@ -1820,36 +1844,71 @@ html,body{
     if (e.key === 'Enter'){ e.preventDefault(); saveProfile(); }
   });
 
-  function fillStatsFilters(){
-    const monthSel = els.statsMonth;
-    const yearSel = els.statsYear;
-    monthSel.innerHTML = '';
-    MONTHS_RU.forEach((name, i) => {
-      const o = document.createElement('option');
-      o.value = i;
-      o.textContent = name;
-      monthSel.appendChild(o);
-    });
-
-    const years = new Set();
+  /* ============================================================
+     СТАТИСТИКА
+     ============================================================ */
+  /* Собираем список «год-месяц», в которых у пользователя были тренировки.
+     Если их нет — берём текущий месяц. */
+  function getAvailableMonths(){
+    const set = new Set();
     S.allWorkouts.forEach(w => {
       const d = dateOnly(w.workout_date);
       if (!d) return;
-      const y = parseInt(d.split('-')[0], 10);
-      if (!isNaN(y)) years.add(y);
+      const parts = d.split('-');
+      if (parts.length >= 2) set.add(parts[0] + '-' + parts[1]);
     });
-    years.add(new Date().getFullYear());
+    const now = new Date();
+    const currentKey = String(now.getFullYear()) + '-' + String(now.getMonth()+1).padStart(2,'0');
+    if (set.size === 0) set.add(currentKey);
+    return Array.from(set).sort().reverse();
+  }
 
+  function fillStatsFilters(){
+    const monthSel = els.statsMonth;
+    const yearSel = els.statsYear;
+
+    const available = getAvailableMonths(); // ['2026-09', '2026-08', ...]
+
+    // Уникальные годы из доступных
+    const yearsSet = new Set();
+    available.forEach(k => yearsSet.add(parseInt(k.split('-')[0], 10)));
+    const years = Array.from(yearsSet).sort((a,b) => b - a);
+
+    // Определяем текущий выбранный год
+    let curYear = S.statsYear;
+    if (!years.includes(curYear)) curYear = years[0];
+
+    // Заполняем год
     yearSel.innerHTML = '';
-    Array.from(years).sort((a,b) => b - a).forEach(y => {
+    years.forEach(y => {
       const o = document.createElement('option');
       o.value = y;
       o.textContent = y;
       yearSel.appendChild(o);
     });
+    yearSel.value = curYear;
 
-    monthSel.value = S.statsMonth;
-    yearSel.value = S.statsYear;
+    // Месяцы только для выбранного года, где были тренировки
+    const monthsForYear = available
+      .filter(k => parseInt(k.split('-')[0], 10) === curYear)
+      .map(k => parseInt(k.split('-')[1], 10)); // 1-12
+    const months = Array.from(new Set(monthsForYear)).sort((a,b) => b - a);
+
+    let curMonth = S.statsMonth + 1; // 1-12
+    if (!months.includes(curMonth)) curMonth = months[0];
+
+    monthSel.innerHTML = '';
+    months.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m - 1; // храним 0-11, как раньше
+      o.textContent = MONTHS_RU[m-1];
+      monthSel.appendChild(o);
+    });
+    monthSel.value = curMonth - 1;
+
+    // Сохраняем в состояние
+    S.statsYear = curYear;
+    S.statsMonth = curMonth - 1;
   }
 
   function renderStatsScreen(){
@@ -1899,8 +1958,15 @@ html,body{
     els.statsContent.innerHTML = html;
   }
 
-  els.statsMonth.addEventListener('change', renderStatsScreen);
-  els.statsYear.addEventListener('change', renderStatsScreen);
+  els.statsMonth.addEventListener('change', () => {
+    S.statsMonth = parseInt(els.statsMonth.value, 10);
+    renderStatsScreen();
+  });
+  els.statsYear.addEventListener('change', () => {
+    S.statsYear = parseInt(els.statsYear.value, 10);
+    // при смене года пересобираем месяцы
+    renderStatsScreen();
+  });
 
   function resetAfterFinish(){
     stopLoop();
