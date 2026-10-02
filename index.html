@@ -1,3 +1,477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Тренировка</title>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='65' y='260' width='170' height='24' rx='12'/%3E%3Crect x='45' y='305' width='190' height='24' rx='12'/%3E%3Crect x='85' y='350' width='150' height='24' rx='12'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='38' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='330' y1='200' x2='255' y2='295'/%3E%3Cline x1='255' y1='295' x2='320' y2='330'/%3E%3Cline x1='320' y1='330' x2='320' y2='405'/%3E%3Cline x1='255' y1='295' x2='195' y2='330'/%3E%3Cline x1='195' y1='330' x2='155' y2='380'/%3E%3Cline x1='325' y1='205' x2='395' y2='240'/%3E%3Cline x1='395' y1='240' x2='420' y2='285'/%3E%3Cline x1='325' y1='205' x2='260' y2='230'/%3E%3C/g%3E%3Ccircle cx='360' cy='150' r='38' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#f7265b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Тренировка">
+
+<style>
+:root{
+  --bg:#0f1115; --panel:#171a21; --panel-2:#1e222b; --panel-3:#252b38;
+  --text:#e8eaf0; --muted:#8b93a7; --border:#262b36;
+  --accent:#3b6fd4; --accent-2:#5b9bff;
+  --green:#7fc98d; --red:#ff9b9b; --orange:#ff8a5c;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{
+  margin:0; padding:0; height:100dvh; overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:radial-gradient(1200px 800px at 50% -10%, #1b2130 0%, var(--bg) 60%);
+  color:var(--text);
+}
+.screens{position:relative; width:100%; height:100dvh; overflow:hidden;}
+.screen{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  padding:16px; overflow:hidden;
+  transition:transform .42s cubic-bezier(.22,.61,.36,1), opacity .42s;
+  will-change:transform, opacity;
+}
+.screen.slide-up{transform:translateY(100%); opacity:0;}
+.screen.slide-up.active{transform:translateY(0); opacity:1; z-index:3;}
+.screen.slide-right{transform:translateX(100%); opacity:0; z-index:5;}
+.screen.slide-right.active{transform:translateX(0); opacity:1;}
+
+.login-screen{
+  position:fixed; inset:0; z-index:999;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  background:radial-gradient(1200px 800px at 50% -10%, #1b2130 0%, var(--bg) 60%);
+}
+.login-screen.hidden{display:none;}
+.login-card{
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:22px; padding:32px 28px; width:100%; max-width:360px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+.login-card h2{margin:0 0 8px; font-size:22px; font-weight:700; text-align:center;}
+.login-card p{margin:0 0 20px; font-size:14px; color:var(--muted); text-align:center;}
+.login-card input{
+  width:100%; padding:14px 16px; font-size:16px;
+  background:var(--panel-2); border:2px solid var(--border);
+  border-radius:12px; color:var(--text); font-family:inherit;
+  outline:none; margin-bottom:12px;
+}
+.login-card input:focus{border-color:var(--accent);}
+.login-card button{
+  width:100%; padding:14px; border-radius:12px; border:none;
+  font-family:inherit; font-size:16px; font-weight:600; color:#fff;
+  background:linear-gradient(160deg,#5b9bff,#2f6ede); cursor:pointer;
+}
+.login-card button:disabled{opacity:.5; cursor:wait;}
+.login-error{color:var(--red); font-size:13px; text-align:center; min-height:18px; margin-bottom:12px;}
+
+.menu-screen{padding:20px 16px;}
+.menu-top{display:flex; justify-content:space-between; align-items:center; padding:8px 4px 0; flex-shrink:0;}
+.menu-greeting{font-size:18px; font-weight:600; line-height:1.2;}
+.menu-greeting .greet-sub{display:block; font-size:12px; color:var(--muted); font-weight:500; margin-bottom:2px;}
+.menu-month-stat{
+  font-size:13px; color:var(--muted); background:var(--panel);
+  border:1px solid var(--border); border-radius:999px;
+  padding:8px 14px; font-weight:600; white-space:nowrap;
+}
+.menu-month-stat b{color:var(--green); font-size:16px; font-weight:700; margin-right:4px;}
+.menu-buttons{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:20px; padding:40px 0;}
+.menu-btn{
+  width:100%; max-width:420px; padding:36px 24px; border-radius:24px;
+  border:none; font-family:inherit; font-size:26px; font-weight:800;
+  letter-spacing:.3px; color:#fff; cursor:pointer;
+  transition:transform .15s, box-shadow .25s;
+  display:flex; align-items:center; justify-content:center;
+  user-select:none;
+}
+.menu-btn.start{background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 18px 44px rgba(47,110,222,.4), inset 0 1px 0 rgba(255,255,255,.25);}
+.menu-btn.stats{background:linear-gradient(160deg,#39404f,#242935); box-shadow:0 18px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); color:#e8eaf0;}
+.menu-btn:hover{transform:translateY(-3px);}
+.menu-btn:active{transform:scale(.97);}
+
+.menu-calendar{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:14px 10px 10px; margin-bottom:8px;}
+.cal-title{font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); font-weight:700; padding:0 6px 10px; text-align:center;}
+.cal-line{display:flex; align-items:center; padding:0 4px; overflow-x:auto; scrollbar-width:none;}
+.cal-line::-webkit-scrollbar{display:none;}
+.cal-day{flex-shrink:0; width:36px; display:flex; flex-direction:column; align-items:center; gap:5px; padding:4px 0;}
+.cal-day .dot{width:12px; height:12px; border-radius:50%; background:#2a3040; border:2px solid transparent; transition:background .2s, border-color .2s;}
+.cal-day.trained .dot{background:var(--green); box-shadow:0 0 0 3px rgba(127,201,141,.18);}
+.cal-day.today .dot{border-color:var(--accent-2); background:var(--accent-2);}
+.cal-day.today.trained .dot{background:var(--green); border-color:var(--accent-2);}
+.cal-day .num{font-size:10px; color:var(--muted); font-weight:600;}
+.cal-day.today .num{color:var(--accent-2);}
+.cal-day.trained .num{color:var(--text);}
+
+.setup-screen{padding:20px 16px;}
+.setup-header{text-align:center; padding:12px 0 20px; flex-shrink:0;}
+.setup-header h1{margin:0; font-size:24px; font-weight:800; letter-spacing:.3px;}
+.setup-header p{margin:6px 0 0; font-size:14px; color:var(--muted);}
+.ex-table{flex:1; display:flex; flex-direction:column; min-height:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; overflow:hidden;}
+.ex-head{display:grid; grid-template-columns:44px 1fr 88px 40px; gap:6px; padding:12px; border-bottom:1px solid var(--border); font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); font-weight:700; flex-shrink:0;}
+.ex-head > div:nth-child(1), .ex-head > div:nth-child(3), .ex-head > div:nth-child(4){text-align:center;}
+.ex-list{list-style:none; margin:0; padding:6px; flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:4px;}
+.ex-row{display:grid; grid-template-columns:44px 1fr 88px 40px; gap:6px; align-items:center; background:var(--panel-2); border-radius:12px; padding:10px 8px; transition:transform .15s, box-shadow .15s; border:1px solid transparent; user-select:none; touch-action:manipulation;}
+.ex-row.dragging{opacity:.85; transform:scale(1.02); box-shadow:0 12px 30px rgba(0,0,0,.5); background:var(--panel-3); z-index:10;}
+.ex-row.drop-target{border-color:var(--accent-2); background:#1a2740;}
+.ex-num{text-align:center; font-size:16px; font-weight:700; color:var(--muted); cursor:grab; display:flex; align-items:center; justify-content:center; gap:4px;}
+.ex-num::before{content:"⋮⋮"; font-size:12px; letter-spacing:-2px; color:#3a4150; margin-right:2px;}
+.ex-name{font-size:16px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:2px 0;}
+.ex-sets{width:100%; background:#14171e; border:1px solid var(--border); color:var(--text); border-radius:9px; padding:9px 6px; font-size:16px; font-weight:600; text-align:center; font-family:inherit; outline:none; cursor:ns-resize; user-select:none; -webkit-user-select:none; touch-action:none;}
+.ex-remove{width:34px; height:34px; border-radius:9px; border:none; background:transparent; color:var(--muted); cursor:pointer; font-size:22px; display:flex; align-items:center; justify-content:center;}
+.ex-remove:hover{background:rgba(255,107,107,.14); color:var(--red);}
+.ex-add{margin:8px 6px 6px; padding:13px; border-radius:12px; border:1px dashed var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; flex-shrink:0;}
+.ex-add:hover{border-color:var(--accent); color:var(--accent-2);}
+.setup-footer{padding-top:14px; flex-shrink:0;}
+.setup-footer .big-start{width:100%; padding:20px; border-radius:18px; border:none; font-family:inherit; font-size:20px; font-weight:800; color:#fff; background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 14px 34px rgba(47,110,222,.4); cursor:pointer;}
+.setup-footer .big-start:active{transform:scale(.97);}
+.setup-footer .back-btn{margin-top:10px; width:100%; padding:12px; border-radius:14px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;}
+
+.timer-screen{padding:16px;}
+.timer-rest-config{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:16px 20px; margin-bottom:14px; text-align:center;}
+.timer-rest-config .label{
+  font-size:20px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--text);
+  font-weight:800;
+  margin-bottom:8px;
+}
+.timer-rest-config .hint{font-size:11px; color:var(--muted); font-weight:500; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;}
+.timer-rest-config .rest-value{display:flex; align-items:baseline; justify-content:center; gap:8px;}
+.rest-input-big{
+  width:130px; background:#14171e; border:2px solid var(--border); color:var(--text);
+  border-radius:14px; padding:12px 8px; font-size:32px; font-weight:800;
+  text-align:center; font-family:inherit; outline:none;
+  cursor:ns-resize; user-select:none; -webkit-user-select:none; touch-action:none;
+  font-variant-numeric:tabular-nums;
+}
+.timer-rest-config .unit{font-size:18px; color:var(--muted); font-weight:700;}
+.timer-body{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; min-height:0;}
+.timer-phase{font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); font-weight:700; text-align:center; min-height:18px;}
+.timer-time{font-size:clamp(64px, 20vw, 130px); font-weight:800; line-height:1; font-variant-numeric:tabular-nums;}
+.timer-btn{width:min(220px,58vw); height:min(220px,58vw); border-radius:50%; border:none; cursor:pointer; font-family:inherit; font-size:clamp(18px,4.6vw,26px); font-weight:800; color:#fff; background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 14px 34px rgba(47,110,222,.4); transition:transform .12s;}
+.timer-btn:active:not(:disabled){transform:scale(.96);}
+.timer-btn.work{background:linear-gradient(160deg,#ff8a5c,#e8503a);}
+.timer-btn.wait{background:linear-gradient(160deg,#39404f,#242935); color:var(--muted);}
+.timer-btn.wait::after{content:""; display:block; width:34px;height:4px; margin:12px auto 0; border-radius:2px; background:rgba(139,147,167,.35); animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.25; transform:scaleX(.6);} 50%{opacity:1; transform:scaleX(1);}}
+.timer-next{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:12px 18px; text-align:center; min-height:56px; display:flex; flex-direction:column; justify-content:center; gap:2px;}
+.timer-next.hidden{visibility:hidden;}
+.timer-next .next-label{font-size:11px; letter-spacing:1.6px; text-transform:uppercase; color:var(--muted); font-weight:700;}
+.timer-next .next-name{font-size:17px; font-weight:700;}
+.timer-skip{background:none; border:none; color:var(--muted); font-family:inherit; font-size:14px; cursor:pointer; text-decoration:underline; padding:6px 10px;}
+.timer-skip.hidden{visibility:hidden;}
+.timer-footer{flex-shrink:0; padding-top:14px;}
+.timer-footer .finish-btn{
+  width:100%;
+  padding:16px;
+  border-radius:14px;
+  border:1px solid #7a3b3b;
+  background:#2a1a1a;
+  color:#ff9b9b;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+.timer-footer .finish-btn:active{transform:scale(.97);}
+
+.finish-screen{padding:20px 16px; overflow-y:auto;}
+.finish-header{text-align:center; padding:20px 0 16px; flex-shrink:0;}
+.finish-emoji{font-size:64px; line-height:1; margin-bottom:8px;}
+.finish-title{font-size:28px; font-weight:800; letter-spacing:.3px; margin:0 0 6px; background:linear-gradient(160deg,#7fc98d,#4ba85e); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.finish-text{font-size:14px; color:var(--muted); margin:0;}
+.finish-status{font-size:13px; padding:9px 13px; border-radius:10px; margin:0 auto 16px; display:none; max-width:500px; width:100%; text-align:center;}
+.finish-status.show{display:block;}
+.finish-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
+.finish-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
+.finish-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
+
+.summary-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:0 0 20px;
+  max-width:500px;
+  width:100%;
+  margin:0 auto;
+}
+.summary-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px 18px;
+}
+.summary-card .ex-name{
+  font-size:18px;
+  font-weight:800;
+  color:#9dc0ff;
+  margin-bottom:10px;
+}
+.summary-card .row{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  color:var(--muted);
+  padding:4px 0;
+  gap:10px;
+}
+.summary-card .row b{color:var(--text); font-weight:600; font-variant-numeric:tabular-nums; text-align:right;}
+.summary-card .set-lines{
+  font-size:12px;
+  color:var(--muted);
+  padding:8px 0;
+  border-bottom:1px dashed rgba(139,147,167,.18);
+  margin-bottom:8px;
+  line-height:1.6;
+}
+.summary-card .set-lines b{color:#c8d0e0; font-weight:600;}
+.summary-card .total-reps{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding-top:10px;
+  margin-top:8px;
+  border-top:1px solid rgba(139,147,167,.18);
+  font-size:14px;
+  color:var(--muted);
+}
+.summary-card .total-reps .big{
+  font-size:24px;
+  font-weight:800;
+  color:var(--green);
+  font-variant-numeric:tabular-nums;
+}
+.summary-totals{
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px 18px;
+  margin-top:4px;
+}
+.summary-totals .row{display:flex; justify-content:space-between; font-size:14px; color:var(--muted); padding:5px 0;}
+.summary-totals .row b{color:var(--text); font-weight:600; font-variant-numeric:tabular-nums;}
+
+.finish-back{
+  width:100%; max-width:500px; margin:16px auto 0; padding:18px;
+  border-radius:16px; border:none; font-family:inherit;
+  font-size:17px; font-weight:800; color:#fff;
+  background:linear-gradient(160deg,#5b9bff,#2f6ede);
+  box-shadow:0 14px 34px rgba(47,110,222,.4); cursor:pointer;
+  display:block;
+}
+.finish-back:active{transform:scale(.97);}
+
+.modal-overlay{position:fixed; inset:0; background:rgba(5,7,12,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--panel); border:1px solid var(--border); border-radius:22px; padding:26px; width:100%; max-width:400px; box-shadow:0 30px 80px rgba(0,0,0,.6); margin:auto;}
+.modal h3{margin:0 0 8px; font-size:20px; font-weight:700;}
+.modal .sub{color:var(--muted); font-size:14px; margin:0 0 18px; line-height:1.4;}
+.modal input[type="number"], .modal input[type="text"]{width:100%; padding:15px 16px; font-size:18px; font-weight:600; text-align:center; background:var(--panel-2); border:2px solid var(--border); border-radius:13px; color:var(--text); font-family:inherit; outline:none; margin-bottom:14px; -moz-appearance:textfield;}
+.modal input[type="text"]{text-align:left;}
+.modal input:focus{border-color:var(--accent);}
+.modal input[type="number"]::-webkit-outer-spin-button,
+.modal input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+.modal-btns{display:flex; gap:10px; margin-top:6px;}
+.modal-btns button{flex:1; padding:14px; border-radius:13px; border:none; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;}
+.btn-secondary{background:var(--panel-2); color:var(--text); border:1px solid var(--border) !important;}
+.btn-primary{background:linear-gradient(160deg,#5b9bff,#2f6ede); color:#fff;}
+
+.stats-screen{padding:20px 16px; gap:14px;}
+.stats-head{display:flex; justify-content:space-between; align-items:center; padding:4px 4px 0; flex-shrink:0;}
+.stats-head h2{margin:0; font-size:22px; font-weight:800;}
+.stats-back{background:var(--panel); border:1px solid var(--border); color:var(--text); padding:10px 16px; border-radius:12px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;}
+.stats-filter{
+  display:flex;
+  gap:8px;
+  padding:4px 4px 0;
+  flex-shrink:0;
+}
+.stats-filter select{
+  flex:1;
+  padding:12px 14px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  color:var(--text);
+  font-family:inherit;
+  font-size:15px;
+  font-weight:600;
+  outline:none;
+  cursor:pointer;
+}
+.stats-filter select:focus{border-color:var(--accent);}
+.stats-content{flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:4px 2px 10px;}
+.stats-empty{text-align:center; color:var(--muted); padding:50px 20px; font-size:14px;}
+.stats-item{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px 16px;}
+.stats-item .h-date{font-size:15px; font-weight:700; margin-bottom:3px;}
+.stats-item .h-meta{font-size:12px; color:var(--muted); margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.stats-ex{display:flex; justify-content:space-between; font-size:13.5px; padding:4px 0; color:var(--muted); gap:10px;}
+.stats-ex .name{color:var(--text); font-weight:500;}
+.stats-ex .reps{font-variant-numeric:tabular-nums;}
+.stats-ex .reps b{color:var(--green); font-weight:700;}
+
+@media (max-width:720px){
+  .menu-btn{padding:30px 20px; font-size:22px; border-radius:20px;}
+  .ex-head, .ex-row{grid-template-columns:38px 1fr 70px 36px; gap:5px;}
+  .ex-head{padding:10px; font-size:10px;}
+  .ex-row{padding:10px 8px;}
+  .ex-num{font-size:14px;}
+  .ex-name{font-size:15px;}
+  .ex-sets{font-size:15px; padding:8px 5px;}
+  .ex-remove{width:30px; height:30px; font-size:20px;}
+  .rest-input-big{width:110px; font-size:28px;}
+  .timer-rest-config .label{font-size:17px;}
+}
+@media (max-width:380px), (max-height:640px){
+  .menu-btn{padding:24px 16px; font-size:20px;}
+  .menu-buttons{gap:14px; padding:24px 0;}
+  .timer-btn{width:min(180px,50vw); height:min(180px,50vw);}
+  .rest-input-big{width:100px; font-size:24px;}
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-7px);}
+  40%{transform:translateX(7px);}
+  60%{transform:translateX(-5px);}
+  80%{transform:translateX(5px);}
+}
+.shake{animation:shake .4s ease;}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h2>Тренировка</h2>
+    <p>Введите ваш логин, чтобы продолжить</p>
+    <input type="text" id="loginInput" placeholder="Логин" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="login-error" id="loginError"></div>
+    <button id="loginBtn">Войти</button>
+  </div>
+</div>
+
+<div class="screens" id="screens" style="display:none;">
+
+  <section class="screen slide-up menu-screen" id="screen-menu">
+    <div class="menu-top">
+      <div class="menu-greeting">
+        <span class="greet-sub">Привет,</span>
+        <span id="greetName">—</span>
+      </div>
+      <div class="menu-month-stat">
+        <b id="monthCount">0</b> в этом месяце
+      </div>
+    </div>
+    <div class="menu-buttons">
+      <button class="menu-btn start" id="menuStartBtn">Начать</button>
+      <button class="menu-btn stats" id="menuStatsBtn">Показатели</button>
+    </div>
+    <div class="menu-calendar">
+      <div class="cal-title" id="calTitle">Календарь</div>
+      <div class="cal-line" id="calLine"></div>
+    </div>
+  </section>
+
+  <section class="screen slide-up setup-screen" id="screen-setup">
+    <div class="setup-header">
+      <h1>Что тренируем сегодня?</h1>
+      <p>Перетащите упражнения для изменения порядка</p>
+    </div>
+    <div class="ex-table">
+      <div class="ex-head">
+        <div>№</div>
+        <div>Упражнение</div>
+        <div>Подходы</div>
+        <div></div>
+      </div>
+      <ul class="ex-list" id="exList"></ul>
+      <button class="ex-add" id="exAddBtn" type="button">
+        <span style="font-size:18px;">+</span> Добавить упражнение
+      </button>
+    </div>
+    <div class="setup-footer">
+      <button class="big-start" id="setupStartBtn">Начать тренировку</button>
+      <button class="back-btn" id="setupBackBtn">← Назад в меню</button>
+    </div>
+  </section>
+
+  <section class="screen slide-up timer-screen" id="screen-timer">
+    <div class="timer-rest-config">
+      <div class="label">ВРЕМЯ ОТДЫХА</div>
+      <div class="hint">потяни вверх/вниз</div>
+      <div class="rest-value">
+        <input type="number" class="rest-input-big" id="restInputBig" min="5" max="600" step="5" value="90" inputmode="none">
+        <span class="unit">сек</span>
+      </div>
+    </div>
+    <div class="timer-body">
+      <div class="timer-phase" id="phaseLabel">Готов к тренировке</div>
+      <div class="timer-time" id="timeDisplay">00:00</div>
+      <button class="timer-btn" id="mainBtn">Начать</button>
+    </div>
+    <div class="timer-next hidden" id="nextExercise">
+      <div class="next-label">Далее</div>
+      <div class="next-name" id="nextName">—</div>
+    </div>
+    <button class="timer-skip hidden" id="skipBtn">Пропустить отдых →</button>
+    <div class="timer-footer">
+      <button class="finish-btn" id="timerFinishBtn">Завершить тренировку</button>
+    </div>
+  </section>
+
+  <section class="screen slide-up finish-screen" id="screen-finish">
+    <div class="finish-header">
+      <div class="finish-emoji">🎉</div>
+      <h2 class="finish-title">Молодец!</h2>
+      <p class="finish-text">Тренировка завершена. Отличная работа!</p>
+    </div>
+    <div class="finish-status" id="finishStatus"></div>
+    <div class="summary-list" id="summaryList"></div>
+    <button class="finish-back" id="finishBackBtn">Вернуться в меню</button>
+  </section>
+
+  <section class="screen slide-right stats-screen" id="screen-stats">
+    <div class="stats-head">
+      <h2>Показатели</h2>
+      <button class="stats-back" id="statsBackBtn">← Назад</button>
+    </div>
+    <div class="stats-filter">
+      <select id="statsMonth"></select>
+      <select id="statsYear"></select>
+    </div>
+    <div class="stats-content" id="statsContent"></div>
+  </section>
+
+</div>
+
+<div class="modal-overlay" id="repsModal">
+  <div class="modal">
+    <h3 id="repsTitle">Подход</h3>
+    <p class="sub">Сколько повторений сделали?</p>
+    <input type="number" id="repsInput" min="0" max="999" inputmode="numeric" placeholder="0" autocomplete="off">
+    <div class="modal-btns">
+      <button class="btn-secondary" id="repsCancel">Отмена</button>
+      <button class="btn-primary" id="repsOk">ОК</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addExModal">
+  <div class="modal">
+    <h3>Новое упражнение</h3>
+    <p class="sub">Введите название и количество подходов.</p>
+    <input type="text" id="newExName" maxlength="30" placeholder="Например, Подтягивания" autocomplete="off">
+    <input type="number" id="newExSets" min="1" max="30" value="3" inputmode="numeric" placeholder="Подходов">
+    <div class="modal-btns">
+      <button class="btn-secondary" id="addExCancel">Отмена</button>
+      <button class="btn-primary" id="addExOk">Добавить</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   "use strict";
@@ -6,7 +480,7 @@
   const SUPABASE_ANON_KEY = 'sb_publishable_lMWOURTeE9MtY7UiCTe-CA_1SeINJhu';
 
   if (typeof window.supabase === 'undefined'){
-    document.body.innerHTML = '<div style="color:#fff;padding:40px;text-align:center;font-family:sans-serif;">Ошибка: Supabase SDK не загрузился.<br>Проверь интернет и https://</div>';
+    document.body.innerHTML = '<div style="color:#fff;padding:40px;text-align:center;font-family:sans-serif;">Ошибка: Supabase SDK не загрузился.<br>Проверь интернет и что страница открыта через https://</div>';
     return;
   }
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -58,7 +532,6 @@
     addExOk: $('addExOk'), addExCancel: $('addExCancel')
   };
 
-  /* ============ УТИЛИТЫ ============ */
   function fmt(ms){
     ms = Math.max(0, ms);
     const t = Math.floor(ms / 1000);
@@ -70,7 +543,6 @@
   function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 450); }
   function dateOnly(s){ return String(s || '').split('T')[0].split(' ')[0]; }
 
-  /* ============ АУДИО ============ */
   let audioCtx = null;
   function getAudioCtx(){
     if (!audioCtx){
@@ -99,7 +571,6 @@
   }
   function vibrate(){ if (navigator.vibrate){ try { navigator.vibrate([180,90,180,90,260]); } catch(e){} } }
 
-  /* ============ API ============ */
   async function apiGetUser(login){
     try {
       const { data, error } = await supabase.from('users').select('login, display_name').eq('login', login.trim()).maybeSingle();
@@ -126,7 +597,6 @@
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
   }
 
-  /* ============ ЭКРАНЫ ============ */
   function showScreen(name){
     const screens = { menu: els.menuScreen, setup: els.setupScreen, timer: els.timerScreen, finish: els.finishScreen, stats: els.statsScreen };
     const cur = screens[S.screen];
@@ -137,7 +607,6 @@
     S.screen = name;
   }
 
-  /* ============ КАЛЕНДАРЬ ============ */
   function renderCalendar(){
     const now = new Date();
     const y = now.getFullYear(), m = now.getMonth(), today = now.getDate();
@@ -187,7 +656,6 @@
     els.monthCount.textContent = dates.size;
   }
 
-  /* ============ УПРАЖНЕНИЯ ============ */
   function loadExercises(){
     try {
       const raw = localStorage.getItem(EXERCISES_KEY);
@@ -371,7 +839,6 @@
     try { localStorage.setItem(REST_KEY, String(v)); } catch(e){}
   });
 
-  /* ============ ТАЙМЕР ============ */
   function startWorkout(){
     const active = S.exercises.filter(e => e.sets > 0);
     if (!active.length){ shake(els.exList); return; }
@@ -492,7 +959,6 @@
   }
   function stopLoop(){ if (S.rafId){ cancelAnimationFrame(S.rafId); S.rafId = null; } }
 
-  /* ============ ФИНАЛ ============ */
   function buildWorkoutData(){
     const stats = computeStats();
     const exercises = [];
@@ -539,15 +1005,11 @@
   }
   function showFinishScreen(workout){
     let html = '';
-
     if (!workout.exercises.length){
       html = '<div class="summary-card" style="text-align:center;color:var(--muted);">Нет выполненных подходов</div>';
     } else {
       workout.exercises.forEach(ex => {
-        const setLines = ex.setReps.map((r, i) =>
-          'Подход ' + (i+1) + ' — <b>' + r + '</b>'
-        ).join(' &nbsp;·&nbsp; ');
-
+        const setLines = ex.setReps.map((r, i) => 'Подход ' + (i+1) + ' — <b>' + r + '</b>').join(' &nbsp;·&nbsp; ');
         html +=
           '<div class="summary-card">' +
             '<div class="ex-name">' + escapeHtml(ex.name) + '</div>' +
@@ -561,21 +1023,18 @@
           '</div>';
       });
     }
-
     html +=
       '<div class="summary-totals">' +
         '<div class="row"><span>Общее время</span><b>' + fmt(workout.totalTime) + '</b></div>' +
         '<div class="row"><span>Работа</span><b>' + fmt(workout.workTime) + '</b></div>' +
         '<div class="row"><span>Отдых</span><b>' + fmt(workout.restTime) + '</b></div>' +
       '</div>';
-
     els.summaryList.innerHTML = html;
     els.finishStatus.className = 'finish-status';
     els.finishStatus.textContent = '';
   }
   function setFinishStatus(type, text){ els.finishStatus.className = 'finish-status show ' + type; els.finishStatus.textContent = text; }
 
-  /* ============ МОДАЛКИ ============ */
   function showRepsModal(){
     const ex = S.activeExercises[S.exIdx];
     const setNum = S.setIdx + 1;
@@ -641,7 +1100,6 @@
     else if (e.key === 'Escape'){ e.preventDefault(); closeAddEx(); }
   });
 
-  /* ============ КНОПКИ ============ */
   els.mainBtn.addEventListener('click', () => { getAudioCtx(); if (S.phase === 'work'){ finishApproach(); } });
   els.skipBtn.addEventListener('click', () => { if (S.phase === 'rest') endRest(true); });
   els.setupStartBtn.addEventListener('click', () => { startWorkout(); });
@@ -669,7 +1127,6 @@
     }
   });
 
-  /* ============ СТАТИСТИКА ============ */
   function fillStatsFilters(){
     const monthSel = els.statsMonth;
     const yearSel = els.statsYear;
@@ -752,7 +1209,6 @@
   els.statsMonth.addEventListener('change', renderStatsScreen);
   els.statsYear.addEventListener('change', renderStatsScreen);
 
-  /* ============ СБРОС ============ */
   function resetAfterFinish(){
     stopLoop();
     clearTimeout(S.restTimeout); S.restTimeout = null;
@@ -767,7 +1223,6 @@
     renderCalendar();
   }
 
-  /* ============ ЛОГИН ============ */
   async function doLogin(login){
     if (!login || !login.trim()){
       els.loginError.textContent = 'Введите логин';
@@ -798,11 +1253,7 @@
         } catch(e){}
 
         S.exercises = loadExercises();
-
-        // Меню показываем СРАЗУ — не ждём данные
         showScreen('menu');
-
-        // Данные грузим в фоне
         loadAllWorkouts();
       } else {
         els.loginError.textContent = (data && data.message) || 'Ошибка входа';
@@ -823,13 +1274,11 @@
     if (e.key === 'Enter'){ e.preventDefault(); doLogin(els.loginInput.value); }
   });
 
-  /* ============ СВАЙП НАЗАД ИЗ ПОКАЗАТЕЛЕЙ ============ */
   (function initStatsSwipe(){
     let startX = 0, startY = 0, dragging = false, pointerId = null, decided = false;
     els.statsScreen.addEventListener('pointerdown', (e) => {
       if (S.screen !== 'stats') return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
-      // Игнорируем свайп по select
       if (e.target.closest('select')) return;
       startX = e.clientX; startY = e.clientY;
       dragging = true; decided = false;
@@ -864,8 +1313,6 @@
     els.statsScreen.addEventListener('pointerup', onUp);
     els.statsScreen.addEventListener('pointercancel', onUp);
   })();
-
-  /* ============ АВТО-ВХОД УБРАН ============ */
 
 })();
 </script>
