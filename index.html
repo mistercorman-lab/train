@@ -65,21 +65,15 @@ html,body{
   margin-bottom:16px;
 }
 .saved-profile .avatar{
-  width:64px;
-  height:64px;
+  width:72px;
+  height:72px;
   border-radius:50%;
   background:linear-gradient(160deg,#5b9bff,#2f6ede);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:32px;
+  font-size:38px;
   line-height:1;
-}
-.saved-profile .name{
-  font-size:18px;
-  font-weight:700;
-  text-align:center;
-  word-break:break-word;
 }
 .saved-profile .continue-btn{
   width:100%;
@@ -92,8 +86,12 @@ html,body{
   color:#fff;
   background:linear-gradient(160deg,#5b9bff,#2f6ede);
   cursor:pointer;
+  word-break:break-word;
 }
-.saved-profile .continue-btn:disabled{opacity:.5;}
+.saved-profile .continue-btn b{
+  font-weight:900;
+  color:#fff;
+}
 .saved-profile .switch-btn{
   width:100%;
   padding:12px;
@@ -143,10 +141,7 @@ html,body{
 
 /* ---------- МЕНЮ ---------- */
 .menu-screen{padding:20px 16px;}
-.menu-top{
-  flex-shrink:0;
-  padding:8px 4px 0;
-}
+.menu-top{flex-shrink:0; padding:8px 4px 0;}
 .menu-user-box{
   display:inline-flex;
   align-items:center;
@@ -164,7 +159,7 @@ html,body{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:16px;
+  font-size:18px;
   flex-shrink:0;
   line-height:1;
 }
@@ -193,7 +188,7 @@ html,body{
 .menu-btn:active{transform:scale(.97);}
 
 .menu-calendar{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:14px 10px 10px; margin-bottom:8px;}
-.cal-top{display:flex; justify-content:space-between; align-items:center; padding:0 6px 10px;}
+.cal-top{display:flex; justify-content:space-between; align-items:center; padding:0 6px 10px; gap:8px;}
 .cal-title{font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); font-weight:700;}
 .cal-month-count{
   font-size:11px;
@@ -201,6 +196,7 @@ html,body{
   font-weight:700;
   letter-spacing:.2px;
   white-space:nowrap;
+  text-align:right;
 }
 .cal-line{display:flex; align-items:center; padding:0 4px; overflow-x:auto; scrollbar-width:none;}
 .cal-line::-webkit-scrollbar{display:none;}
@@ -272,19 +268,32 @@ html,body{
   padding:20px;
   line-height:1.2;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
   text-align:center;
+  gap:6px;
 }
 .timer-btn:active:not(:disabled){transform:scale(.96);}
 .timer-btn.work{background:linear-gradient(160deg,#ff8a5c,#e8503a);}
-.timer-btn.wait{background:linear-gradient(160deg,#39404f,#242935); color:var(--muted); font-size:clamp(14px,3.4vw,18px); line-height:1.3;}
+.timer-btn.wait{
+  background:linear-gradient(160deg,#39404f,#242935);
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  line-height:1.2;
+}
 .timer-btn.wait .next-name{
   display:block;
-  font-size:clamp(17px,4.6vw,24px);
+  font-size:clamp(18px,4.6vw,24px);
   font-weight:900;
   color:var(--text);
-  margin-top:6px;
+  letter-spacing:0;
+  text-transform:none;
+  line-height:1.15;
+  max-width:90%;
+  word-break:break-word;
 }
 .timer-skip{background:none; border:none; color:var(--muted); font-family:inherit; font-size:14px; cursor:pointer; text-decoration:underline; padding:6px 10px;}
 .timer-skip.hidden{visibility:hidden;}
@@ -477,9 +486,10 @@ html,body{
     <p class="login-sub" id="loginSubtitle">Введите логин, чтобы продолжить</p>
 
     <div class="saved-profile" id="savedProfile" style="display:none;">
-      <div class="avatar">👤</div>
-      <div class="name" id="savedProfileName">—</div>
-      <button class="continue-btn" id="savedContinueBtn">Вход выполнен</button>
+      <div class="avatar">🤸</div>
+      <button class="continue-btn" id="savedContinueBtn">
+        Войти как <b id="savedProfileName">—</b>
+      </button>
       <button class="switch-btn" id="savedSwitchBtn">Войти в другой профиль</button>
     </div>
 
@@ -498,7 +508,7 @@ html,body{
   <section class="screen slide-up menu-screen" id="screen-menu">
     <div class="menu-top">
       <div class="menu-user-box">
-        <div class="menu-user-icon">👤</div>
+        <div class="menu-user-icon">🤸</div>
         <div class="menu-user-name" id="greetName">—</div>
       </div>
     </div>
@@ -1092,7 +1102,7 @@ html,body{
 
       const nxt = nextExerciseName();
       if (nxt){
-        btn.innerHTML = 'Далее:<span class="next-name">' + escapeHtml(nxt) + '</span>';
+        btn.innerHTML = 'Далее<span class="next-name">' + escapeHtml(nxt) + '</span>';
       } else {
         btn.textContent = 'Ожидание';
       }
@@ -1398,8 +1408,8 @@ html,body{
     els.savedProfile.style.display = 'flex';
     els.newLogin.classList.add('hidden');
     els.backToSavedBtn.classList.add('hidden');
-    els.loginTitle.textContent = 'С возвращением!';
-    els.loginSubtitle.textContent = 'Продолжите с сохранённого профиля';
+    els.loginTitle.style.display = 'none';
+    els.loginSubtitle.style.display = 'none';
     els.savedProfileName.textContent = S.savedLogin;
   }
 
@@ -1407,6 +1417,8 @@ html,body{
     els.savedProfile.style.display = 'none';
     els.newLogin.classList.remove('hidden');
     els.backToSavedBtn.classList.toggle('hidden', !S.savedLogin);
+    els.loginTitle.style.display = 'block';
+    els.loginSubtitle.style.display = 'block';
     els.loginTitle.textContent = 'Тренировка';
     els.loginSubtitle.textContent = S.savedLogin ? 'Введите логин другого пользователя' : 'Введите логин, чтобы продолжить';
     els.loginError.textContent = '';
