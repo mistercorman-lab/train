@@ -5,11 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Тренировка</title>
 
-<!-- Favicon для браузера -->
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="shortcut icon" type="image/png" href="icon.png">
-
-<!-- Иконка для домашнего экрана iPhone/iPad -->
 <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
 <link rel="apple-touch-icon" sizes="152x152" href="icon.png">
 <link rel="apple-touch-icon" sizes="167x167" href="icon.png">
@@ -236,12 +233,18 @@ html,body{
 .cal-top{display:flex; justify-content:space-between; align-items:center; padding:0 6px 10px; gap:8px;}
 .cal-title{font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); font-weight:700;}
 .cal-month-count{
-  font-size:11px;
-  color:var(--green);
+  font-size:12px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:var(--muted);
   font-weight:700;
-  letter-spacing:.2px;
   white-space:nowrap;
   text-align:right;
+}
+.cal-month-count b{
+  color:var(--green);
+  font-weight:800;
+  margin-right:4px;
 }
 .cal-line{display:flex; align-items:center; padding:0 4px; overflow-x:auto; scrollbar-width:none;}
 .cal-line::-webkit-scrollbar{display:none;}
@@ -442,7 +445,7 @@ html,body{
 }
 .finish-back:active{transform:scale(.97);}
 
-/* ---------- ПРОФИЛЬ ---------- */
+/* ---------- ПРОФИЛЬ (всё по центру) ---------- */
 .profile-modal{max-width:420px;}
 .profile-header{
   display:flex;
@@ -450,6 +453,7 @@ html,body{
   align-items:center;
   gap:10px;
   margin-bottom:22px;
+  text-align:center;
 }
 .profile-avatar{
   width:80px;
@@ -468,7 +472,11 @@ html,body{
   font-weight:600;
   letter-spacing:.3px;
 }
-.profile-field{margin-bottom:14px;}
+
+.profile-field{
+  margin-bottom:16px;
+  text-align:center;
+}
 .profile-field label{
   display:block;
   font-size:11px;
@@ -476,13 +484,15 @@ html,body{
   text-transform:uppercase;
   color:var(--muted);
   font-weight:700;
-  margin-bottom:6px;
+  margin-bottom:8px;
+  text-align:center;
 }
 .profile-field input{
   width:100%;
   padding:14px 16px;
   font-size:16px;
   font-weight:600;
+  text-align:center;
   background:var(--panel-2);
   border:2px solid var(--border);
   border-radius:12px;
@@ -495,7 +505,6 @@ html,body{
 .profile-field input::-webkit-outer-spin-button,
 .profile-field input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
 .profile-field input.weight-swipe{
-  text-align:center;
   font-size:22px;
   font-weight:800;
   cursor:ns-resize;
@@ -529,6 +538,7 @@ html,body{
   touch-action:none;
   overflow:hidden;
 }
+/* Плашка выделения строго по центру */
 .date-wheels::before{
   content:"";
   position:absolute;
@@ -541,7 +551,7 @@ html,body{
   border-bottom:1px solid rgba(91,155,255,.35);
   border-radius:8px;
   pointer-events:none;
-  z-index:1;
+  z-index:3;
 }
 .date-wheel{
   position:relative;
@@ -968,11 +978,6 @@ html,body{
   }
   function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 450); }
   function dateOnly(s){ return String(s || '').split('T')[0].split(' ')[0]; }
-  function pluralTrainings(n){
-    if (n % 10 === 1 && n % 100 !== 11) return n + ' тренировка';
-    if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return n + ' тренировки';
-    return n + ' тренировок';
-  }
   function pluralYears(n){
     if (n == null) return '';
     if (n % 10 === 1 && n % 100 !== 11) return n + ' год';
@@ -994,7 +999,6 @@ html,body{
     return new Date(year, month, 0).getDate();
   }
 
-  /* ============ АУДИО ============ */
   let audioCtx = null;
   function getAudioCtx(){
     if (!audioCtx){
@@ -1023,7 +1027,6 @@ html,body{
   }
   function vibrate(){ if (navigator.vibrate){ try { navigator.vibrate([180,90,180,90,260]); } catch(e){} } }
 
-  /* ============ API ============ */
   async function apiGetUser(login){
     try {
       const { data, error } = await supabase
@@ -1074,7 +1077,6 @@ html,body{
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
   }
 
-  /* ============ ЭКРАНЫ ============ */
   function showScreen(name){
     const screens = { menu: els.menuScreen, setup: els.setupScreen, timer: els.timerScreen, finish: els.finishScreen, stats: els.statsScreen };
     const cur = screens[S.screen];
@@ -1085,7 +1087,6 @@ html,body{
     S.screen = name;
   }
 
-  /* ============ КАЛЕНДАРЬ ============ */
   function renderCalendar(){
     const now = new Date();
     const y = now.getFullYear(), m = now.getMonth(), today = now.getDate();
@@ -1100,7 +1101,8 @@ html,body{
     });
 
     els.calTitle.textContent = MONTHS_RU[m] + ' ' + y;
-    els.calMonthCount.textContent = pluralTrainings(trainedDates.size) + ' в этом месяце';
+    // <b>N</b> В ЭТОМ МЕСЯЦЕ
+    els.calMonthCount.innerHTML = '<b>' + trainedDates.size + '</b> В ЭТОМ МЕСЯЦЕ';
 
     let html = '';
     for (let d = 1; d <= dim; d++){
@@ -1124,7 +1126,6 @@ html,body{
     }
   }
 
-  /* ============ УПРАЖНЕНИЯ ============ */
   function loadExercises(){
     try {
       const raw = localStorage.getItem(EXERCISES_KEY);
@@ -1308,7 +1309,6 @@ html,body{
     try { localStorage.setItem(REST_KEY, String(v)); } catch(e){}
   });
 
-  /* ============ ТАЙМЕР ============ */
   function startWorkout(){
     const active = S.exercises.filter(e => e.sets > 0);
     if (!active.length){ shake(els.exList); return; }
@@ -1436,7 +1436,6 @@ html,body{
   }
   function stopLoop(){ if (S.rafId){ cancelAnimationFrame(S.rafId); S.rafId = null; } }
 
-  /* ============ ФИНАЛ ============ */
   function buildWorkoutData(){
     const stats = computeStats();
     const exercises = [];
@@ -1513,7 +1512,6 @@ html,body{
   }
   function setFinishStatus(type, text){ els.finishStatus.className = 'finish-status show ' + type; els.finishStatus.textContent = text; }
 
-  /* ============ МОДАЛКИ ============ */
   function showRepsModal(){
     const ex = S.activeExercises[S.exIdx];
     const setNum = S.setIdx + 1;
@@ -1579,7 +1577,6 @@ html,body{
     else if (e.key === 'Escape'){ e.preventDefault(); closeAddEx(); }
   });
 
-  /* ============ КНОПКИ ============ */
   els.mainBtn.addEventListener('click', () => { getAudioCtx(); if (S.phase === 'work'){ finishApproach(); } });
   els.skipBtn.addEventListener('click', () => { if (S.phase === 'rest') endRest(true); });
   els.setupStartBtn.addEventListener('click', () => { startWorkout(); });
@@ -1607,7 +1604,6 @@ html,body{
     }
   });
 
-  /* ============ ШАПКА МЕНЮ ============ */
   function updateMenuUserCard(){
     const age = calcAgeFromDate(S.birthDate);
     const parts = [];
@@ -1777,7 +1773,6 @@ html,body{
     return String(y).padStart(4,'0') + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
   }
 
-  /* ============ ПРОФИЛЬ ============ */
   function openProfileModal(){
     els.profileLoginLabel.textContent = '@' + S.login;
     els.profileName.value = S.displayName || '';
@@ -1872,7 +1867,6 @@ html,body{
     if (e.key === 'Enter'){ e.preventDefault(); saveProfile(); }
   });
 
-  /* ============ СТАТИСТИКА ============ */
   function fillStatsFilters(){
     const monthSel = els.statsMonth;
     const yearSel = els.statsYear;
@@ -1955,7 +1949,6 @@ html,body{
   els.statsMonth.addEventListener('change', renderStatsScreen);
   els.statsYear.addEventListener('change', renderStatsScreen);
 
-  /* ============ СБРОС ============ */
   function resetAfterFinish(){
     stopLoop();
     clearTimeout(S.restTimeout); S.restTimeout = null;
@@ -1970,7 +1963,6 @@ html,body{
     renderCalendar();
   }
 
-  /* ============ ЛОГИН ============ */
   function showSavedProfileView(){
     els.savedProfile.style.display = 'flex';
     els.newLogin.classList.add('hidden');
@@ -2048,7 +2040,6 @@ html,body{
   els.savedSwitchBtn.addEventListener('click', () => showNewLoginView());
   els.backToSavedBtn.addEventListener('click', () => showSavedProfileView());
 
-  /* ============ СВАЙП НАЗАД ИЗ ПОКАЗАТЕЛЕЙ ============ */
   (function initStatsSwipe(){
     let startX = 0, startY = 0, dragging = false, pointerId = null, decided = false;
     els.statsScreen.addEventListener('pointerdown', (e) => {
@@ -2089,7 +2080,6 @@ html,body{
     els.statsScreen.addEventListener('pointercancel', onUp);
   })();
 
-  /* ============ СТАРТ ============ */
   initDateWheels();
 
   (function initLoginScreen(){
