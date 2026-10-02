@@ -167,8 +167,9 @@ html,body{
 .menu-user-card{
   display:flex;
   align-items:center;
+  justify-content:center;
   gap:12px;
-  padding:12px 16px 12px 12px;
+  padding:12px 16px;
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:18px;
@@ -192,11 +193,13 @@ html,body{
   line-height:1;
 }
 .menu-user-info{
-  flex:1;
+  flex:0 1 auto;
   min-width:0;
   display:flex;
   flex-direction:column;
   gap:2px;
+  align-items:center;
+  text-align:center;
 }
 .menu-user-name{
   font-size:17px;
@@ -204,6 +207,7 @@ html,body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  text-align:center;
 }
 .menu-user-meta{
   font-size:12.5px;
@@ -212,6 +216,7 @@ html,body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  text-align:center;
 }
 
 .menu-buttons{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:16px; padding:30px 0;}
@@ -445,7 +450,7 @@ html,body{
 }
 .finish-back:active{transform:scale(.97);}
 
-/* ---------- ПРОФИЛЬ (всё по центру) ---------- */
+/* ---------- ПРОФИЛЬ ---------- */
 .profile-modal{max-width:420px;}
 .profile-header{
   display:flex;
@@ -472,7 +477,6 @@ html,body{
   font-weight:600;
   letter-spacing:.3px;
 }
-
 .profile-field{
   margin-bottom:16px;
   text-align:center;
@@ -513,15 +517,18 @@ html,body{
   touch-action:none;
   font-variant-numeric:tabular-nums;
 }
-.weight-hint{
-  font-size:10px;
-  color:var(--muted);
-  letter-spacing:1px;
-  text-transform:uppercase;
+.profile-status{
+  font-size:13px;
+  padding:9px 13px;
+  border-radius:10px;
+  margin-bottom:14px;
   text-align:center;
-  margin-top:6px;
-  opacity:.7;
+  display:none;
 }
+.profile-status.show{display:block;}
+.profile-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
+.profile-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
+.profile-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
 
 /* ---------- ПИКЕР ДАТЫ (три колеса) ---------- */
 .date-wheels{
@@ -531,7 +538,7 @@ html,body{
   background:var(--panel-2);
   border:2px solid var(--border);
   border-radius:12px;
-  padding:6px;
+  padding:0 6px;
   position:relative;
   height:150px;
   user-select:none;
@@ -559,6 +566,7 @@ html,body{
   height:100%;
   z-index:2;
   cursor:ns-resize;
+  touch-action:none;
 }
 .date-wheel-track{
   position:absolute;
@@ -574,7 +582,7 @@ html,body{
   font-weight:600;
   color:var(--muted);
   font-variant-numeric:tabular-nums;
-  transition:color .15s, opacity .15s;
+  transition:color .15s;
 }
 .date-wheel-item.active{
   color:var(--text);
@@ -583,28 +591,6 @@ html,body{
 .date-wheel-item.near{
   color:#a9b1c3;
 }
-.date-hint{
-  font-size:10px;
-  color:var(--muted);
-  letter-spacing:1px;
-  text-transform:uppercase;
-  text-align:center;
-  margin-top:6px;
-  opacity:.7;
-}
-
-.profile-status{
-  font-size:13px;
-  padding:9px 13px;
-  border-radius:10px;
-  margin-bottom:14px;
-  text-align:center;
-  display:none;
-}
-.profile-status.show{display:block;}
-.profile-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
-.profile-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
-.profile-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
 
 /* ---------- МОДАЛКИ ---------- */
 .modal-overlay{position:fixed; inset:0; background:rgba(5,7,12,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; overflow-y:auto;}
@@ -627,24 +613,13 @@ html,body{
 .stats-head{display:flex; justify-content:space-between; align-items:center; padding:4px 4px 0; flex-shrink:0;}
 .stats-head h2{margin:0; font-size:22px; font-weight:800;}
 .stats-back{background:var(--panel); border:1px solid var(--border); color:var(--text); padding:10px 16px; border-radius:12px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;}
-.stats-filter{
-  display:flex;
-  gap:8px;
-  padding:4px 4px 0;
-  flex-shrink:0;
-}
+.stats-filter{display:flex; gap:8px; padding:4px 4px 0; flex-shrink:0;}
 .stats-filter select{
-  flex:1;
-  padding:12px 14px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  color:var(--text);
-  font-family:inherit;
-  font-size:15px;
-  font-weight:600;
-  outline:none;
-  cursor:pointer;
+  flex:1; padding:12px 14px;
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:12px; color:var(--text);
+  font-family:inherit; font-size:15px; font-weight:600;
+  outline:none; cursor:pointer;
 }
 .stats-filter select:focus{border-color:var(--accent);}
 .stats-content{flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:4px 2px 10px;}
@@ -770,10 +745,7 @@ html,body{
 
   <section class="screen slide-up timer-screen" id="screen-timer">
     <div class="timer-rest-config">
-      <div class="label">
-        Отдых
-        <b>потяни вверх/вниз</b>
-      </div>
+      <div class="label">Отдых</div>
       <div class="rest-value">
         <input type="number" class="rest-input-big" id="restInputBig" min="5" max="600" step="5" value="90" inputmode="none">
         <span class="unit">сек</span>
@@ -861,13 +833,11 @@ html,body{
         <div class="date-wheel" data-wheel="month"><div class="date-wheel-track" id="wheelMonth"></div></div>
         <div class="date-wheel" data-wheel="year"><div class="date-wheel-track" id="wheelYear"></div></div>
       </div>
-      <div class="date-hint">день · месяц · год</div>
     </div>
 
     <div class="profile-field">
       <label for="profileWeight">Вес (кг)</label>
       <input type="number" id="profileWeight" min="5" max="400" step="0.5" inputmode="none" class="weight-swipe">
-      <div class="weight-hint">потяни вверх/вниз</div>
     </div>
 
     <div class="modal-btns" style="margin-top:18px;">
@@ -1101,7 +1071,6 @@ html,body{
     });
 
     els.calTitle.textContent = MONTHS_RU[m] + ' ' + y;
-    // <b>N</b> В ЭТОМ МЕСЯЦЕ
     els.calMonthCount.innerHTML = '<b>' + trainedDates.size + '</b> В ЭТОМ МЕСЯЦЕ';
 
     let html = '';
@@ -1612,25 +1581,43 @@ html,body{
     els.menuUserMeta.textContent = parts.length ? parts.join('  ·  ') : 'Профиль';
   }
 
-  /* ============ КОЛЕСО ДАТЫ ============ */
+  /* ============================================================
+     КОЛЕСО ДАТЫ (исправлено)
+     ============================================================ */
   const ITEM_H = 44;
+
   const dateWheel = {
     day:   { el: null, track: null, value: 1, min: 1, max: 31 },
     month: { el: null, track: null, value: 1, min: 1, max: 12 },
     year:  { el: null, track: null, value: new Date().getFullYear(), min: 1900, max: new Date().getFullYear() }
   };
 
+  /* Строит трек с верхним и нижним padding.
+     Внутри контейнера высотой H, чтобы ITEM-й элемент оказался по центру,
+     верхний padding = H/2 - ITEM_H/2, аналогично снизу. */
   function buildWheelItems(wheel, kind){
+    const containerH = wheel.el.clientHeight || 150;
+    const pad = Math.max(0, containerH / 2 - ITEM_H / 2);
+
     wheel.track.innerHTML = '';
+
     let items = [];
     if (kind === 'day'){
-      for (let i = 1; i <= 31; i++) items.push({ v: i, label: String(i) });
+      const maxD = daysInMonth(dateWheel.year.value, dateWheel.month.value);
+      for (let i = 1; i <= maxD; i++) items.push({ v: i, label: String(i) });
     } else if (kind === 'month'){
       for (let i = 1; i <= 12; i++) items.push({ v: i, label: MONTHS_SHORT[i-1] });
     } else if (kind === 'year'){
       const maxYear = new Date().getFullYear();
       for (let y = maxYear; y >= 1900; y--) items.push({ v: y, label: String(y) });
     }
+
+    // Верхний padding
+    const padTop = document.createElement('div');
+    padTop.style.height = pad + 'px';
+    wheel.track.appendChild(padTop);
+
+    // Элементы
     items.forEach(it => {
       const div = document.createElement('div');
       div.className = 'date-wheel-item';
@@ -1638,23 +1625,29 @@ html,body{
       div.dataset.value = String(it.v);
       wheel.track.appendChild(div);
     });
-    const paddingTop = document.createElement('div');
-    paddingTop.style.height = 'calc(50% - ' + (ITEM_H/2) + 'px)';
-    const paddingBottom = document.createElement('div');
-    paddingBottom.style.height = 'calc(50% - ' + (ITEM_H/2) + 'px)';
-    wheel.track.insertBefore(paddingTop, wheel.track.firstChild);
-    wheel.track.appendChild(paddingBottom);
+
+    // Нижний padding
+    const padBot = document.createElement('div');
+    padBot.style.height = pad + 'px';
+    wheel.track.appendChild(padBot);
   }
 
+  /* Устанавливает активное значение. Смещает track так, чтобы нужный
+     ITEM оказался по вертикальному центру контейнера. */
   function setWheelValue(wheel, value, animate){
     wheel.value = value;
     const items = wheel.track.querySelectorAll('.date-wheel-item');
     let idx = -1;
     items.forEach((it, i) => { if (parseInt(it.dataset.value, 10) === value) idx = i; });
     if (idx < 0) idx = 0;
-    const y = -(idx * ITEM_H);
+
+    // Смещение = позиция нужного элемента в треке минус половина разницы высот
+    const containerH = wheel.el.clientHeight || 150;
+    const y = -(idx * ITEM_H) + (containerH / 2 - ITEM_H / 2);
+
     wheel.track.style.transition = animate === false ? 'none' : 'transform .25s cubic-bezier(.22,.61,.36,1)';
     wheel.track.style.transform = 'translateY(' + y + 'px)';
+
     items.forEach((it, i) => {
       it.classList.remove('active', 'near');
       if (i === idx) it.classList.add('active');
@@ -1662,6 +1655,7 @@ html,body{
     });
   }
 
+  /* Пересобирает трек дня, если изменилось количество дней в месяце */
   function refreshDaysByMonth(){
     const maxDay = daysInMonth(dateWheel.year.value, dateWheel.month.value);
     const dayWheel = dateWheel.day;
@@ -1669,10 +1663,6 @@ html,body{
     if (currentItems.length !== maxDay){
       const prev = Math.min(dayWheel.value, maxDay);
       buildWheelItems(dayWheel, 'day');
-      const items = dayWheel.track.querySelectorAll('.date-wheel-item');
-      for (let i = items.length - 1; i >= 0 && items.length > maxDay; i--){
-        items[i].remove();
-      }
       setWheelValue(dayWheel, prev, false);
     }
   }
@@ -1760,6 +1750,11 @@ html,body{
     }
     const maxDay = daysInMonth(y, m);
     d = Math.min(d, maxDay);
+    // Пересобираем трек дня под правильное количество дней
+    dateWheel.day.value = d;
+    dateWheel.month.value = m;
+    dateWheel.year.value = y;
+    buildWheelItems(dateWheel.day, 'day');
     setWheelValue(dateWheel.day, d, false);
     setWheelValue(dateWheel.month, m, false);
     setWheelValue(dateWheel.year, y, false);
@@ -1776,15 +1771,16 @@ html,body{
   function openProfileModal(){
     els.profileLoginLabel.textContent = '@' + S.login;
     els.profileName.value = S.displayName || '';
-    setDateWheelsFromISO(S.birthDate);
     els.profileWeight.value = (S.weight != null && !isNaN(S.weight)) ? S.weight : 70;
     els.profileStatus.className = 'profile-status';
     els.profileStatus.textContent = '';
     els.profileModal.classList.add('show');
     setTimeout(() => {
-      setWheelValue(dateWheel.day, dateWheel.day.value, false);
-      setWheelValue(dateWheel.month, dateWheel.month.value, false);
-      setWheelValue(dateWheel.year, dateWheel.year.value, false);
+      // Пересобираем треки после того, как модалка стала видимой (clientHeight > 0)
+      buildWheelItems(dateWheel.day, 'day');
+      buildWheelItems(dateWheel.month, 'month');
+      buildWheelItems(dateWheel.year, 'year');
+      setDateWheelsFromISO(S.birthDate);
       try { els.profileName.focus(); } catch(e){}
     }, 100);
   }
