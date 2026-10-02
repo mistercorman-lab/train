@@ -1,363 +1,14 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<title>Тренировка</title>
-
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7a3d'/%3E%3Cstop offset='1' stop-color='%23f7265b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23g)'/%3E%3Cg fill='%23fff'%3E%3Crect x='65' y='260' width='170' height='24' rx='12'/%3E%3Crect x='45' y='305' width='190' height='24' rx='12'/%3E%3Crect x='85' y='350' width='150' height='24' rx='12'/%3E%3C/g%3E%3Cg stroke='%23fff' stroke-width='38' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cline x1='330' y1='200' x2='255' y2='295'/%3E%3Cline x1='255' y1='295' x2='320' y2='330'/%3E%3Cline x1='320' y1='330' x2='320' y2='405'/%3E%3Cline x1='255' y1='295' x2='195' y2='330'/%3E%3Cline x1='195' y1='330' x2='155' y2='380'/%3E%3Cline x1='325' y1='205' x2='395' y2='240'/%3E%3Cline x1='395' y1='240' x2='420' y2='285'/%3E%3Cline x1='325' y1='205' x2='260' y2='230'/%3E%3C/g%3E%3Ccircle cx='360' cy='150' r='38' fill='%23fff'/%3E%3C/svg%3E">
-<meta name="theme-color" content="#f7265b">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Тренировка">
-
-<style>
-:root{
-  --bg:#0f1115; --panel:#171a21; --panel-2:#1e222b; --panel-3:#252b38;
-  --text:#e8eaf0; --muted:#8b93a7; --border:#262b36;
-  --accent:#3b6fd4; --accent-2:#5b9bff;
-  --green:#7fc98d; --red:#ff9b9b; --orange:#ff8a5c;
-}
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{
-  margin:0; padding:0; height:100dvh; overflow:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:radial-gradient(1200px 800px at 50% -10%, #1b2130 0%, var(--bg) 60%);
-  color:var(--text);
-}
-.screens{position:relative; width:100%; height:100dvh; overflow:hidden;}
-.screen{
-  position:absolute; inset:0; display:flex; flex-direction:column;
-  transform:translateY(100%);
-  transition:transform .42s cubic-bezier(.22,.61,.36,1), opacity .42s;
-  opacity:0; padding:16px; overflow:hidden;
-}
-.screen.active{transform:translateY(0); opacity:1; z-index:2;}
-
-.login-screen{
-  position:fixed; inset:0; z-index:999;
-  display:flex; align-items:center; justify-content:center; padding:20px;
-  background:radial-gradient(1200px 800px at 50% -10%, #1b2130 0%, var(--bg) 60%);
-}
-.login-screen.hidden{display:none;}
-.login-card{
-  background:var(--panel); border:1px solid var(--border);
-  border-radius:22px; padding:32px 28px; width:100%; max-width:360px;
-  box-shadow:0 30px 80px rgba(0,0,0,.6);
-}
-.login-card h2{margin:0 0 8px; font-size:22px; font-weight:700; text-align:center;}
-.login-card p{margin:0 0 20px; font-size:14px; color:var(--muted); text-align:center;}
-.login-card input{
-  width:100%; padding:14px 16px; font-size:16px;
-  background:var(--panel-2); border:2px solid var(--border);
-  border-radius:12px; color:var(--text); font-family:inherit;
-  outline:none; margin-bottom:12px;
-}
-.login-card input:focus{border-color:var(--accent);}
-.login-card button{
-  width:100%; padding:14px; border-radius:12px; border:none;
-  font-family:inherit; font-size:16px; font-weight:600; color:#fff;
-  background:linear-gradient(160deg,#5b9bff,#2f6ede); cursor:pointer;
-}
-.login-card button:disabled{opacity:.5; cursor:wait;}
-.login-error{color:var(--red); font-size:13px; text-align:center; min-height:18px; margin-bottom:12px;}
-
-.menu-screen{padding:20px 16px;}
-.menu-top{display:flex; justify-content:space-between; align-items:center; padding:8px 4px 0; flex-shrink:0;}
-.menu-greeting{font-size:18px; font-weight:600; color:var(--text); line-height:1.2;}
-.menu-greeting .greet-sub{display:block; font-size:12px; color:var(--muted); font-weight:500; margin-bottom:2px;}
-.menu-month-stat{
-  font-size:13px; color:var(--muted); background:var(--panel);
-  border:1px solid var(--border); border-radius:999px;
-  padding:8px 14px; font-weight:600; white-space:nowrap;
-}
-.menu-month-stat b{color:var(--green); font-size:16px; font-weight:700; margin-right:4px;}
-.menu-buttons{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:20px; padding:40px 0;}
-.menu-btn{
-  width:100%; max-width:420px; padding:36px 24px; border-radius:24px;
-  border:none; font-family:inherit; font-size:26px; font-weight:800;
-  letter-spacing:.3px; color:#fff; cursor:pointer;
-  transition:transform .15s, box-shadow .25s;
-  display:flex; align-items:center; justify-content:center; gap:14px;
-  user-select:none;
-}
-.menu-btn.start{background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 18px 44px rgba(47,110,222,.4), inset 0 1px 0 rgba(255,255,255,.25);}
-.menu-btn.stats{background:linear-gradient(160deg,#39404f,#242935); box-shadow:0 18px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); color:#e8eaf0;}
-.menu-btn:hover{transform:translateY(-3px);}
-.menu-btn:active{transform:scale(.97);}
-.menu-calendar{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:14px 10px 10px; margin-bottom:8px;}
-.cal-title{font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); font-weight:700; padding:0 6px 10px; text-align:center;}
-.cal-line{display:flex; align-items:center; gap:0; position:relative; padding:0 4px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
-.cal-line::-webkit-scrollbar{display:none;}
-.cal-day{flex-shrink:0; width:36px; display:flex; flex-direction:column; align-items:center; gap:5px; padding:4px 0; position:relative;}
-.cal-day .dot{width:12px; height:12px; border-radius:50%; background:#2a3040; border:2px solid transparent; transition:background .2s, border-color .2s;}
-.cal-day.trained .dot{background:var(--green); box-shadow:0 0 0 3px rgba(127,201,141,.18);}
-.cal-day.today .dot{border-color:var(--accent-2); background:var(--accent-2);}
-.cal-day.today.trained .dot{background:var(--green); border-color:var(--accent-2);}
-.cal-day .num{font-size:10px; color:var(--muted); font-weight:600; font-variant-numeric:tabular-nums;}
-.cal-day.today .num{color:var(--accent-2);}
-.cal-day.trained .num{color:var(--text);}
-
-.setup-screen{padding:20px 16px;}
-.setup-header{text-align:center; padding:12px 0 20px; flex-shrink:0;}
-.setup-header h1{margin:0; font-size:24px; font-weight:800; letter-spacing:.3px;}
-.setup-header p{margin:6px 0 0; font-size:14px; color:var(--muted);}
-.ex-table{flex:1; display:flex; flex-direction:column; min-height:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; overflow:hidden;}
-.ex-head{display:grid; grid-template-columns:44px 1fr 88px 40px; gap:6px; padding:12px; border-bottom:1px solid var(--border); font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); font-weight:700; flex-shrink:0;}
-.ex-head > div:nth-child(1), .ex-head > div:nth-child(3), .ex-head > div:nth-child(4){text-align:center;}
-.ex-list{list-style:none; margin:0; padding:6px; flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:4px;}
-.ex-row{display:grid; grid-template-columns:44px 1fr 88px 40px; gap:6px; align-items:center; background:var(--panel-2); border-radius:12px; padding:10px 8px; transition:background .15s, transform .15s, box-shadow .15s, opacity .2s; border:1px solid transparent; user-select:none; touch-action:manipulation;}
-.ex-row.dragging{opacity:.85; transform:scale(1.02); box-shadow:0 12px 30px rgba(0,0,0,.5); background:var(--panel-3); z-index:10;}
-.ex-row.drop-target{border-color:var(--accent-2); background:#1a2740;}
-.ex-num{text-align:center; font-size:16px; font-weight:700; color:var(--muted); cursor:grab; display:flex; align-items:center; justify-content:center; gap:4px;}
-.ex-num::before{content:"⋮⋮"; font-size:12px; letter-spacing:-2px; color:#3a4150; margin-right:2px;}
-.ex-name{font-size:16px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:2px 0;}
-.ex-sets{width:100%; background:#14171e; border:1px solid var(--border); color:var(--text); border-radius:9px; padding:9px 6px; font-size:16px; font-weight:600; text-align:center; font-family:inherit; outline:none; cursor:ns-resize; user-select:none; -webkit-user-select:none; touch-action:none;}
-.ex-sets:focus{border-color:var(--accent);}
-.ex-remove{width:34px; height:34px; border-radius:9px; border:none; background:transparent; color:var(--muted); cursor:pointer; font-size:22px; display:flex; align-items:center; justify-content:center;}
-.ex-remove:hover{background:rgba(255,107,107,.14); color:var(--red);}
-.ex-add{margin:8px 6px 6px; padding:13px; border-radius:12px; border:1px dashed var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; flex-shrink:0;}
-.ex-add:hover{border-color:var(--accent); color:var(--accent-2);}
-.setup-footer{padding-top:14px; flex-shrink:0;}
-.setup-footer .big-start{width:100%; padding:20px; border-radius:18px; border:none; font-family:inherit; font-size:20px; font-weight:800; color:#fff; background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 14px 34px rgba(47,110,222,.4); cursor:pointer;}
-.setup-footer .big-start:active{transform:scale(.97);}
-.setup-footer .back-btn{margin-top:10px; width:100%; padding:12px; border-radius:14px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;}
-
-.timer-screen{padding:16px;}
-.timer-rest-config{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:14px;}
-.timer-rest-config .label{font-size:14px; color:var(--muted); font-weight:600; line-height:1.3;}
-.timer-rest-config .label b{display:block; font-size:11px; font-weight:500; opacity:.7; margin-top:2px;}
-.timer-rest-config .rest-value{display:flex; align-items:baseline; gap:8px;}
-.rest-input-big{width:110px; background:#14171e; border:2px solid var(--border); color:var(--text); border-radius:14px; padding:12px 8px; font-size:26px; font-weight:800; text-align:center; font-family:inherit; outline:none; cursor:ns-resize; user-select:none; -webkit-user-select:none; touch-action:none;}
-.timer-rest-config .unit{font-size:14px; color:var(--muted); font-weight:600;}
-.timer-body{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; min-height:0;}
-.timer-phase{font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); font-weight:700; text-align:center; min-height:18px;}
-.timer-time{font-size:clamp(64px, 20vw, 130px); font-weight:800; line-height:1; letter-spacing:1px; font-variant-numeric:tabular-nums;}
-.timer-btn{width:min(220px,58vw); height:min(220px,58vw); border-radius:50%; border:none; cursor:pointer; font-family:inherit; font-size:clamp(18px,4.6vw,26px); font-weight:800; color:#fff; background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 14px 34px rgba(47,110,222,.4), inset 0 1px 0 rgba(255,255,255,.25); transition:transform .12s, background .25s; user-select:none;}
-.timer-btn:active:not(:disabled){transform:scale(.96);}
-.timer-btn.work{background:linear-gradient(160deg,#ff8a5c,#e8503a);}
-.timer-btn.wait{background:linear-gradient(160deg,#39404f,#242935); color:var(--muted); box-shadow:none;}
-.timer-btn.wait::after{content:""; display:block; width:34px;height:4px; margin:12px auto 0; border-radius:2px; background:rgba(139,147,167,.35); animation:pulse 1.4s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:.25; transform:scaleX(.6);} 50%{opacity:1; transform:scaleX(1);}}
-.timer-next{flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:12px 18px; text-align:center; min-height:56px; display:flex; flex-direction:column; justify-content:center; gap:2px;}
-.timer-next.hidden{visibility:hidden;}
-.timer-next .next-label{font-size:11px; letter-spacing:1.6px; text-transform:uppercase; color:var(--muted); font-weight:700;}
-.timer-next .next-name{font-size:17px; font-weight:700;}
-.timer-skip{background:none; border:none; color:var(--muted); font-family:inherit; font-size:14px; cursor:pointer; text-decoration:underline; padding:6px 10px;}
-.timer-skip.hidden{visibility:hidden;}
-
-.finish-screen{align-items:center; justify-content:center; text-align:center; padding:40px 24px;}
-.finish-emoji{font-size:80px; line-height:1; margin-bottom:20px;}
-.finish-title{font-size:32px; font-weight:800; letter-spacing:.3px; margin:0 0 12px; background:linear-gradient(160deg,#7fc98d,#4ba85e); -webkit-background-clip:text; background-clip:text; color:transparent;}
-.finish-text{font-size:16px; color:var(--muted); line-height:1.5; margin:0 0 32px; max-width:340px;}
-.finish-stats{background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:18px 24px; margin-bottom:28px; width:100%; max-width:340px;}
-.finish-stats .row{display:flex; justify-content:space-between; font-size:14px; color:var(--muted); padding:6px 0;}
-.finish-stats .row b{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
-.finish-status{font-size:13px; padding:9px 13px; border-radius:10px; margin-bottom:18px; display:none; max-width:340px; width:100%;}
-.finish-status.show{display:block;}
-.finish-status.sending{background:rgba(59,111,212,.12); border:1px solid rgba(59,111,212,.4); color:#9dc0ff;}
-.finish-status.saved{background:rgba(75,168,94,.12); border:1px solid rgba(75,168,94,.4); color:var(--green);}
-.finish-status.error{background:rgba(232,80,58,.12); border:1px solid rgba(232,80,58,.4); color:var(--red);}
-.finish-back{width:100%; max-width:340px; padding:18px; border-radius:16px; border:none; font-family:inherit; font-size:17px; font-weight:800; color:#fff; background:linear-gradient(160deg,#5b9bff,#2f6ede); box-shadow:0 14px 34px rgba(47,110,222,.4); cursor:pointer;}
-
-.modal-overlay{position:fixed; inset:0; background:rgba(5,7,12,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; overflow-y:auto;}
-.modal-overlay.show{display:flex;}
-.modal{background:var(--panel); border:1px solid var(--border); border-radius:22px; padding:26px; width:100%; max-width:400px; box-shadow:0 30px 80px rgba(0,0,0,.6); margin:auto;}
-.modal h3{margin:0 0 8px; font-size:20px; font-weight:700;}
-.modal .sub{color:var(--muted); font-size:14px; margin:0 0 18px; line-height:1.4;}
-.modal input[type="number"], .modal input[type="text"]{width:100%; padding:15px 16px; font-size:18px; font-weight:600; text-align:center; background:var(--panel-2); border:2px solid var(--border); border-radius:13px; color:var(--text); font-family:inherit; outline:none; margin-bottom:14px; -moz-appearance:textfield;}
-.modal input[type="text"]{text-align:left;}
-.modal input:focus{border-color:var(--accent);}
-.modal input[type="number"]::-webkit-outer-spin-button,
-.modal input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
-.modal-btns{display:flex; gap:10px; margin-top:6px;}
-.modal-btns button{flex:1; padding:14px; border-radius:13px; border:none; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;}
-.btn-secondary{background:var(--panel-2); color:var(--text); border:1px solid var(--border) !important;}
-.btn-primary{background:linear-gradient(160deg,#5b9bff,#2f6ede); color:#fff;}
-
-.stats-screen{padding:20px 16px; gap:14px;}
-.stats-head{display:flex; justify-content:space-between; align-items:center; padding:4px 4px 0; flex-shrink:0;}
-.stats-head h2{margin:0; font-size:22px; font-weight:800;}
-.stats-back{background:var(--panel); border:1px solid var(--border); color:var(--text); padding:10px 16px; border-radius:12px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer;}
-.stats-content{flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:4px 2px 10px;}
-.stats-loading, .stats-empty{text-align:center; color:var(--muted); padding:50px 20px; font-size:14px;}
-.stats-month{font-size:12px; letter-spacing:1.6px; text-transform:uppercase; color:var(--muted); font-weight:700; padding:10px 4px 2px;}
-.stats-item{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px 16px;}
-.stats-item .h-date{font-size:15px; font-weight:700; margin-bottom:3px;}
-.stats-item .h-meta{font-size:12px; color:var(--muted); margin-bottom:10px; font-variant-numeric:tabular-nums;}
-.stats-ex{display:flex; justify-content:space-between; font-size:13.5px; padding:4px 0; color:var(--muted); gap:10px;}
-.stats-ex .name{color:var(--text); font-weight:500;}
-.stats-ex .reps{font-variant-numeric:tabular-nums;}
-.stats-ex .reps b{color:var(--green); font-weight:700;}
-
-@media (max-width:720px){
-  .menu-btn{padding:30px 20px; font-size:22px; border-radius:20px;}
-  .ex-head, .ex-row{grid-template-columns:38px 1fr 70px 36px; gap:5px;}
-  .ex-head{padding:10px; font-size:10px;}
-  .ex-row{padding:10px 8px;}
-  .ex-num{font-size:14px;}
-  .ex-num::before{font-size:10px;}
-  .ex-name{font-size:15px;}
-  .ex-sets{font-size:15px; padding:8px 5px;}
-  .ex-remove{width:30px; height:30px; font-size:20px;}
-  .rest-input-big{width:96px; font-size:24px; padding:11px 6px;}
-}
-@media (max-width:380px), (max-height:640px){
-  .menu-btn{padding:24px 16px; font-size:20px;}
-  .menu-buttons{gap:14px; padding:24px 0;}
-  .timer-btn{width:min(180px,50vw); height:min(180px,50vw);}
-}
-@keyframes shake{
-  0%,100%{transform:translateX(0);}
-  20%{transform:translateX(-7px);}
-  40%{transform:translateX(7px);}
-  60%{transform:translateX(-5px);}
-  80%{transform:translateX(5px);}
-}
-.shake{animation:shake .4s ease;}
-</style>
-</head>
-<body>
-
-<div class="login-screen" id="loginScreen">
-  <div class="login-card">
-    <h2>Тренировка</h2>
-    <p>Введите ваш логин, чтобы продолжить</p>
-    <input type="text" id="loginInput" placeholder="Логин" autocomplete="off" autocapitalize="off" spellcheck="false">
-    <div class="login-error" id="loginError"></div>
-    <button id="loginBtn">Войти</button>
-  </div>
-</div>
-
-<div class="screens" id="screens" style="display:none;">
-
-  <section class="screen menu-screen" id="screen-menu">
-    <div class="menu-top">
-      <div class="menu-greeting">
-        <span class="greet-sub">Привет,</span>
-        <span id="greetName">—</span>
-      </div>
-      <div class="menu-month-stat">
-        <b id="monthCount">0</b> в этом месяце
-      </div>
-    </div>
-    <div class="menu-buttons">
-      <button class="menu-btn start" id="menuStartBtn">▶ Начать</button>
-      <button class="menu-btn stats" id="menuStatsBtn">📊 Показатели</button>
-    </div>
-    <div class="menu-calendar">
-      <div class="cal-title" id="calTitle">Календарь</div>
-      <div class="cal-line" id="calLine"></div>
-    </div>
-  </section>
-
-  <section class="screen setup-screen" id="screen-setup">
-    <div class="setup-header">
-      <h1>Что тренируем сегодня?</h1>
-      <p>Перетащите упражнения для изменения порядка</p>
-    </div>
-    <div class="ex-table">
-      <div class="ex-head">
-        <div>№</div>
-        <div>Упражнение</div>
-        <div>Подходы</div>
-        <div></div>
-      </div>
-      <ul class="ex-list" id="exList"></ul>
-      <button class="ex-add" id="exAddBtn" type="button">
-        <span style="font-size:18px;">+</span> Добавить упражнение
-      </button>
-    </div>
-    <div class="setup-footer">
-      <button class="big-start" id="setupStartBtn">Начать</button>
-      <button class="back-btn" id="setupBackBtn">← Назад в меню</button>
-    </div>
-  </section>
-
-  <section class="screen timer-screen" id="screen-timer">
-    <div class="timer-rest-config">
-      <div class="label">
-        Отдых между подходами
-        <b>потяни вверх/вниз</b>
-      </div>
-      <div class="rest-value">
-        <input type="number" class="rest-input-big" id="restInputBig" min="5" max="600" step="5" value="90" inputmode="none">
-        <span class="unit">сек</span>
-      </div>
-    </div>
-    <div class="timer-body">
-      <div class="timer-phase" id="phaseLabel">Готов к тренировке</div>
-      <div class="timer-time" id="timeDisplay">00:00</div>
-      <button class="timer-btn" id="mainBtn">Начать</button>
-    </div>
-    <div class="timer-next hidden" id="nextExercise">
-      <div class="next-label">Далее</div>
-      <div class="next-name" id="nextName">—</div>
-    </div>
-    <button class="timer-skip hidden" id="skipBtn">Пропустить отдых →</button>
-  </section>
-
-  <section class="screen finish-screen" id="screen-finish">
-    <div class="finish-emoji">🎉</div>
-    <h2 class="finish-title">Молодец!</h2>
-    <p class="finish-text">Тренировка завершена. Отличная работа!</p>
-    <div class="finish-stats" id="finishStats"></div>
-    <div class="finish-status" id="finishStatus"></div>
-    <button class="finish-back" id="finishBackBtn">Вернуться в меню</button>
-  </section>
-
-  <section class="screen stats-screen" id="screen-stats">
-    <div class="stats-head">
-      <h2>Показатели</h2>
-      <button class="stats-back" id="statsBackBtn">← Назад</button>
-    </div>
-    <div class="stats-content" id="statsContent"></div>
-  </section>
-
-</div>
-
-<div class="modal-overlay" id="repsModal">
-  <div class="modal">
-    <h3 id="repsTitle">Подход</h3>
-    <p class="sub">Сколько повторений сделали?</p>
-    <input type="number" id="repsInput" min="0" max="999" inputmode="numeric" placeholder="0" autocomplete="off">
-    <div class="modal-btns">
-      <button class="btn-secondary" id="repsCancel">Отмена</button>
-      <button class="btn-primary" id="repsOk">ОК</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="addExModal">
-  <div class="modal">
-    <h3>Новое упражнение</h3>
-    <p class="sub">Введите название и количество подходов.</p>
-    <input type="text" id="newExName" maxlength="30" placeholder="Например, Подтягивания" autocomplete="off">
-    <input type="number" id="newExSets" min="1" max="30" value="3" inputmode="numeric" placeholder="Подходов">
-    <div class="modal-btns">
-      <button class="btn-secondary" id="addExCancel">Отмена</button>
-      <button class="btn-primary" id="addExOk">Добавить</button>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   "use strict";
 
-  // ============================================================
-  // SUPABASE
-  // ============================================================
   const SUPABASE_URL = 'https://mvyeknoysdizrokdeyfc.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_lMWOURTeE9MtY7UiCTe-CA_1SeINJhu';
 
-  // Диагностика: SDK загрузился?
   if (typeof window.supabase === 'undefined'){
-    document.body.innerHTML = '<div style="color:#fff;padding:40px;text-align:center;font-family:sans-serif;">Ошибка: Supabase SDK не загрузился.<br>Проверь интернет и что страница открыта через https://</div>';
+    document.body.innerHTML = '<div style="color:#fff;padding:40px;text-align:center;font-family:sans-serif;">Ошибка: Supabase SDK не загрузился.<br>Проверь интернет и https://</div>';
     return;
   }
-
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const DEFAULT_EXERCISES = [
@@ -371,6 +22,7 @@ html,body{
   const EXERCISES_KEY = 'workoutExercises_v2';
   const LOGIN_KEY = 'workoutLogin_v1';
   const REST_KEY = 'restSeconds';
+  const MONTHS_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
   const S = {
     login: null, displayName: null, screen: 'menu', phase: 'idle',
@@ -378,7 +30,9 @@ html,body{
     workoutStart: 0, finishedAt: 0, restDuration: 90 * 1000,
     exercises: [], activeExercises: [], exIdx: 0, setIdx: 0,
     pendingFinish: false, rafId: null, restTimeout: null,
-    lastTimeStr: '', allWorkouts: []
+    lastTimeStr: '', allWorkouts: [],
+    statsMonth: new Date().getMonth(),
+    statsYear: new Date().getFullYear()
   };
 
   const $ = (id) => document.getElementById(id);
@@ -394,8 +48,10 @@ html,body{
     setupStartBtn: $('setupStartBtn'), setupBackBtn: $('setupBackBtn'),
     restInputBig: $('restInputBig'), phaseLabel: $('phaseLabel'), timeDisplay: $('timeDisplay'),
     mainBtn: $('mainBtn'), skipBtn: $('skipBtn'), nextExercise: $('nextExercise'), nextName: $('nextName'),
-    finishStats: $('finishStats'), finishStatus: $('finishStatus'), finishBackBtn: $('finishBackBtn'),
+    timerFinishBtn: $('timerFinishBtn'),
+    finishStatus: $('finishStatus'), summaryList: $('summaryList'), finishBackBtn: $('finishBackBtn'),
     statsContent: $('statsContent'), statsBackBtn: $('statsBackBtn'),
+    statsMonth: $('statsMonth'), statsYear: $('statsYear'),
     repsModal: $('repsModal'), repsTitle: $('repsTitle'), repsInput: $('repsInput'),
     repsOk: $('repsOk'), repsCancel: $('repsCancel'),
     addExModal: $('addExModal'), newExName: $('newExName'), newExSets: $('newExSets'),
@@ -405,18 +61,14 @@ html,body{
   /* ============ УТИЛИТЫ ============ */
   function fmt(ms){
     ms = Math.max(0, ms);
-    const total = Math.floor(ms / 1000);
-    return String(Math.floor(total / 60)).padStart(2,'0') + ':' + String(total % 60).padStart(2,'0');
+    const t = Math.floor(ms / 1000);
+    return String(Math.floor(t / 60)).padStart(2,'0') + ':' + String(t % 60).padStart(2,'0');
   }
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
   function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 450); }
-  function monthNameRu(m){ return ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'][m]; }
-  function dateOnly(s){
-    // Отрезает и T, и пробел — работает и с "2026-10-02T...", и с "2026-10-02 ..."
-    return String(s || '').split('T')[0].split(' ')[0];
-  }
+  function dateOnly(s){ return String(s || '').split('T')[0].split(' ')[0]; }
 
   /* ============ АУДИО ============ */
   let audioCtx = null;
@@ -458,7 +110,7 @@ html,body{
   }
   async function apiGetHistory(login){
     try {
-      const { data, error } = await supabase.from('workouts').select('*').eq('user_login', login).order('workout_date', { ascending: false }).limit(500);
+      const { data, error } = await supabase.from('workouts').select('*').eq('user_login', login).order('workout_date', { ascending: false }).limit(1000);
       if (error){ console.error(error); return { result:'error', message: error.message }; }
       return { result:'success', history: data || [] };
     } catch(err){ console.error(err); return { result:'error', message:'Ошибка соединения: ' + err.message }; }
@@ -476,23 +128,19 @@ html,body{
 
   /* ============ ЭКРАНЫ ============ */
   function showScreen(name){
-    console.log('[showScreen] →', name, '| было:', S.screen);
     const screens = { menu: els.menuScreen, setup: els.setupScreen, timer: els.timerScreen, finish: els.finishScreen, stats: els.statsScreen };
     const cur = screens[S.screen];
     const next = screens[name];
-    if (!next){ console.error('Нет экрана:', name); return; }
+    if (!next) return;
     if (cur && cur !== next) cur.classList.remove('active');
     next.classList.add('active');
     S.screen = name;
-    console.log('[showScreen] next.className =', next.className);
   }
 
   /* ============ КАЛЕНДАРЬ ============ */
   function renderCalendar(){
     const now = new Date();
-    const y = now.getFullYear();
-    const m = now.getMonth();
-    const today = now.getDate();
+    const y = now.getFullYear(), m = now.getMonth(), today = now.getDate();
     const daysInMonth = new Date(y, m+1, 0).getDate();
 
     const trainedDates = new Set();
@@ -503,7 +151,7 @@ html,body{
       if (parts[0] === y && parts[1] === m+1) trainedDates.add(parts[2]);
     });
 
-    els.calTitle.textContent = monthNameRu(m) + ' ' + y;
+    els.calTitle.textContent = MONTHS_RU[m] + ' ' + y;
     let html = '';
     for (let d = 1; d <= daysInMonth; d++){
       const cls = 'cal-day' + (d === today ? ' today' : '') + (trainedDates.has(d) ? ' trained' : '');
@@ -523,8 +171,7 @@ html,body{
       S.allWorkouts = data.history;
       updateMenuStats();
       renderCalendar();
-    } else {
-      console.error('Не удалось загрузить историю:', data);
+      renderStatsScreen();
     }
   }
   function updateMenuStats(){
@@ -885,18 +532,44 @@ html,body{
     const res = await apiSaveWorkout(S.login, workoutData);
     if (res && res.result === 'success'){
       setFinishStatus('saved', '✓ Сохранено');
-      await loadAllWorkouts();
+      loadAllWorkouts();
     } else {
       setFinishStatus('error', 'Ошибка: ' + ((res && res.message) || 'не удалось сохранить'));
     }
   }
   function showFinishScreen(workout){
     let html = '';
-    html += '<div class="row"><span>Всего времени</span><b>' + fmt(workout.totalTime) + '</b></div>';
-    html += '<div class="row"><span>Работа</span><b>' + fmt(workout.workTime) + '</b></div>';
-    html += '<div class="row"><span>Отдых</span><b>' + fmt(workout.restTime) + '</b></div>';
-    html += '<div class="row"><span>Упражнений</span><b>' + workout.exercises.length + '</b></div>';
-    els.finishStats.innerHTML = html;
+
+    if (!workout.exercises.length){
+      html = '<div class="summary-card" style="text-align:center;color:var(--muted);">Нет выполненных подходов</div>';
+    } else {
+      workout.exercises.forEach(ex => {
+        const setLines = ex.setReps.map((r, i) =>
+          'Подход ' + (i+1) + ' — <b>' + r + '</b>'
+        ).join(' &nbsp;·&nbsp; ');
+
+        html +=
+          '<div class="summary-card">' +
+            '<div class="ex-name">' + escapeHtml(ex.name) + '</div>' +
+            '<div class="row"><span>Подходов</span><b>' + ex.sets + '</b></div>' +
+            '<div class="set-lines">' + setLines + '</div>' +
+            '<div class="row"><span>Среднее время на подход</span><b>' + fmt(ex.avgTime) + '</b></div>' +
+            '<div class="total-reps">' +
+              '<span>Всего повторений</span>' +
+              '<span class="big">' + ex.reps + '</span>' +
+            '</div>' +
+          '</div>';
+      });
+    }
+
+    html +=
+      '<div class="summary-totals">' +
+        '<div class="row"><span>Общее время</span><b>' + fmt(workout.totalTime) + '</b></div>' +
+        '<div class="row"><span>Работа</span><b>' + fmt(workout.workTime) + '</b></div>' +
+        '<div class="row"><span>Отдых</span><b>' + fmt(workout.restTime) + '</b></div>' +
+      '</div>';
+
+    els.summaryList.innerHTML = html;
     els.finishStatus.className = 'finish-status';
     els.finishStatus.textContent = '';
   }
@@ -978,47 +651,106 @@ html,body{
   els.statsBackBtn.addEventListener('click', () => { showScreen('menu'); });
   els.finishBackBtn.addEventListener('click', () => { resetAfterFinish(); showScreen('menu'); });
 
+  els.timerFinishBtn.addEventListener('click', () => {
+    if (S.phase === 'idle') return;
+    if (confirm('Завершить тренировку?')){
+      if (S.phase === 'work'){
+        const dur = performance.now() - S.workStart;
+        if (dur > 2000){
+          S.workEnd = performance.now();
+          S.phase = 'prompt';
+          S.pendingFinish = true;
+          setTimerUI();
+          showRepsModal();
+          return;
+        }
+      }
+      requestFinish();
+    }
+  });
+
   /* ============ СТАТИСТИКА ============ */
+  function fillStatsFilters(){
+    const monthSel = els.statsMonth;
+    const yearSel = els.statsYear;
+    monthSel.innerHTML = '';
+    MONTHS_RU.forEach((name, i) => {
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = name;
+      monthSel.appendChild(o);
+    });
+
+    const years = new Set();
+    S.allWorkouts.forEach(w => {
+      const d = dateOnly(w.workout_date);
+      if (!d) return;
+      const y = parseInt(d.split('-')[0], 10);
+      if (!isNaN(y)) years.add(y);
+    });
+    years.add(new Date().getFullYear());
+
+    yearSel.innerHTML = '';
+    Array.from(years).sort((a,b) => b - a).forEach(y => {
+      const o = document.createElement('option');
+      o.value = y;
+      o.textContent = y;
+      yearSel.appendChild(o);
+    });
+
+    monthSel.value = S.statsMonth;
+    yearSel.value = S.statsYear;
+  }
+
   function renderStatsScreen(){
-    if (!S.allWorkouts.length){
-      els.statsContent.innerHTML = '<div class="stats-empty">Пока нет тренировок</div>';
+    fillStatsFilters();
+
+    const m = parseInt(els.statsMonth.value, 10);
+    const y = parseInt(els.statsYear.value, 10);
+
+    const filtered = S.allWorkouts.filter(w => {
+      const d = dateOnly(w.workout_date);
+      if (!d) return false;
+      const [wy, wm] = d.split('-').map(Number);
+      return wy === y && wm === m+1;
+    });
+
+    if (!filtered.length){
+      els.statsContent.innerHTML = '<div class="stats-empty">В этом месяце тренировок нет</div>';
       return;
     }
+
     const byDate = {};
-    S.allWorkouts.forEach(row => {
+    filtered.forEach(row => {
       const d = dateOnly(row.workout_date);
-      if (!d) return;
       if (!byDate[d]) byDate[d] = [];
       byDate[d].push(row);
     });
-    const groups = {};
-    Object.keys(byDate).forEach(dateStr => {
-      const [y, m] = dateStr.split('-');
-      const key = y + '-' + m;
-      if (!groups[key]) groups[key] = { year: parseInt(y), month: parseInt(m) - 1, items: [] };
-      groups[key].items.push({ dateStr, rows: byDate[dateStr] });
-    });
-    const keys = Object.keys(groups).sort().reverse();
+
     let html = '';
-    keys.forEach(k => {
-      const g = groups[k];
-      html += '<div class="stats-month">' + monthNameRu(g.month) + ' ' + g.year + ' · ' + g.items.length + ' трен.</div>';
-      [...g.items].reverse().forEach(item => {
-        const firstRow = item.rows[0];
-        const totalTime = firstRow.total_time ? fmt(parseFloat(firstRow.total_time) * 1000) : '—';
-        html += '<div class="stats-item">';
-        html += '<div class="h-date">' + item.dateStr + '</div>';
-        html += '<div class="h-meta">Всего ' + totalTime + '</div>';
-        item.rows.forEach(r => {
-          const reps = r.reps || 0, sets = r.sets || 0;
-          const avg = sets ? (reps / sets).toFixed(1) : '0';
-          html += '<div class="stats-ex"><span class="name">' + escapeHtml(r.exercise_name) + '</span><span class="reps">' + sets + '×  ·  <b>' + reps + '</b> повт  ·  ср. ' + avg + '</span></div>';
-        });
-        html += '</div>';
+    Object.keys(byDate).sort().reverse().forEach(dateStr => {
+      const rows = byDate[dateStr];
+      const firstRow = rows[0];
+      const totalTime = firstRow.total_time ? fmt(parseFloat(firstRow.total_time) * 1000) : '—';
+
+      html += '<div class="stats-item">';
+      html += '<div class="h-date">' + dateStr + '</div>';
+      html += '<div class="h-meta">Всего ' + totalTime + '</div>';
+
+      rows.forEach(r => {
+        const reps = r.reps || 0, sets = r.sets || 0;
+        const avg = sets ? (reps / sets).toFixed(1) : '0';
+        html += '<div class="stats-ex"><span class="name">' + escapeHtml(r.exercise_name) + '</span><span class="reps">' + sets + '×  ·  <b>' + reps + '</b> повт  ·  ср. ' + avg + '</span></div>';
       });
+
+      html += '</div>';
     });
+
     els.statsContent.innerHTML = html;
   }
+
+  els.statsMonth.addEventListener('change', renderStatsScreen);
+  els.statsYear.addEventListener('change', renderStatsScreen);
 
   /* ============ СБРОС ============ */
   function resetAfterFinish(){
@@ -1037,10 +769,6 @@ html,body{
 
   /* ============ ЛОГИН ============ */
   async function doLogin(login){
-    if (typeof window.supabase === 'undefined'){
-      els.loginError.textContent = 'SDK Supabase не загрузился. Проверь интернет и https://';
-      return;
-    }
     if (!login || !login.trim()){
       els.loginError.textContent = 'Введите логин';
       return;
@@ -1048,11 +776,9 @@ html,body{
     els.loginError.textContent = '';
     els.loginBtn.disabled = true;
     els.loginBtn.textContent = 'Проверяем...';
-    console.log('[LOGIN] логин =', login.trim());
 
     try {
       const data = await apiGetUser(login);
-      console.log('[LOGIN] ответ:', data);
 
       if (data && data.result === 'success'){
         S.login = data.login;
@@ -1072,24 +798,19 @@ html,body{
         } catch(e){}
 
         S.exercises = loadExercises();
-        console.log('[LOGIN] упражнений:', S.exercises.length);
 
-        try {
-          await loadAllWorkouts();
-          console.log('[LOGIN] тренировок:', S.allWorkouts.length);
-        } catch(err){
-          console.error('[LOGIN] история не загрузилась:', err);
-        }
-
+        // Меню показываем СРАЗУ — не ждём данные
         showScreen('menu');
-        console.log('[LOGIN] экран после входа:', S.screen);
+
+        // Данные грузим в фоне
+        loadAllWorkouts();
       } else {
         els.loginError.textContent = (data && data.message) || 'Ошибка входа';
         els.loginInput.classList.add('shake');
         setTimeout(() => els.loginInput.classList.remove('shake'), 450);
       }
     } catch(err){
-      console.error('[LOGIN] ошибка:', err);
+      console.error(err);
       els.loginError.textContent = 'Ошибка: ' + err.message;
     } finally {
       els.loginBtn.disabled = false;
@@ -1102,20 +823,49 @@ html,body{
     if (e.key === 'Enter'){ e.preventDefault(); doLogin(els.loginInput.value); }
   });
 
-  /* ============ ДИАГНОСТИКА ПРИ ЗАГРУЗКЕ ============ */
-  window.addEventListener('DOMContentLoaded', () => {
-    console.log('=== ДИАГНОСТИКА ===');
-    console.log('URL:', window.location.href);
-    console.log('Протокол:', window.location.protocol);
-    console.log('Supabase SDK:', typeof window.supabase);
-
-    if (window.location.protocol === 'file:'){
-      console.error('!!! Открыто через file:// — Supabase не будет работать. Залей на GitHub Pages.');
+  /* ============ СВАЙП НАЗАД ИЗ ПОКАЗАТЕЛЕЙ ============ */
+  (function initStatsSwipe(){
+    let startX = 0, startY = 0, dragging = false, pointerId = null, decided = false;
+    els.statsScreen.addEventListener('pointerdown', (e) => {
+      if (S.screen !== 'stats') return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      // Игнорируем свайп по select
+      if (e.target.closest('select')) return;
+      startX = e.clientX; startY = e.clientY;
+      dragging = true; decided = false;
+      pointerId = e.pointerId;
+    });
+    els.statsScreen.addEventListener('pointermove', (e) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!decided){
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        if (Math.abs(dy) > Math.abs(dx)){ dragging = false; return; }
+        decided = true;
+        try { els.statsScreen.setPointerCapture(e.pointerId); } catch(err){}
+      }
+      if (dx > 0){
+        els.statsScreen.style.transform = 'translateX(' + dx + 'px)';
+        els.statsScreen.style.transition = 'none';
+      }
+      e.preventDefault();
+    });
+    function onUp(e){
+      if (!dragging || (pointerId !== null && e.pointerId !== pointerId)) return;
+      dragging = false; pointerId = null;
+      const dx = e.clientX - startX;
+      els.statsScreen.style.transition = '';
+      els.statsScreen.style.transform = '';
+      if (dx > 100){
+        showScreen('menu');
+      }
     }
-    console.log('=== КОНЕЦ ДИАГНОСТИКИ ===');
-  });
+    els.statsScreen.addEventListener('pointerup', onUp);
+    els.statsScreen.addEventListener('pointercancel', onUp);
+  })();
 
-  // Автовход убран — каждый раз показывается экран логина.
+  /* ============ АВТО-ВХОД УБРАН ============ */
 
 })();
 </script>
